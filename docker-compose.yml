@@ -1,0 +1,44 @@
+name: aivastra
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: aivastra-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-aivastra}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-aivastra_dev_pw}
+      POSTGRES_DB: ${POSTGRES_DB:-aivastra_dev}
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5443}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-aivastra} -d ${POSTGRES_DB:-aivastra_dev}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # Website (/) + CMS admin (/admin) in one container. Start with: make up
+  app:
+    profiles: ["app"]
+    build: .
+    container_name: aivastra-app
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-aivastra}:${POSTGRES_PASSWORD:-aivastra_dev_pw}@postgres:5432/${POSTGRES_DB:-aivastra_dev}
+      NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-http://localhost:3100}
+    ports:
+      - "${APP_PORT:-3100}:3100"
+    volumes:
+      - media:/app/media
+
+volumes:
+  pgdata:
+  media:

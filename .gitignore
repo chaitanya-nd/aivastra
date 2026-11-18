@@ -1,0 +1,13 @@
+node_modules
+.next
+.env
+.env.*
+!.env.example
+media
+*.wpress
+*.tsbuildinfo
+next-env.d.ts
+.DS_Store
+seed/wp-full.json
+reports
+public/tinymce

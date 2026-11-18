@@ -1,0 +1,2925 @@
+{
+ "templates": [
+  "about",
+  "ai-showcase",
+  "case-studies",
+  "category",
+  "contact",
+  "default",
+  "document",
+  "front-page",
+  "guide",
+  "market-places",
+  "pricing",
+  "shopify",
+  "update",
+  "virtual-try-on"
+ ],
+ "groups": [
+  {
+   "title": "Home Page Sections",
+   "fields": [
+    {
+     "name": "home_banner_section",
+     "label": "Home Banner Section",
+     "type": "wysiwyg",
+     "templates": [
+      "front-page"
+     ]
+    },
+    {
+     "name": "home_brand_section",
+     "label": "Home Brand Section",
+     "type": "wysiwyg",
+     "templates": [
+      "front-page"
+     ]
+    },
+    {
+     "name": "hm_create-ready_section",
+     "label": "Home Create Ready Section",
+     "type": "wysiwyg",
+     "templates": [
+      "front-page"
+     ]
+    },
+    {
+     "name": "home_steps_section",
+     "label": "Home Steps Section",
+     "type": "wysiwyg",
+     "templates": [
+      "front-page"
+     ]
+    },
+    {
+     "name": "home_photoshoots_section",
+     "label": "Home photoshoots Section",
+     "type": "wysiwyg",
+     "templates": [
+      "front-page"
+     ]
+    },
+    {
+     "name": "home_choose_perfect_section",
+     "label": "Home Choose Perfect Section",
+     "type": "wysiwyg",
+     "templates": [
+      "front-page"
+     ]
+    },
+    {
+     "name": "home_catalogue_creation_section",
+     "label": "Home Catalogue Creation Section",
+     "type": "wysiwyg",
+     "templates": [
+      "front-page"
+     ]
+    },
+    {
+     "name": "home_brand_choose_section",
+     "label": "Home Brand Choose Section",
+     "type": "wysiwyg",
+     "templates": [
+      "front-page"
+     ]
+    },
+    {
+     "name": "home_cases_section",
+     "label": "Home Cases Section",
+     "type": "wysiwyg",
+     "templates": [
+      "front-page"
+     ]
+    },
+    {
+     "name": "home_customers_section",
+     "label": "Home Customers Section",
+     "type": "wysiwyg",
+     "templates": [
+      "front-page"
+     ]
+    },
+    {
+     "name": "home_results_section",
+     "label": "Home Results Section",
+     "type": "wysiwyg",
+     "templates": [
+      "front-page"
+     ]
+    },
+    {
+     "name": "home_blog_title",
+     "label": "Home Blog Title",
+     "type": "text",
+     "templates": [
+      "front-page"
+     ]
+    },
+    {
+     "name": "home_blog_sub_title",
+     "label": "Home Blog Sub Title",
+     "type": "text",
+     "templates": [
+      "front-page"
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Inner Footer Form Section",
+   "fields": [
+    {
+     "name": "inner_footer_form",
+     "label": "Inner Footer Form",
+     "type": "wysiwyg",
+     "templates": [
+      "default"
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Accordion",
+   "fields": [
+    {
+     "name": "category_accordion_eyebrow",
+     "label": "category accordion eyebrow",
+     "type": "text",
+     "templates": [
+      "about",
+      "ai-showcase",
+      "case-studies",
+      "category",
+      "contact",
+      "default",
+      "document",
+      "guide",
+      "market-places",
+      "shopify",
+      "update",
+      "virtual-try-on"
+     ]
+    },
+    {
+     "name": "category_accordion_title",
+     "label": "category accordion title",
+     "type": "text",
+     "templates": [
+      "about",
+      "ai-showcase",
+      "case-studies",
+      "category",
+      "contact",
+      "default",
+      "document",
+      "guide",
+      "market-places",
+      "shopify",
+      "update",
+      "virtual-try-on"
+     ]
+    },
+    {
+     "name": "accordion_list",
+     "label": "Accordion List",
+     "type": "repeater",
+     "fields": [
+      {
+       "name": "accordion_question",
+       "label": "Accordion Question",
+       "type": "text"
+      },
+      {
+       "name": "accordion_answer",
+       "label": "Accordion Answer",
+       "type": "wysiwyg"
+      }
+     ],
+     "templates": [
+      "about",
+      "ai-showcase",
+      "case-studies",
+      "category",
+      "contact",
+      "default",
+      "document",
+      "guide",
+      "market-places",
+      "shopify",
+      "update",
+      "virtual-try-on"
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Fashion Tabs",
+   "fields": [
+    {
+     "name": "fashion_tabs",
+     "label": "Fashion Tabs",
+     "type": "repeater",
+     "fields": [
+      {
+       "name": "tab_title",
+       "label": "Tab Title",
+       "type": "text"
+      },
+      {
+       "name": "tab_images",
+       "label": "Tab Images",
+       "type": "gallery"
+      }
+     ],
+     "templates": [
+      "ai-showcase"
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Documentation Page",
+   "fields": [
+    {
+     "name": "guide_categories",
+     "label": "Guide Categories",
+     "type": "repeater",
+     "fields": [
+      {
+       "name": "icon",
+       "label": "Icon",
+       "type": "image"
+      },
+      {
+       "name": "hover_icon",
+       "label": "Hover Icon",
+       "type": "image"
+      },
+      {
+       "name": "title",
+       "label": "Title",
+       "type": "text"
+      },
+      {
+       "name": "description",
+       "label": "Description",
+       "type": "textarea"
+      },
+      {
+       "name": "guide_count",
+       "label": "Guide Count",
+       "type": "number"
+      },
+      {
+       "name": "link",
+       "label": "Link",
+       "type": "link"
+      }
+     ],
+     "templates": [
+      "document"
+     ]
+    },
+    {
+     "name": "documentation_banner_title",
+     "label": "Documentation Banner Title",
+     "type": "text",
+     "templates": [
+      "document"
+     ]
+    },
+    {
+     "name": "documentation_banner_content",
+     "label": "Documentation Banner Content",
+     "type": "text",
+     "templates": [
+      "document"
+     ]
+    },
+    {
+     "name": "documentation_search",
+     "label": "Documentation Search",
+     "type": "text",
+     "templates": [
+      "document"
+     ]
+    },
+    {
+     "name": "documentation_footer_top_title",
+     "label": "Documentation Footer Top Title",
+     "type": "text",
+     "templates": [
+      "document"
+     ]
+    },
+    {
+     "name": "documentation_footer_top_content",
+     "label": "Documentation Footer Top Content",
+     "type": "text",
+     "templates": [
+      "document"
+     ]
+    },
+    {
+     "name": "documentation_footer_top_form_title",
+     "label": "Documentation Footer Top Form Title",
+     "type": "text",
+     "templates": [
+      "document"
+     ]
+    },
+    {
+     "name": "documentation_footer_top_form",
+     "label": "Documentation Footer Top Form",
+     "type": "text",
+     "templates": [
+      "document"
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Category Page Template",
+   "fields": [
+    {
+     "name": "banner_top_title",
+     "label": "Banner Top Title",
+     "type": "text",
+     "templates": [
+      "category",
+      "market-places"
+     ]
+    },
+    {
+     "name": "sub_title",
+     "label": "Sub Title",
+     "type": "text",
+     "templates": [
+      "category",
+      "market-places"
+     ]
+    },
+    {
+     "name": "description",
+     "label": "Description",
+     "type": "text",
+     "templates": [
+      "category",
+      "market-places"
+     ]
+    },
+    {
+     "name": "category_button",
+     "label": "Category Button",
+     "type": "link",
+     "templates": [
+      "category"
+     ]
+    },
+    {
+     "name": "category_form_title",
+     "label": "Category Form Title",
+     "type": "text",
+     "templates": [
+      "category"
+     ]
+    },
+    {
+     "name": "category_form_content",
+     "label": "Category Form Content",
+     "type": "text",
+     "templates": [
+      "category"
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Creation Section",
+   "fields": [
+    {
+     "name": "creation_sub_title",
+     "label": "Creation Sub Title",
+     "type": "text",
+     "templates": [
+      "category"
+     ]
+    },
+    {
+     "name": "creation_title",
+     "label": "Creation Title",
+     "type": "text",
+     "templates": [
+      "category"
+     ]
+    },
+    {
+     "name": "creation_description",
+     "label": "Creation Description",
+     "type": "text",
+     "templates": [
+      "category"
+     ]
+    },
+    {
+     "name": "creation_list",
+     "label": "Creation List",
+     "type": "repeater",
+     "fields": [
+      {
+       "name": "creation_item_image",
+       "label": "Creation Item Image",
+       "type": "image"
+      },
+      {
+       "name": "creation_item_title",
+       "label": "Creation Item Title",
+       "type": "text"
+      }
+     ],
+     "templates": [
+      "category"
+     ]
+    },
+    {
+     "name": "creation_link",
+     "label": "Creation Link",
+     "type": "text",
+     "templates": [
+      "category"
+     ]
+    },
+    {
+     "name": "creation_text",
+     "label": "Creation Text",
+     "type": "text",
+     "templates": [
+      "category"
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Inner Why Teams Section",
+   "fields": [
+    {
+     "name": "why_teams_sub_title",
+     "label": "Why Teams Sub Title",
+     "type": "text",
+     "templates": [
+      "category"
+     ]
+    },
+    {
+     "name": "why_teams_title",
+     "label": "Why Teams Title",
+     "type": "text",
+     "templates": [
+      "category"
+     ]
+    },
+    {
+     "name": "why_teams_list",
+     "label": "Why Teams List",
+     "type": "repeater",
+     "fields": [
+      {
+       "name": "why_teams_item_title",
+       "label": "Why Teams Item Title",
+       "type": "text"
+      },
+      {
+       "name": "why_teams_item_content",
+       "label": "Why Teams Item Content",
+       "type": "wysiwyg"
+      }
+     ],
+     "templates": [
+      "category"
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Your Western Section",
+   "fields": [
+    {
+     "name": "your_western_conent",
+     "label": "Your Western Conent",
+     "type": "text",
+     "templates": [
+      "category"
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Inner Proof Section",
+   "fields": [
+    {
+     "name": "proof_sub_title",
+     "label": "Proof Sub Title",
+     "type": "text",
+     "templates": [
+      "category"
+     ]
+    },
+    {
+     "name": "proof_title",
+     "label": "Proof Title",
+     "type": "text",
+     "templates": [
+      "category"
+     ]
+    },
+    {
+     "name": "proof_content",
+     "label": "Proof Content",
+     "type": "text",
+     "templates": [
+      "category"
+     ]
+    },
+    {
+     "name": "proof_list",
+     "label": "Proof List",
+     "type": "repeater",
+     "fields": [
+      {
+       "name": "proof_item_title",
+       "label": "Proof Item Title",
+       "type": "text"
+      },
+      {
+       "name": "proof_item_content",
+       "label": "Proof Item Content",
+       "type": "wysiwyg"
+      }
+     ],
+     "templates": [
+      "category"
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Inner Brand Choose Section",
+   "fields": [
+    {
+     "name": "inner_brand_choose_section",
+     "label": "Inner brand_choose_section",
+     "type": "wysiwyg",
+     "templates": [
+      "category"
+     ]
+    }
+   ]
+  },
+  {
+   "title": "AI photoshoots Section",
+   "fields": [
+    {
+     "name": "aiphotoshoot_sub_title",
+     "label": "Aiphotoshoot Sub Title",
+     "type": "text",
+     "templates": [
+      "category"
+     ]
+    },
+    {
+     "name": "aiphotoshoot_title",
+     "label": "Aiphotoshoot Title",
+     "type": "text",
+     "templates": [
+      "category"
+     ]
+    },
+    {
+     "name": "aiphotoshoot_top_content",
+     "label": "Aiphotoshoot Top Content",
+     "type": "text",
+     "templates": [
+      "category"
+     ]
+    },
+    {
+     "name": "aiphotoshoot_list",
+     "label": "Aiphotoshoot List",
+     "type": "repeater",
+     "fields": [
+      {
+       "name": "aiphotoshoot_item_image",
+       "label": "Aiphotoshoot Item Image",
+       "type": "image"
+      },
+      {
+       "name": "aiphotoshoot_item_title",
+       "label": "Aiphotoshoot Item Title",
+       "type": "text"
+      },
+      {
+       "name": "aiphotoshoot_item_hvr",
+       "label": "Aiphotoshoot Item Hvr",
+       "type": "text"
+      }
+     ],
+     "templates": [
+      "category"
+     ]
+    },
+    {
+     "name": "aiphotoshoot_right_content",
+     "label": "Aiphotoshoot Right Content",
+     "type": "wysiwyg",
+     "templates": [
+      "category"
+     ]
+    },
+    {
+     "name": "aiphotoshoot_logo_image",
+     "label": "Aiphotoshoot Logo Image",
+     "type": "image",
+     "templates": [
+      "category"
+     ]
+    },
+    {
+     "name": "aiphotoshoot_logo_title",
+     "label": "Aiphotoshoot Logo Title",
+     "type": "text",
+     "templates": [
+      "category"
+     ]
+    },
+    {
+     "name": "aiphotoshoot_cost_list",
+     "label": "Aiphotoshoot Cost List",
+     "type": "repeater",
+     "fields": [
+      {
+       "name": "aiphotoshoot_cost",
+       "label": "Aiphotoshoot Cost",
+       "type": "text"
+      },
+      {
+       "name": "aiphotoshoot_cost_content",
+       "label": "Aiphotoshoot Cost Content",
+       "type": "text"
+      }
+     ],
+     "templates": [
+      "category"
+     ]
+    },
+    {
+     "name": "photoshoots_link",
+     "label": "Photoshoots Link",
+     "type": "text",
+     "templates": [
+      "category"
+     ]
+    },
+    {
+     "name": "photoshoots_text",
+     "label": "Photoshoots Text",
+     "type": "text",
+     "templates": [
+      "category"
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Client Showcase Section",
+   "fields": [
+    {
+     "name": "showcase_sub_title",
+     "label": "Showcase Sub Title",
+     "type": "text",
+     "templates": [
+      "category"
+     ]
+    },
+    {
+     "name": "showcase_title",
+     "label": "Showcase Title",
+     "type": "text",
+     "templates": [
+      "category"
+     ]
+    },
+    {
+     "name": "showcase_content",
+     "label": "Showcase Content",
+     "type": "text",
+     "templates": [
+      "category"
+     ]
+    },
+    {
+     "name": "showcase_list",
+     "label": "Showcase List",
+     "type": "repeater",
+     "fields": [
+      {
+       "name": "showcase_item_image",
+       "label": "Showcase Item Image",
+       "type": "image"
+      },
+      {
+       "name": "showcase_item_title",
+       "label": "Showcase Item Title",
+       "type": "text"
+      },
+      {
+       "name": "showcase_item_hvr",
+       "label": "Showcase Item Hvr",
+       "type": "text"
+      }
+     ],
+     "templates": [
+      "category"
+     ]
+    },
+    {
+     "name": "showcase_link",
+     "label": "Showcase Link",
+     "type": "text",
+     "templates": [
+      "category"
+     ]
+    },
+    {
+     "name": "showcase_text",
+     "label": "Showcase Text",
+     "type": "text",
+     "templates": [
+      "category"
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Inner Models Section",
+   "fields": [
+    {
+     "name": "models_title",
+     "label": "Models Title",
+     "type": "text",
+     "templates": [
+      "category"
+     ]
+    },
+    {
+     "name": "models_content",
+     "label": "Models Content",
+     "type": "wysiwyg",
+     "templates": [
+      "category"
+     ]
+    },
+    {
+     "name": "models_book",
+     "label": "Models Book",
+     "type": "text",
+     "templates": [
+      "category"
+     ]
+    },
+    {
+     "name": "models_start",
+     "label": "Models Start",
+     "type": "text",
+     "templates": [
+      "category"
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Market Places Page",
+   "fields": [
+    {
+     "name": "answer_first_sub_title",
+     "label": "Answer First Sub Title",
+     "type": "text",
+     "templates": [
+      "market-places"
+     ]
+    },
+    {
+     "name": "answer_first_title",
+     "label": "Answer First Title",
+     "type": "text",
+     "templates": [
+      "market-places"
+     ]
+    },
+    {
+     "name": "answer_first_content",
+     "label": "Answer First Content",
+     "type": "wysiwyg",
+     "templates": [
+      "market-places"
+     ]
+    },
+    {
+     "name": "built_sub_title",
+     "label": "Built Sub Title",
+     "type": "text",
+     "templates": [
+      "market-places"
+     ]
+    },
+    {
+     "name": "built_title",
+     "label": "Built Title",
+     "type": "text",
+     "templates": [
+      "market-places"
+     ]
+    },
+    {
+     "name": "built_list",
+     "label": "Built List",
+     "type": "repeater",
+     "fields": [
+      {
+       "name": "built_item_image",
+       "label": "Built Item Image",
+       "type": "image"
+      },
+      {
+       "name": "built_item_title",
+       "label": "Built Item Title",
+       "type": "text"
+      },
+      {
+       "name": "built_item_content",
+       "label": "Built Item Content",
+       "type": "wysiwyg"
+      }
+     ],
+     "templates": [
+      "market-places"
+     ]
+    },
+    {
+     "name": "sellers_sub_title",
+     "label": "Sellers Sub Title",
+     "type": "text",
+     "templates": [
+      "market-places"
+     ]
+    },
+    {
+     "name": "sellers_title",
+     "label": "Sellers Title",
+     "type": "text",
+     "templates": [
+      "market-places"
+     ]
+    },
+    {
+     "name": "sellers_list",
+     "label": "Sellers List",
+     "type": "repeater",
+     "fields": [
+      {
+       "name": "sellers_item_image",
+       "label": "Sellers Item Image",
+       "type": "image"
+      },
+      {
+       "name": "sellers_item_title",
+       "label": "Sellers Item Title",
+       "type": "text"
+      },
+      {
+       "name": "sellers_item_content",
+       "label": "Sellers Item Content",
+       "type": "wysiwyg"
+      }
+     ],
+     "templates": [
+      "market-places"
+     ]
+    },
+    {
+     "name": "traditional_sub_title",
+     "label": "Traditional Sub Title",
+     "type": "text",
+     "templates": [
+      "market-places"
+     ]
+    },
+    {
+     "name": "traditional_title",
+     "label": "Traditional Title",
+     "type": "text",
+     "templates": [
+      "market-places"
+     ]
+    },
+    {
+     "name": "table_feature_heading",
+     "label": "Table Feature Heading",
+     "type": "text",
+     "templates": [
+      "market-places"
+     ]
+    },
+    {
+     "name": "left_title",
+     "label": "Left Title",
+     "type": "text",
+     "templates": [
+      "market-places"
+     ]
+    },
+    {
+     "name": "right_title",
+     "label": "Right Title",
+     "type": "text",
+     "templates": [
+      "market-places"
+     ]
+    },
+    {
+     "name": "comparison_list",
+     "label": "Comparison List",
+     "type": "repeater",
+     "fields": [
+      {
+       "name": "feature",
+       "label": "Feature",
+       "type": "text"
+      },
+      {
+       "name": "left_content",
+       "label": "Left Content",
+       "type": "text"
+      },
+      {
+       "name": "right_content",
+       "label": "Right Content",
+       "type": "text"
+      }
+     ],
+     "templates": [
+      "market-places"
+     ]
+    },
+    {
+     "name": "math_sub_title",
+     "label": "Math Sub Title",
+     "type": "text",
+     "templates": [
+      "market-places"
+     ]
+    },
+    {
+     "name": "math_title",
+     "label": "Math Title",
+     "type": "text",
+     "templates": [
+      "market-places"
+     ]
+    },
+    {
+     "name": "math_content",
+     "label": "Math Content",
+     "type": "wysiwyg",
+     "templates": [
+      "market-places"
+     ]
+    },
+    {
+     "name": "math_table_feature_heading",
+     "label": "Math Table Feature Heading",
+     "type": "text",
+     "templates": [
+      "market-places"
+     ]
+    },
+    {
+     "name": "math_left_title",
+     "label": "Math Left Title",
+     "type": "text",
+     "templates": [
+      "market-places"
+     ]
+    },
+    {
+     "name": "math_right_title",
+     "label": "Math Right Title",
+     "type": "text",
+     "templates": [
+      "market-places"
+     ]
+    },
+    {
+     "name": "math_comparison_list",
+     "label": "Math Comparison List",
+     "type": "repeater",
+     "fields": [
+      {
+       "name": "math_feature",
+       "label": "Math Feature",
+       "type": "text"
+      },
+      {
+       "name": "math_left_content",
+       "label": "Math Left Content",
+       "type": "text"
+      },
+      {
+       "name": "math_right_content",
+       "label": "Math Right Content",
+       "type": "text"
+      }
+     ],
+     "templates": [
+      "market-places"
+     ]
+    },
+    {
+     "name": "math_bottom_content",
+     "label": "Math Bottom Content",
+     "type": "wysiwyg",
+     "templates": [
+      "market-places"
+     ]
+    },
+    {
+     "name": "works_sub_title",
+     "label": "Works Sub Title",
+     "type": "text",
+     "templates": [
+      "market-places"
+     ]
+    },
+    {
+     "name": "works_title",
+     "label": "Works Title",
+     "type": "text",
+     "templates": [
+      "market-places"
+     ]
+    },
+    {
+     "name": "works_list",
+     "label": "Works List",
+     "type": "repeater",
+     "fields": [
+      {
+       "name": "works_item_image",
+       "label": "Works Item Image",
+       "type": "image"
+      },
+      {
+       "name": "works_image_title",
+       "label": "Works Image Title",
+       "type": "text"
+      },
+      {
+       "name": "works_item_title",
+       "label": "Works Item Title",
+       "type": "text"
+      },
+      {
+       "name": "works_item_content",
+       "label": "Works Item Content",
+       "type": "wysiwyg"
+      }
+     ],
+     "templates": [
+      "market-places"
+     ]
+    },
+    {
+     "name": "launch_sub_title",
+     "label": "Launch Sub Title",
+     "type": "text",
+     "templates": [
+      "market-places"
+     ]
+    },
+    {
+     "name": "launch_title",
+     "label": "Launch Title",
+     "type": "text",
+     "templates": [
+      "market-places"
+     ]
+    },
+    {
+     "name": "launch_content",
+     "label": "Launch Content",
+     "type": "wysiwyg",
+     "templates": [
+      "market-places"
+     ]
+    },
+    {
+     "name": "launch_list",
+     "label": "Launch List",
+     "type": "repeater",
+     "fields": [
+      {
+       "name": "launch_list_content",
+       "label": "Launch List Content",
+       "type": "text"
+      }
+     ],
+     "templates": [
+      "market-places"
+     ]
+    },
+    {
+     "name": "launch_right_sub_title",
+     "label": "Launch Right Sub Title",
+     "type": "text",
+     "templates": [
+      "market-places"
+     ]
+    },
+    {
+     "name": "launch_right_photography_count",
+     "label": "Launch Right Photography Count",
+     "type": "text",
+     "templates": [
+      "market-places"
+     ]
+    },
+    {
+     "name": "launch_right_title",
+     "label": "Launch Right Title",
+     "type": "text",
+     "templates": [
+      "market-places"
+     ]
+    },
+    {
+     "name": "launch_right_content",
+     "label": "Launch Right Content",
+     "type": "wysiwyg",
+     "templates": [
+      "market-places"
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Shopify page",
+   "fields": [
+    {
+     "name": "shopify_banner_sub_title",
+     "label": "Shopify Banner Sub Title",
+     "type": "text",
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_banner_title",
+     "label": "Shopify Banner Title",
+     "type": "text",
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_banner_small_title",
+     "label": "Shopify Banner Small Title",
+     "type": "text",
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_banner_content",
+     "label": "Shopify Banner Content",
+     "type": "wysiwyg",
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_banner_buttons",
+     "label": "Shopify Banner Buttons",
+     "type": "wysiwyg",
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_banner_btm_cont",
+     "label": "Shopify Banner Btm Cont",
+     "type": "wysiwyg",
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_banner_trust_pills",
+     "label": "Shopify Banner Trust Pills",
+     "type": "repeater",
+     "fields": [
+      {
+       "name": "shopify_banner_trust_pills_title",
+       "label": "Shopify Banner Trust Pills Title",
+       "type": "text"
+      }
+     ],
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "catalogue_image",
+     "label": "Catalogue Image",
+     "type": "image",
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopper_uploads_cards",
+     "label": "Shopper uploads Cards",
+     "type": "repeater",
+     "fields": [
+      {
+       "name": "shoper_upload_icon",
+       "label": "Shoper Upload Icon",
+       "type": "image"
+      },
+      {
+       "name": "shopper_uploads_title",
+       "label": "Shopper uploads Title",
+       "type": "text"
+      },
+      {
+       "name": "shopper_uploads_image",
+       "label": "Shopper uploads Image",
+       "type": "image"
+      }
+     ],
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_the_real_problem_sub_title",
+     "label": "Shopify The Real Problem Sub Title",
+     "type": "text",
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_the_real_problem_title",
+     "label": "Shopify The Real Problem Title",
+     "type": "text",
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_the_real_problem_content",
+     "label": "Shopify The Real Problem Content",
+     "type": "wysiwyg",
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "virtual_blk_img",
+     "label": "Virtual Blk Img",
+     "type": "image",
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_the_real_problem_stat_bar",
+     "label": "Shopify The Real Problem Stat Bar",
+     "type": "repeater",
+     "fields": [
+      {
+       "name": "shopify_the_real_problem_stat_bar_icon",
+       "label": "Shopify The Real Problem Stat Bar Icon",
+       "type": "image"
+      },
+      {
+       "name": "shopify_the_real_problem_stat_bar_title",
+       "label": "Shopify The Real Problem Stat Bar Title",
+       "type": "text"
+      },
+      {
+       "name": "shopify_the_real_problem_stat_bar_cont",
+       "label": "Shopify The Real Problem Stat Bar Cont",
+       "type": "wysiwyg"
+      }
+     ],
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_the_real_problem_cards",
+     "label": "Shopify The Real Problem Cards",
+     "type": "repeater",
+     "fields": [
+      {
+       "name": "shopify_the_real_problem_card_title",
+       "label": "Shopify The Real Problem card Title",
+       "type": "text"
+      },
+      {
+       "name": "shopify_the_real_problem_card_content",
+       "label": "Shopify The Real Problem Card Content",
+       "type": "wysiwyg"
+      }
+     ],
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_the_real_problem_btm_cont",
+     "label": "Shopify The Real Problem Btm Cont",
+     "type": "wysiwyg",
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_shopping_logos_sub_title",
+     "label": "Shopify Shopping Logos Sub Title",
+     "type": "text",
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_shopping_logos_items",
+     "label": "Shopify Shopping Logos Items",
+     "type": "repeater",
+     "fields": [
+      {
+       "name": "shopify_shopping_logos_images",
+       "label": "Shopify Shopping Logos Images",
+       "type": "image"
+      }
+     ],
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_how_it_works_sub_title",
+     "label": "Shopify How It Works Sub Title",
+     "type": "text",
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_how_it_works_title",
+     "label": "Shopify How It Works Title",
+     "type": "text",
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_how_it_works_content",
+     "label": "Shopify How It Works Content",
+     "type": "wysiwyg",
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_how_it_works_left_list",
+     "label": "Shopify How It Works Left List",
+     "type": "repeater",
+     "fields": [
+      {
+       "name": "shopify_how_it_works_lft_title",
+       "label": "Shopify How It Works Lft Title",
+       "type": "text"
+      },
+      {
+       "name": "shopify_how_it_works_lft_cont",
+       "label": "Shopify How It Works Lft Cont",
+       "type": "wysiwyg"
+      }
+     ],
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_how_it_works_rgt_content",
+     "label": "Shopify How It Works Rgt Content",
+     "type": "wysiwyg",
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_how_it_works_rgt_video",
+     "label": "Shopify How It Works Rgt Image",
+     "type": "text",
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_built_for_your_catalogue_sub_title",
+     "label": "Shopify Built For Your Catalogue Sub Title",
+     "type": "text",
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_built_for_your_catalogue_title",
+     "label": "Shopify Built For Your Catalogue Title",
+     "type": "text",
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_built_for_your_catalogue_content",
+     "label": "Shopify Built For Your Catalogue Content",
+     "type": "wysiwyg",
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_built_for_your_catalogue_cards",
+     "label": "Shopify Built For Your Catalogue Cards",
+     "type": "repeater",
+     "fields": [
+      {
+       "name": "shopify_built_for_your_catalogue_image",
+       "label": "Shopify Built For Your Catalogue Image",
+       "type": "image"
+      },
+      {
+       "name": "shopify_built_for_your_catalogue_card_cont",
+       "label": "Shopify Built For Your Catalogue Card Cont",
+       "type": "wysiwyg"
+      },
+      {
+       "name": "shopify_built_for_your_catalogue_card_link",
+       "label": "Shopify Built For Your Catalogue Card Link",
+       "type": "url"
+      }
+     ],
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_built_for_your_catalogue_btm_cont",
+     "label": "Shopify Built For Your Catalogue Btm Cont",
+     "type": "wysiwyg",
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_integration_sub_title",
+     "label": "Shopify Integration Sub Title",
+     "type": "text",
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_integration_title",
+     "label": "Shopify Integration Title",
+     "type": "text",
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_integration_content",
+     "label": "Shopify Integration Content",
+     "type": "wysiwyg",
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_integration_cards",
+     "label": "Shopify Integration Cards",
+     "type": "repeater",
+     "fields": [
+      {
+       "name": "shopify_integration_card_sml_image",
+       "label": "Shopify Integration Card Sml Image",
+       "type": "image"
+      },
+      {
+       "name": "shopify_integration_card_big_image",
+       "label": "Shopify Integration Card Big Image",
+       "type": "image"
+      },
+      {
+       "name": "shopify_integration_card_big_image_hvr",
+       "label": "Shopify Integration Card Big Image Hvr",
+       "type": "image"
+      },
+      {
+       "name": "shopify_integration_card_title",
+       "label": "Shopify Integration Card Title",
+       "type": "text"
+      }
+     ],
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_integration_btm_cards",
+     "label": "Shopify Integration Btm Cards",
+     "type": "repeater",
+     "fields": [
+      {
+       "name": "inr_int_item_icon",
+       "label": "Inr Int Item Icon",
+       "type": "image"
+      },
+      {
+       "name": "inr_int_item_number",
+       "label": "Inr Int Item Number",
+       "type": "number"
+      },
+      {
+       "name": "shopify_integration_btm_card_title",
+       "label": "Shopify Integration Btm Card Title",
+       "type": "text"
+      },
+      {
+       "name": "shopify_integration_btm_card_cont",
+       "label": "Shopify Integration Btm Card Cont",
+       "type": "wysiwyg"
+      }
+     ],
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_what_it_does_for_your_business_sub_title",
+     "label": "Shopify What It Does For Your Business Sub Title",
+     "type": "text",
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_what_it_does_for_your_business_title",
+     "label": "Shopify What It Does For Your Business Title",
+     "type": "text",
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_what_it_does_for_your_business_content",
+     "label": "Shopify What It Does For Your Business Content",
+     "type": "wysiwyg",
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_what_it_does_for_your_business_cards",
+     "label": "Shopify What It Does For Your Business Cards",
+     "type": "repeater",
+     "fields": [
+      {
+       "name": "shopify_what_it_does_for_your_business_cord_icon",
+       "label": "Shopify What It Does For Your Business Cord Icon",
+       "type": "image"
+      },
+      {
+       "name": "shopify_what_it_does_for_your_business_card_title",
+       "label": "Shopify What It Does For Your Business Card Title",
+       "type": "text"
+      },
+      {
+       "name": "shopify_what_it_does_for_your_business_cord_cont",
+       "label": "Shopify What It Does For Your Business Cord Cont",
+       "type": "wysiwyg"
+      }
+     ],
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_made_for_you_if_sub_title",
+     "label": "Shopify Made For You If Sub Title",
+     "type": "text",
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_made_for_you_if_title",
+     "label": "Shopify Made For You If Title",
+     "type": "text",
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_made_for_you_if_rgt_star_cont",
+     "label": "Shopify Made For You If Rgt Star Cont",
+     "type": "wysiwyg",
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_plays_well_with_your_stack_sub_title",
+     "label": "Shopify Plays Well With Your Stack Sub Title",
+     "type": "text",
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_plays_well_with_your_stack_title",
+     "label": "Shopify Plays Well With Your Stack Title",
+     "type": "text",
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_plays_well_with_your_stack_content",
+     "label": "Shopify Plays Well With Your Stack Content",
+     "type": "wysiwyg",
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_plays_well_with_your_stack_btn",
+     "label": "Shopify Plays Well With Your Stack btn",
+     "type": "wysiwyg",
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_plays_well_with_your_stack_cards",
+     "label": "Shopify Plays Well With Your Stack Cards",
+     "type": "repeater",
+     "fields": [
+      {
+       "name": "klaviyo_img_blk",
+       "label": "Klaviyo Img Blk",
+       "type": "repeater",
+       "fields": [
+        {
+         "name": "klaviyo_icon",
+         "label": "Klaviyo Icon",
+         "type": "image"
+        }
+       ]
+      },
+      {
+       "name": "shopify_plays_well_with_your_stack_card_title",
+       "label": "Shopify Plays Well With Your Stack Card Title",
+       "type": "text"
+      },
+      {
+       "name": "shopify_plays_well_with_your_stack_card_cont",
+       "label": "Shopify Plays Well With Your Stack Card Cont",
+       "type": "wysiwyg"
+      }
+     ],
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_form_title",
+     "label": "Shopify Form Title",
+     "type": "text",
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_form_content",
+     "label": "Shopify Form Content",
+     "type": "text",
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_frm_lft_buttons",
+     "label": "Shopify Frm Lft Buttons",
+     "type": "wysiwyg",
+     "templates": [
+      "shopify"
+     ]
+    },
+    {
+     "name": "shopify_frm_lft_trust_tags",
+     "label": "Shopify Frm Lft Trust Tags",
+     "type": "repeater",
+     "fields": [
+      {
+       "name": "shopify_frm_lft_trust_tags_cont",
+       "label": "Shopify Frm Lft Trust Tags Cont",
+       "type": "text"
+      }
+     ],
+     "templates": [
+      "shopify"
+     ]
+    }
+   ]
+  },
+  {
+   "title": "About Page",
+   "fields": [
+    {
+     "name": "about_banner_title",
+     "label": "About Banner Title",
+     "type": "text",
+     "templates": [
+      "about"
+     ]
+    },
+    {
+     "name": "about_banner_content",
+     "label": "About Banner Content",
+     "type": "wysiwyg",
+     "templates": [
+      "about"
+     ]
+    },
+    {
+     "name": "about_banner_button_link",
+     "label": "About Banner Button Link",
+     "type": "text",
+     "templates": [
+      "about"
+     ]
+    },
+    {
+     "name": "about_banner_button_text",
+     "label": "About Banner Button Text",
+     "type": "text",
+     "templates": [
+      "about"
+     ]
+    },
+    {
+     "name": "experiences_title",
+     "label": "Experiences Title",
+     "type": "text",
+     "templates": [
+      "about"
+     ]
+    },
+    {
+     "name": "experiences_content",
+     "label": "Experiences Content",
+     "type": "wysiwyg",
+     "templates": [
+      "about"
+     ]
+    },
+    {
+     "name": "experiences_list",
+     "label": "Experiences List",
+     "type": "repeater",
+     "fields": [
+      {
+       "name": "experiences_items",
+       "label": "Experiences items",
+       "type": "text"
+      }
+     ],
+     "templates": [
+      "about"
+     ]
+    },
+    {
+     "name": "experiences_button",
+     "label": "Experiences Button",
+     "type": "text",
+     "templates": [
+      "about"
+     ]
+    },
+    {
+     "name": "experiences_image",
+     "label": "Experiences Image",
+     "type": "image",
+     "templates": [
+      "about"
+     ]
+    },
+    {
+     "name": "mission_title",
+     "label": "Mission Title",
+     "type": "text",
+     "templates": [
+      "about"
+     ]
+    },
+    {
+     "name": "mission_content",
+     "label": "Mission Content",
+     "type": "wysiwyg",
+     "templates": [
+      "about"
+     ]
+    },
+    {
+     "name": "mission_list",
+     "label": "Mission List",
+     "type": "repeater",
+     "fields": [
+      {
+       "name": "mission_image",
+       "label": "Mission Image",
+       "type": "image"
+      },
+      {
+       "name": "mission_list_title",
+       "label": "Mission List Title",
+       "type": "text"
+      },
+      {
+       "name": "mission_list_sub_title",
+       "label": "Mission List Sub Title",
+       "type": "text"
+      }
+     ],
+     "templates": [
+      "about"
+     ]
+    },
+    {
+     "name": "mission_button_text",
+     "label": "Mission Button Text",
+     "type": "text",
+     "templates": [
+      "about"
+     ]
+    },
+    {
+     "name": "mission_right_image",
+     "label": "Mission Right Image",
+     "type": "image",
+     "templates": [
+      "about"
+     ]
+    },
+    {
+     "name": "virtual_experiences_title",
+     "label": "Virtual Experiences Title",
+     "type": "text",
+     "templates": [
+      "about"
+     ]
+    },
+    {
+     "name": "virtual_experiences_content",
+     "label": "Virtual Experiences Content",
+     "type": "wysiwyg",
+     "templates": [
+      "about"
+     ]
+    },
+    {
+     "name": "virtual_experiences_list",
+     "label": "Virtual Experiences LIst",
+     "type": "repeater",
+     "fields": [
+      {
+       "name": "virtual_experiences_image",
+       "label": "Virtual Experiences Image",
+       "type": "image"
+      },
+      {
+       "name": "virtual_experiences_item_title",
+       "label": "Virtual Experiences Item Title",
+       "type": "text"
+      }
+     ],
+     "templates": [
+      "about"
+     ]
+    },
+    {
+     "name": "virtual_experiences_button",
+     "label": "Virtual Experiences Button",
+     "type": "text",
+     "templates": [
+      "about"
+     ]
+    },
+    {
+     "name": "smarter_fashion_title",
+     "label": "Smarter Fashion Title",
+     "type": "text",
+     "templates": [
+      "about"
+     ]
+    },
+    {
+     "name": "smarter_fashion_content",
+     "label": "Smarter Fashion Content",
+     "type": "wysiwyg",
+     "templates": [
+      "about"
+     ]
+    },
+    {
+     "name": "smarter_fashion_items",
+     "label": "Smarter Fashion Items",
+     "type": "wysiwyg",
+     "templates": [
+      "about"
+     ]
+    },
+    {
+     "name": "table_section_title",
+     "label": "Table Section Title",
+     "type": "text",
+     "templates": [
+      "about"
+     ]
+    },
+    {
+     "name": "table_section_content",
+     "label": "Table Section Content",
+     "type": "wysiwyg",
+     "templates": [
+      "about"
+     ]
+    },
+    {
+     "name": "table_section_items",
+     "label": "Table Section Items",
+     "type": "wysiwyg",
+     "templates": [
+      "about"
+     ]
+    },
+    {
+     "name": "blog_title",
+     "label": "Blog Title",
+     "type": "text",
+     "templates": [
+      "about"
+     ]
+    },
+    {
+     "name": "blog_content",
+     "label": "Blog Content",
+     "type": "text",
+     "templates": [
+      "about"
+     ]
+    },
+    {
+     "name": "blog_button",
+     "label": "Blog Button",
+     "type": "text",
+     "templates": [
+      "about"
+     ]
+    },
+    {
+     "name": "blog_button_link",
+     "label": "Blog Button Link",
+     "type": "text",
+     "templates": [
+      "about"
+     ]
+    },
+    {
+     "name": "form_left_title",
+     "label": "Form Left Title",
+     "type": "text",
+     "templates": [
+      "about"
+     ]
+    },
+    {
+     "name": "form_left_content",
+     "label": "Form Left Content",
+     "type": "text",
+     "templates": [
+      "about"
+     ]
+    },
+    {
+     "name": "form_right_title",
+     "label": "Form Right Title",
+     "type": "text",
+     "templates": [
+      "about"
+     ]
+    },
+    {
+     "name": "form_item",
+     "label": "Form Item",
+     "type": "text",
+     "templates": [
+      "about"
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Contact Page",
+   "fields": [
+    {
+     "name": "contact_title",
+     "label": "Contact Title",
+     "type": "text",
+     "templates": [
+      "contact"
+     ]
+    },
+    {
+     "name": "contact_content",
+     "label": "Contact Content",
+     "type": "text",
+     "templates": [
+      "contact"
+     ]
+    },
+    {
+     "name": "contact_mail_text",
+     "label": "Contact Mail Text",
+     "type": "text",
+     "templates": [
+      "contact"
+     ]
+    },
+    {
+     "name": "contact_mail_link",
+     "label": "Contact Mail Link",
+     "type": "text",
+     "templates": [
+      "contact"
+     ]
+    },
+    {
+     "name": "contact_phone_text",
+     "label": "Contact Phone Text",
+     "type": "text",
+     "templates": [
+      "contact"
+     ]
+    },
+    {
+     "name": "contact_phone_link",
+     "label": "Contact Phone LInk",
+     "type": "text",
+     "templates": [
+      "contact"
+     ]
+    },
+    {
+     "name": "contact_social_media_title",
+     "label": "Contact Social Media Title",
+     "type": "text",
+     "templates": [
+      "contact"
+     ]
+    },
+    {
+     "name": "contact_social_media",
+     "label": "Contact Social Media",
+     "type": "repeater",
+     "fields": [
+      {
+       "name": "contact_social_media_link",
+       "label": "Contact Social Media Link",
+       "type": "text"
+      },
+      {
+       "name": "contact_social_media_image",
+       "label": "Contact Social Media Image",
+       "type": "image"
+      },
+      {
+       "name": "contact_social_media_hover_image",
+       "label": "Contact Social Media Hover Image",
+       "type": "image"
+      }
+     ],
+     "templates": [
+      "contact"
+     ]
+    },
+    {
+     "name": "whatsapp_qr_link",
+     "label": "Whatsapp QR Link",
+     "type": "text",
+     "templates": [
+      "contact"
+     ]
+    },
+    {
+     "name": "whtasapp_qr",
+     "label": "Whtasapp QR",
+     "type": "image",
+     "templates": [
+      "contact"
+     ]
+    },
+    {
+     "name": "contact_form_title",
+     "label": "Contact Form Title",
+     "type": "text",
+     "templates": [
+      "contact"
+     ]
+    },
+    {
+     "name": "contact_form_block",
+     "label": "Contact Form Block",
+     "type": "text",
+     "templates": [
+      "contact"
+     ]
+    },
+    {
+     "name": "contact_locations_title",
+     "label": "Contact Locations Title",
+     "type": "text",
+     "templates": [
+      "contact"
+     ]
+    },
+    {
+     "name": "contact_locations_section_list",
+     "label": "Contact Locations Section List",
+     "type": "repeater",
+     "fields": [
+      {
+       "name": "contact_locations_section_title",
+       "label": "Contact Locations Section Title",
+       "type": "text"
+      },
+      {
+       "name": "contact_locations_section_content",
+       "label": "Contact Locations Section Content",
+       "type": "text"
+      },
+      {
+       "name": "contact_locations_section_map",
+       "label": "Contact Locations Section Map",
+       "type": "text"
+      },
+      {
+       "name": "contact_locations_section_map_link",
+       "label": "Contact Locations Section Map Link",
+       "type": "text"
+      }
+     ],
+     "templates": [
+      "contact"
+     ]
+    },
+    {
+     "name": "contact_footer_top_title",
+     "label": "Contact Footer Top Title",
+     "type": "text",
+     "templates": [
+      "contact"
+     ]
+    },
+    {
+     "name": "contact_footer_top_content",
+     "label": "Contact Footer Top Content",
+     "type": "text",
+     "templates": [
+      "contact"
+     ]
+    },
+    {
+     "name": "contact_footer_top_button",
+     "label": "Contact Footer Top Button",
+     "type": "text",
+     "templates": [
+      "contact"
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Virtual Try-On Page",
+   "fields": [
+    {
+     "name": "virtual_try-on_title",
+     "label": "Virtual Try-On Title",
+     "type": "text",
+     "templates": [
+      "virtual-try-on"
+     ]
+    },
+    {
+     "name": "virtual_try-on_sub_title",
+     "label": "Virtual Try-On Sub Title",
+     "type": "text",
+     "templates": [
+      "virtual-try-on"
+     ]
+    },
+    {
+     "name": "virtual_try-on_content",
+     "label": "Virtual Try-On Content",
+     "type": "wysiwyg",
+     "templates": [
+      "virtual-try-on"
+     ]
+    },
+    {
+     "name": "virtual_try-on_button_text",
+     "label": "Virtual Try-On Button Text",
+     "type": "text",
+     "templates": [
+      "virtual-try-on"
+     ]
+    },
+    {
+     "name": "virtual_try-on_button_link",
+     "label": "Virtual Try-On Button LInk",
+     "type": "text",
+     "templates": [
+      "virtual-try-on"
+     ]
+    },
+    {
+     "name": "virtual_try-on_free_trial_image",
+     "label": "Virtual Try-On Free Trial Image",
+     "type": "image",
+     "templates": [
+      "virtual-try-on"
+     ]
+    },
+    {
+     "name": "virtual_try-on_free_trial_title",
+     "label": "Virtual Try-On Free Trial Title",
+     "type": "text",
+     "templates": [
+      "virtual-try-on"
+     ]
+    },
+    {
+     "name": "virtual_try-on_free_trial_content",
+     "label": "Virtual Try-On Free Trial Content",
+     "type": "wysiwyg",
+     "templates": [
+      "virtual-try-on"
+     ]
+    },
+    {
+     "name": "virtual_try-on_free_trial_button_text",
+     "label": "Virtual Try-On Free Trial Button Text",
+     "type": "text",
+     "templates": [
+      "virtual-try-on"
+     ]
+    },
+    {
+     "name": "virtual_try-on_free_trial_button_link",
+     "label": "Virtual Try-On Free Trial Button Link",
+     "type": "text",
+     "templates": [
+      "virtual-try-on"
+     ]
+    },
+    {
+     "name": "virtual_try-on_shoppers_title",
+     "label": "Virtual Try-On Shoppers Title",
+     "type": "text",
+     "templates": [
+      "virtual-try-on"
+     ]
+    },
+    {
+     "name": "virtual_try-on_shoppers_content",
+     "label": "Virtual Try-On Shoppers Content",
+     "type": "text",
+     "templates": [
+      "virtual-try-on"
+     ]
+    },
+    {
+     "name": "virtual_try-on_shoppers_list",
+     "label": "Virtual Try-On Shoppers List",
+     "type": "repeater",
+     "fields": [
+      {
+       "name": "virtual_try-on_shoppers_list_icon",
+       "label": "Virtual Try-On Shoppers List Icon",
+       "type": "image"
+      },
+      {
+       "name": "virtual_try-on_shoppers_list_title",
+       "label": "Virtual Try-On Shoppers List Title",
+       "type": "text"
+      },
+      {
+       "name": "virtual_try-on_shoppers_list_sub_title",
+       "label": "Virtual Try-On Shoppers List Sub Title",
+       "type": "text"
+      },
+      {
+       "name": "virtual_try-on_shoppers_list_image",
+       "label": "Virtual Try-On Shoppers List Image",
+       "type": "image"
+      }
+     ],
+     "templates": [
+      "virtual-try-on"
+     ]
+    },
+    {
+     "name": "virtual_try-on_business_title",
+     "label": "Virtual Try-On Business Title",
+     "type": "text",
+     "templates": [
+      "virtual-try-on"
+     ]
+    },
+    {
+     "name": "virtual_try-on_business_content",
+     "label": "Virtual Try-On Business Content",
+     "type": "text",
+     "templates": [
+      "virtual-try-on"
+     ]
+    },
+    {
+     "name": "virtual_try-on_business_list",
+     "label": "Virtual Try-On Business List",
+     "type": "repeater",
+     "fields": [
+      {
+       "name": "virtual_try-on_business_list_text",
+       "label": "Virtual Try-On Business List Text",
+       "type": "text"
+      }
+     ],
+     "templates": [
+      "virtual-try-on"
+     ]
+    },
+    {
+     "name": "virtual_try-on_business_button",
+     "label": "Virtual Try-On Business Button",
+     "type": "text",
+     "templates": [
+      "virtual-try-on"
+     ]
+    },
+    {
+     "name": "virtual_try-on_business_button_link",
+     "label": "Virtual Try-On Business Button Link",
+     "type": "text",
+     "templates": [
+      "virtual-try-on"
+     ]
+    },
+    {
+     "name": "virtual_try-on_right_image",
+     "label": "Virtual Try-On Right Image",
+     "type": "image",
+     "templates": [
+      "virtual-try-on"
+     ]
+    },
+    {
+     "name": "virtual_try-on_wardrobe_title",
+     "label": "Virtual Try-On Wardrobe Title",
+     "type": "text",
+     "templates": [
+      "virtual-try-on"
+     ]
+    },
+    {
+     "name": "virtual_try-on_wardrobe_content",
+     "label": "Virtual Try-On Wardrobe Content",
+     "type": "text",
+     "templates": [
+      "virtual-try-on"
+     ]
+    },
+    {
+     "name": "virtual_try-on_wardrobe_list",
+     "label": "Virtual Try-On Wardrobe List",
+     "type": "repeater",
+     "fields": [
+      {
+       "name": "virtual_try-on_wardrobe_image",
+       "label": "Virtual Try-On Wardrobe Image",
+       "type": "image"
+      },
+      {
+       "name": "virtual_try-on_wardrobe_text",
+       "label": "Virtual Try-On Wardrobe Text",
+       "type": "text"
+      }
+     ],
+     "templates": [
+      "virtual-try-on"
+     ]
+    },
+    {
+     "name": "virtual_try-on_wardrobe_button",
+     "label": "Virtual Try-On Wardrobe Button",
+     "type": "text",
+     "templates": [
+      "virtual-try-on"
+     ]
+    },
+    {
+     "name": "virtual_try-on_wardrobe_button_link",
+     "label": "Virtual Try-On Wardrobe Button Link",
+     "type": "text",
+     "templates": [
+      "virtual-try-on"
+     ]
+    },
+    {
+     "name": "virtual_try-on_fashion_title",
+     "label": "Virtual Try-On Fashion Title",
+     "type": "text",
+     "templates": [
+      "virtual-try-on"
+     ]
+    },
+    {
+     "name": "virtual_try-on_fashion_content",
+     "label": "Virtual Try-On Fashion Content",
+     "type": "text",
+     "templates": [
+      "virtual-try-on"
+     ]
+    },
+    {
+     "name": "virtual_try-on_fashion_list",
+     "label": "Virtual Try-On Fashion List",
+     "type": "repeater",
+     "fields": [
+      {
+       "name": "virtual_try-on_fashion_list_title",
+       "label": "Virtual Try-On Fashion List Title",
+       "type": "text"
+      },
+      {
+       "name": "virtual_try-on_fashion_list_sub_title",
+       "label": "Virtual Try-On Fashion List Sub Title",
+       "type": "text"
+      },
+      {
+       "name": "virtual_try-on_fashion_list_image",
+       "label": "Virtual Try-On Fashion List Image",
+       "type": "image"
+      }
+     ],
+     "templates": [
+      "virtual-try-on"
+     ]
+    },
+    {
+     "name": "virtual_try-on_footer_top_title",
+     "label": "Virtual Try-On Footer Top Title",
+     "type": "text",
+     "templates": [
+      "virtual-try-on"
+     ]
+    },
+    {
+     "name": "virtual_try-on_footer_top_content",
+     "label": "Virtual Try-On Footer Top Content",
+     "type": "text",
+     "templates": [
+      "virtual-try-on"
+     ]
+    },
+    {
+     "name": "virtual_try-on_footer_form_title",
+     "label": "Virtual Try-On Footer Form Title",
+     "type": "text",
+     "templates": [
+      "virtual-try-on"
+     ]
+    },
+    {
+     "name": "virtual_try-on_footer_form",
+     "label": "Virtual Try-On Footer Form",
+     "type": "text",
+     "templates": [
+      "virtual-try-on"
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Pricing Page",
+   "fields": [
+    {
+     "name": "pricing_banner_title",
+     "label": "Pricing Banner Title",
+     "type": "text",
+     "templates": [
+      "pricing"
+     ]
+    },
+    {
+     "name": "pricing_banner_content",
+     "label": "Pricing Banner Content",
+     "type": "text",
+     "templates": [
+      "pricing"
+     ]
+    },
+    {
+     "name": "pricing_block_content",
+     "label": "Pricing Block Content",
+     "type": "wysiwyg",
+     "templates": [
+      "pricing"
+     ]
+    },
+    {
+     "name": "pricing_footer_title",
+     "label": "Pricing Footer Title",
+     "type": "text",
+     "templates": [
+      "pricing"
+     ]
+    },
+    {
+     "name": "pricing_footer_content",
+     "label": "Pricing Footer Content",
+     "type": "text",
+     "templates": [
+      "pricing"
+     ]
+    },
+    {
+     "name": "pricing_footer_form_title",
+     "label": "Pricing Footer Form Title",
+     "type": "text",
+     "templates": [
+      "pricing"
+     ]
+    },
+    {
+     "name": "pricing_footer_form_block",
+     "label": "Pricing Footer Form Block",
+     "type": "text",
+     "templates": [
+      "pricing"
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Case Studies Page",
+   "fields": [
+    {
+     "name": "case_studies_banner_title",
+     "label": "Case Studies Banner Title",
+     "type": "text",
+     "templates": [
+      "case-studies"
+     ]
+    },
+    {
+     "name": "case_studies_banner_content",
+     "label": "Case Studies Banner Content",
+     "type": "text",
+     "templates": [
+      "case-studies"
+     ]
+    },
+    {
+     "name": "case_studies_banner_buttom_list",
+     "label": "Case Studies Banner Buttom List",
+     "type": "repeater",
+     "fields": [
+      {
+       "name": "case_studies_buttom_title",
+       "label": "Case Studies Buttom Title",
+       "type": "text"
+      },
+      {
+       "name": "case_studies_buttom_content",
+       "label": "Case Studies Buttom Content",
+       "type": "text"
+      }
+     ],
+     "templates": [
+      "case-studies"
+     ]
+    },
+    {
+     "name": "case_studies_footer_top_title",
+     "label": "Case Studies Footer Top Title",
+     "type": "text",
+     "templates": [
+      "case-studies"
+     ]
+    },
+    {
+     "name": "case_studies_footer_top_content",
+     "label": "Case Studies Footer Top Content",
+     "type": "text",
+     "templates": [
+      "case-studies"
+     ]
+    },
+    {
+     "name": "case_studies_footer_top_form_title",
+     "label": "Case Studies Footer Top Form Title",
+     "type": "text",
+     "templates": [
+      "case-studies"
+     ]
+    },
+    {
+     "name": "case_studies_footer_top_form_content",
+     "label": "Case Studies Footer Top Form Content",
+     "type": "text",
+     "templates": [
+      "case-studies"
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Getting Started Page",
+   "fields": [
+    {
+     "name": "getting_started_title",
+     "label": "Getting Started Title",
+     "type": "text",
+     "templates": [
+      "guide"
+     ]
+    },
+    {
+     "name": "getting_started_content",
+     "label": "Getting Started Content",
+     "type": "text",
+     "templates": [
+      "guide"
+     ]
+    },
+    {
+     "name": "getting_started_footer_top_title",
+     "label": "Getting Started Footer Top Title",
+     "type": "text",
+     "templates": [
+      "guide"
+     ]
+    },
+    {
+     "name": "getting_started_footer_top_content",
+     "label": "Getting Started Footer Top Content",
+     "type": "text",
+     "templates": [
+      "guide"
+     ]
+    },
+    {
+     "name": "getting_started_footer_form_title",
+     "label": "Getting Started Footer Form Title",
+     "type": "text",
+     "templates": [
+      "guide"
+     ]
+    },
+    {
+     "name": "getting_started_footer_form",
+     "label": "Getting Started Footer Form",
+     "type": "text",
+     "templates": [
+      "guide"
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Product Page",
+   "fields": [
+    {
+     "name": "product_banner_title",
+     "label": "Product Banner Title",
+     "type": "text",
+     "templates": [
+      "update"
+     ]
+    },
+    {
+     "name": "product_banner_content",
+     "label": "Product Banner Content",
+     "type": "text",
+     "templates": [
+      "update"
+     ]
+    }
+   ]
+  }
+ ],
+ "globalContent": [
+  {
+   "name": "catalogue_content",
+   "label": "Catalogue Content",
+   "type": "text"
+  },
+  {
+   "name": "sign_link",
+   "label": "Sign Link",
+   "type": "text"
+  },
+  {
+   "name": "sign_text",
+   "label": "Sign Text",
+   "type": "text"
+  },
+  {
+   "name": "google_play_link",
+   "label": "Google Play Link",
+   "type": "text"
+  },
+  {
+   "name": "google_play_image",
+   "label": "Google Play Image",
+   "type": "image"
+  },
+  {
+   "name": "shopify_link",
+   "label": "Shopify Link",
+   "type": "text"
+  },
+  {
+   "name": "shopify_image",
+   "label": "Shopify Image",
+   "type": "image"
+  },
+  {
+   "name": "footer_form_left_title",
+   "label": "Footer Form Left Title",
+   "type": "text"
+  },
+  {
+   "name": "footer_form_left_content",
+   "label": "Footer Form Left Content",
+   "type": "text"
+  },
+  {
+   "name": "footer_form_right_title",
+   "label": "Footer Form Right Title",
+   "type": "text"
+  },
+  {
+   "name": "corporate_title",
+   "label": "Corporate Title",
+   "type": "text"
+  },
+  {
+   "name": "corporate_content",
+   "label": "Corporate Content",
+   "type": "text"
+  },
+  {
+   "name": "head_title",
+   "label": "Head Title",
+   "type": "text"
+  },
+  {
+   "name": "head_content",
+   "label": "Head Content",
+   "type": "text"
+  },
+  {
+   "name": "mail_link",
+   "label": "Mail Link",
+   "type": "text"
+  },
+  {
+   "name": "mail_text",
+   "label": "Mail Text",
+   "type": "text"
+  },
+  {
+   "name": "phone_link",
+   "label": "Phone Link",
+   "type": "text"
+  },
+  {
+   "name": "phone_text",
+   "label": "Phone Text",
+   "type": "text"
+  },
+  {
+   "name": "social_media",
+   "label": "Social Media",
+   "type": "repeater",
+   "fields": [
+    {
+     "name": "social_media_link",
+     "label": "Social Media Link",
+     "type": "text"
+    },
+    {
+     "name": "social_media_image",
+     "label": "Social Media Image",
+     "type": "image"
+    },
+    {
+     "name": "social_media_hover_image",
+     "label": "Social Media Hover Image",
+     "type": "image"
+    }
+   ]
+  },
+  {
+   "name": "google_link",
+   "label": "Google Link",
+   "type": "text"
+  },
+  {
+   "name": "google_image",
+   "label": "Google Image",
+   "type": "image"
+  },
+  {
+   "name": "whatsapp_link",
+   "label": "Whatsapp Link",
+   "type": "text"
+  },
+  {
+   "name": "whatsapp_image",
+   "label": "Whatsapp Image",
+   "type": "image"
+  },
+  {
+   "name": "footer_top_left_title",
+   "label": "Footer Top Left Title",
+   "type": "text"
+  },
+  {
+   "name": "footer_top_left_content",
+   "label": "Footer Top Left Content",
+   "type": "text"
+  },
+  {
+   "name": "footer_top_right_title",
+   "label": "Footer Top Right Title",
+   "type": "text"
+  },
+  {
+   "name": "footer_top_form",
+   "label": "Footer Top Form",
+   "type": "text"
+  },
+  {
+   "name": "fashion_insights_title",
+   "label": "Fashion Insights Title",
+   "type": "text"
+  },
+  {
+   "name": "fashion_insights_content",
+   "label": "Fashion Insights Content",
+   "type": "text"
+  },
+  {
+   "name": "fashion_insights_block",
+   "label": "Fashion Insights Block",
+   "type": "text"
+  }
+ ]
+}

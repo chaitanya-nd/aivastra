@@ -1,0 +1,11 @@
+node_modules
+.next
+.git
+.env
+.env.*
+!.env.example
+media
+reports
+*.wpress
+seed/wp-full.json
+tsconfig.tsbuildinfo
