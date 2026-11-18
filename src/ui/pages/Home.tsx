@@ -1,6 +1,6 @@
 import { findMany } from '@/lib/data'
 import { excerptOf, THEME_URL, words } from '@/components/theme/util'
-import { HeroSlides, HScroll, Toggle } from '../client/Interactive'
+import { HeroShow, HScroll, Toggle, TryOnStage, LookStage } from '../client/Interactive'
 import { attr, buttons, inline, load, q, qa, src, tx } from '../html'
 import { CtaBand, FaqSection } from '../shell'
 import { Words } from '../Words'
@@ -13,6 +13,7 @@ const Btn = ({ b, ghost = false }: { b: { text: string; href: string; newTab: bo
     <i aria-hidden="true">→</i>
   </a>
 )
+const EYE_ICONS = ['/hero/icon-hanger.png', '/hero/flat/icon-badge-sparkle.png', '/hero/jewel/icon-badge-gem.png']
 const Rich = ({ html: h, className = '' }: { html: string; className?: string }) => <p className={className} dangerouslySetInnerHTML={{ __html: h }} />
 
 export async function Home({ doc, gc }: { doc: any; gc: any }) {
@@ -27,6 +28,8 @@ export async function Home({ doc, gc }: { doc: any; gc: any }) {
     btns: buttons(q(s, '.hm-banner-btn-lsting')),
     img: src(q(s, '.hm-banner-sec-cnt-img')),
   }))
+  // Virtual try-on (last CMS slide) leads, then the two catalogue slides.
+  slides.unshift(slides.pop()!)
   const tiles = [
     { s: 'photoshoots-item1', y: '2026/08', d: 1.4, c: 'a' },
     { s: 'photoshoots-item2', y: '2026/08', d: 0.7, c: 'b' },
@@ -77,7 +80,7 @@ export async function Home({ doc, gc }: { doc: any; gc: any }) {
 
   const hero = slides.map((s, n) => (
     <div className="av-hero-txt" key={n}>
-      <p className="av-eyebrow"><span className="av-dot" />{s.eyebrow}</p>
+      <p className={`av-eyebrow${n > 0 ? ' pill' : ''}`}><img className="av-hanger" src={EYE_ICONS[n] ?? EYE_ICONS[2]} alt="" width={26} height={22} />{s.eyebrow}</p>
       <h1 className="av-mega">
         {s.title.map((l, i) => <span className="av-line" key={i}><span>{l}</span>{i < s.title.length - 1 ? ' ' : ''}</span>)}
       </h1>
@@ -89,23 +92,39 @@ export async function Home({ doc, gc }: { doc: any; gc: any }) {
   return (
     <div className="av-page av-home">
       {/* HERO */}
-      <section className="av-hero">
-        <div className="av-grid-bg" aria-hidden="true" />
-        <div className="av-field" data-field aria-hidden="true">
-          {tiles.map((t) => (
-            <figure className={`av-tile ${t.c}`} data-depth={t.d} key={t.s}>
-              <img src={`https://aivastra.com/wp-content/uploads/${t.y}/${t.s}.webp`} alt="" loading="eager" />
-            </figure>
-          ))}
-        </div>
+      <section className="av-hero av-hero2">
+        <div className="av-hero2-bg" aria-hidden="true" />
         <div className="av-wrap av-hero-in">
-          <HeroSlides slides={hero} />
-          <div className="av-hero-shot" data-parallax="0.05">
-            <div className="av-sticker s1">AI</div>
-            {slides.map((s, n) => (
-              <img key={n} src={s.img} alt="" className="av-hero-img" data-i={n} />
-            ))}
-          </div>
+          <HeroShow
+            slides={hero}
+            feats={[
+              <ul className="av-feats" key="f3">
+                {[['icon-instant', 'Instant Preview'], ['icon-fit', 'Realistic Fit & Draping'], ['icon-conversion', 'Higher Conversions']].map(([ic, t]) => (
+                  <li key={t}><img src={`/hero/${ic}.png`} alt="" width={34} height={34} /><span>{t}</span></li>
+                ))}
+              </ul>,
+              <ul className="av-feats flow" key="f1">
+                {[['/hero/flat/icon-tshirt.png', 'Upload Flat Lay'], ['/hero/flat/icon-sparkles.png', 'Generate On-Model'], ['/hero/flat/icon-images.png', 'Get Multiple Looks']].map(([ic, t], k) => (
+                  <li key={t}>{k > 0 && <img className="av-feat-arrow" src="/hero/flat/arrow-1.png" alt="" />}<span className="av-feat"><img src={ic} alt="" width={40} height={40} /><span>{t}</span></span></li>
+                ))}
+              </ul>,
+              <ul className="av-feats" key="f2">
+                {[['/hero/jewel/icon-camera.png', 'Lifelike On-Model Photos'], ['/hero/jewel/icon-layers.png', 'Multiple Angles & Poses'], ['/hero/jewel/icon-sparkle.png', 'Premium Studio Quality']].map(([ic, t]) => (
+                  <li key={t}><img src={ic} alt="" width={34} height={34} /><span>{t}</span></li>
+                ))}
+              </ul>,
+            ]}
+            stages={[
+              <TryOnStage key="s3"
+                garments={['/hero/garment-1-red.png', '/hero/garment-2-cream.png', '/hero/garment-3-black.png']}
+                afters={['/hero/after-red.png', '/hero/after-cream.png', '/hero/after-black.png']}
+                before="/hero/model-before.png"
+                labels={{ before: 'Before', after: 'After – Virtual Try-On' }}
+              />,
+              <LookStage key="s1" kind="flat" inputLabel="Flat Lay Input" inputIcon="/hero/flat/icon-upload.png" inputImg="/hero/flat/flatlay-dress.png" main={{ src: '/hero/flat/model-main.png' }} thumbs={[{ src: '/hero/flat/model-pose-1.png' }, { src: '/hero/flat/model-pose-2.png' }, { src: '/hero/flat/model-pose-3.png' }]} pill="On-Model Catalogue" arrow="/hero/flat/arrow-2.png" />,
+              <LookStage key="s2" kind="jewel" inputLabel="Jewellery Input" inputIcon="/hero/jewel/icon-jewellery-input.png" inputImg="/hero/jewel/jewellery-set.png" main={{ src: '/hero/jewel/model-main.png' }} thumbs={[{ src: '/hero/jewel/model-main.png', pos: 'center 22%', big: { src: '/hero/jewel/model-main.png', pos: 'center top' } }, { src: '/hero/jewel/model-main.png', pos: 'center 62%', big: { src: '/hero/jewel/model-main.png', pos: 'center 62%', zoom: 1.3 } }, { src: '/hero/jewel/model-pose-3.png', pos: 'center 20%', big: { src: '/hero/jewel/model-main.png', pos: '30% 30%', zoom: 1.4 } }]} pill="AI Generated Catalogue" arrow="/hero/flat/arrow-1.png" />,
+            ]}
+          />
         </div>
         <a className="av-scroll" href="#brands" aria-label="Scroll"><i /></a>
       </section>

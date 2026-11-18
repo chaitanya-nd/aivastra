@@ -115,3 +115,104 @@ export function Faq({ items }: { items: { q: string; a: string }[] }) {
     </div>
   )
 }
+
+/** Hero virtual try-on stage: Before card → After model, garment picker swaps the look. */
+export function TryOnStage({ garments, afters, before, labels }: { garments: string[]; afters: string[]; before: string; labels: { before: string; after: string } }) {
+  const [i, setI] = useState(0)
+  const [paused, setPaused] = useState(false)
+  const [picked, setPicked] = useState(false) // once a shopper picks a dress, stop auto-rotating
+  useEffect(() => {
+    if (paused || picked) return
+    const t = setInterval(() => setI((n) => (n + 1) % garments.length), 3500)
+    return () => clearInterval(t)
+  }, [paused, picked, garments.length])
+  return (
+    <div className="av-tryon" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
+      <div className="av-tryon-ring" aria-hidden="true" />
+      <div className="av-tryon-glow" aria-hidden="true" />
+      <div className="av-tryon-after" data-parallax="0.04">
+        {afters.map((s, n) => <img key={n} src={s} alt="" className={n === i ? 'is-on' : ''} />)}
+      </div>
+      <figure className="av-tryon-before" data-depth="0.8">
+        <img src={before} alt="" />
+        <figcaption>{labels.before}</figcaption>
+      </figure>
+      <svg className="av-tryon-arrow" viewBox="0 0 110 60" aria-hidden="true"><path d="M2 48 C 40 56, 70 40, 100 24" fill="none" stroke="url(#ag)" strokeWidth="3" strokeLinecap="round" /><path d="M86 18 L102 23 L93 37" fill="none" stroke="#ffb68a" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" /><defs><linearGradient id="ag" x1="0" x2="1"><stop stopColor="#ff5a78" /><stop offset="1" stopColor="#ffb68a" /></linearGradient></defs></svg>
+      <div className="av-tryon-picker" role="tablist">
+        {garments.map((g, n) => (
+          <button key={n} role="tab" aria-selected={n === i} className={n === i ? 'is-on' : ''} onClick={() => { setI(n); setPicked(true) }} aria-label={`Garment ${n + 1}`}>
+            <img src={g} alt="" />
+            {n === i && <i aria-hidden="true">✓</i>}
+          </button>
+        ))}
+      </div>
+      <div className="av-tryon-pill"><i aria-hidden="true">✓</i>{labels.after}</div>
+    </div>
+  )
+}
+
+/** Hero: rotating text + per-slide feature row + per-slide visual stage, all driven by one slide index. */
+export function HeroShow({ slides, feats, stages }: { slides: ReactNode[]; feats: ReactNode[]; stages: ReactNode[] }) {
+  const [i, setI] = useState(0)
+  const [paused, setPaused] = useState(false)
+  useEffect(() => {
+    if (paused) return
+    const t = setTimeout(() => setI((n) => (n + 1) % slides.length), 2200)
+    return () => clearTimeout(t)
+  }, [paused, slides.length, i]) // depends on i so clicking a dot restarts the timer
+  return (
+    <div className="av-hero-show" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
+      <div className="av-hero2-left">
+        <div className="av-slides">
+          {slides.map((s, n) => <div className={`av-slide${n === i ? ' is-on' : ''}`} key={n} aria-hidden={n !== i}>{s}</div>)}
+        </div>
+        <div className="av-dots">
+          {slides.map((_, n) => <button key={n} className={n === i ? 'is-on' : ''} aria-label={`Slide ${n + 1}`} onClick={() => setI(n)} />)}
+        </div>
+        <div className="av-feats-stack">
+          {feats.map((f, n) => <div className={`av-feats-slide${n === i ? ' is-on' : ''}`} key={n} aria-hidden={n !== i}>{f}</div>)}
+        </div>
+      </div>
+      <div className="av-stages">
+        {stages.map((s, n) => <div className={`av-stage${n === i ? ' is-on' : ''}`} key={n} aria-hidden={n !== i}>{s}</div>)}
+      </div>
+    </div>
+  )
+}
+
+type Look = { src: string; pos?: string; zoom?: number; big?: Look }
+/** Input card → big on-model frame + clickable looks rail (flat lay and jewellery banners). */
+export function LookStage({ kind, inputLabel, inputIcon, inputImg, main, thumbs, pill, arrow }: { kind: 'flat' | 'jewel'; inputLabel: string; inputIcon: string; inputImg: string; main: Look; thumbs: Look[]; pill: string; arrow: string }) {
+  const [sel, setSel] = useState(-1) // -1 = hero shot, 0.. = rail look
+  const [paused, setPaused] = useState(false)
+  const [picked, setPicked] = useState(false)
+  useEffect(() => {
+    if (paused || picked) return
+    const t = setInterval(() => setSel((n) => (n + 1 >= thumbs.length ? -1 : n + 1)), 3200)
+    return () => clearInterval(t)
+  }, [paused, picked, thumbs.length])
+  const looks = [main, ...thumbs.map((t) => t.big ?? t)]
+  return (
+    <div className={`av-look av-look-${kind}`} onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
+      <div className="av-look-glow" aria-hidden="true" />
+      <div className="av-look-input">
+        <span className="av-look-chip"><img src={inputIcon} alt="" width={20} height={20} />{inputLabel}</span>
+        <div className="av-look-input-img"><img src={inputImg} alt="" /></div>
+      </div>
+      <div className="av-look-main">
+        {looks.map((l, n) => (
+          <img key={n} src={l.src} alt="" className={n === sel + 1 ? 'is-on' : ''} style={{ objectPosition: l.pos || 'center top', transform: n === sel + 1 && l.zoom ? `scale(${l.zoom})` : undefined }} />
+        ))}
+        <div className="av-look-pill"><i aria-hidden="true">✓</i>{pill}</div>
+      </div>
+      <div className="av-look-arrow" aria-hidden="true"><img src={arrow} alt="" /></div>
+      <div className="av-look-rail" role="tablist">
+        {thumbs.map((t, n) => (
+          <button key={n} role="tab" aria-selected={sel === n} className={sel === n ? 'is-on' : ''} onClick={() => { setSel(n); setPicked(true) }} aria-label={`Look ${n + 1}`}>
+            <img src={t.src} alt="" style={{ objectPosition: t.pos || 'center top' }} />
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
