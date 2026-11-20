@@ -375,3 +375,6 @@ main.page-content.shopify-page .guide-category-card.inshop-item .why-teams-itm-t
 /* remaining orange → purple */
 .card-category-tag { background: linear-gradient(to right, #b07cff, #7c5cff) !important; -webkit-background-clip: text !important; background-clip: text !important; -webkit-text-fill-color: transparent !important; }
 .pricing-table .card .badge { background: linear-gradient(90deg, #7c5cff, #b07cff) !important; }
+
+/* pricing "best value": logo gradient (blue → violet → coral) */
+.pricing-table .card .badge, .pricing-table .highlight { background: linear-gradient(100deg, #4e54f8, #ba2fe2 55%, #f8624d) !important; color: #fff !important; }

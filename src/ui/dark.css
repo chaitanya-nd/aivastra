@@ -727,3 +727,100 @@ footer img[src*="av-logo-horizontal"] { filter: none !important; height: 52px; w
 
 /* AI stickers: logo gradient */
 .av-sticker, .av-sticker.s1, .av-sticker.s2, .av-sticker.s3 { background: linear-gradient(135deg, #4e54f8, #ba2fe2 55%, #f8624d) !important; box-shadow: 0 0 60px rgba(186,47,226,.55) !important; color: #fff !important; }
+
+/* ── 3 easy steps: production-grade motion (compositor-friendly: opacity/translate/box-shadow only) ── */
+.av-steps-l { position: relative; }
+.av-step { --st: 0s; position: relative; will-change: auto; }
+.av-step:nth-child(2) { --st: 3s; } .av-step:nth-child(3) { --st: 6s; }
+
+/* 1) scroll-in: staggered rise (uses `translate`, so the JS tilt transform is untouched) */
+@supports (animation-timeline: view()) {
+  .av-step { animation: avStepIn both cubic-bezier(.2,.8,.2,1); animation-timeline: view(); animation-range: entry 0% entry 55%; }
+  .av-step:nth-child(2) { animation-range: entry 8% entry 63%; } .av-step:nth-child(3) { animation-range: entry 16% entry 71%; }
+}
+@keyframes avStepIn { from { opacity: 0; translate: 0 56px; } to { opacity: 1; translate: 0 0; } }
+
+/* 2) guided loop: step 1 → 2 → 3 lights up in turn (9s cycle) */
+.av-step { animation-name: avStepOn; animation-duration: 9s; animation-delay: var(--st); animation-iteration-count: infinite; animation-timing-function: ease-in-out; }
+@supports (animation-timeline: view()) { .av-step { animation: avStepIn both cubic-bezier(.2,.8,.2,1) view() entry 0% entry 55%, avStepOn 9s ease-in-out var(--st) infinite; } .av-step:nth-child(2) { animation-range: entry 8% entry 63%, normal; } .av-step:nth-child(3) { animation-range: entry 16% entry 71%, normal; } }
+@keyframes avStepOn {
+  0%, 38%, 100% { border-color: rgba(255,255,255,.1); box-shadow: 0 0 0 0 rgba(124,92,255,0); }
+  8%, 28% { border-color: rgba(176,124,255,.65); box-shadow: 0 30px 90px -30px rgba(124,92,255,.55), 0 0 0 1px rgba(176,124,255,.25); }
+}
+.av-step-n { position: relative; animation: avPillOn 9s ease-in-out var(--st) infinite; }
+@keyframes avPillOn { 0%, 38%, 100% { background: rgba(255,255,255,.1); } 8%, 28% { background: linear-gradient(100deg, #4e54f8, #ba2fe2 55%, #f8624d); border-color: transparent; } }
+.av-step-top img { animation: avIconFloat 4.5s ease-in-out var(--st) infinite; }
+@keyframes avIconFloat { 0%, 100% { translate: 0 0; } 50% { translate: 0 -5px; } }
+
+/* 3) light sweep across the photo while a step is active */
+.av-step-img { position: relative; isolation: isolate; }
+.av-step-img::after { content: ''; position: absolute; inset: 0; z-index: 2; pointer-events: none; background: linear-gradient(105deg, transparent 35%, rgba(255,255,255,.38) 50%, transparent 65%); translate: -120% 0; animation: avSweep 9s ease-in-out var(--st) infinite; }
+@keyframes avSweep { 0%, 6% { translate: -120% 0; } 22%, 100% { translate: 120% 0; } }
+.av-step-img img { animation: avKen 14s ease-in-out var(--st) infinite alternate; }
+@keyframes avKen { from { scale: 1; } to { scale: 1.045; } }
+
+/* 4) connector dots travelling between the cards (desktop) */
+@media (min-width: 901px) {
+  .av-step:not(:last-child)::after { content: ''; position: absolute; top: 47px; left: calc(100% + 2px); width: 18px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, #8b6cff, #ba2fe2); box-shadow: 0 0 12px rgba(139,108,255,.9); opacity: 0; animation: avHop 9s ease-in-out var(--st) infinite; }
+}
+@keyframes avHop { 0%, 24% { opacity: 0; translate: -4px 0; } 30% { opacity: 1; } 38% { opacity: 1; translate: 6px 0; } 44%, 100% { opacity: 0; translate: 6px 0; } }
+
+/* interaction: pause the loop and lift the hovered card */
+.av-steps-l:hover .av-step, .av-steps-l:hover .av-step-n, .av-steps-l:hover .av-step-img::after { animation-play-state: paused; }
+.av-step:hover { border-color: rgba(176,124,255,.7); }
+
+@media (prefers-reduced-motion: reduce) {
+  .av-step, .av-step-n, .av-step-top img, .av-step-img::after, .av-step-img img, .av-step::after { animation: none !important; }
+  .av-step-img::after, .av-step::after { display: none; }
+}
+
+/* ── steps: extra motion ── */
+/* a) rotating gradient ring around the active card */
+.av-step::before { content: ''; position: absolute; inset: -1px; border-radius: inherit; padding: 1.5px; pointer-events: none; opacity: 0; background: conic-gradient(from var(--a, 0deg), transparent 0 62%, #4e54f8, #ba2fe2, #f8624d, transparent); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); animation: avRing 9s linear var(--st) infinite; }
+@keyframes avRing { 0%, 2% { opacity: 0; --a: 0deg; } 8% { opacity: 1; } 28% { opacity: 1; } 36%, 100% { opacity: 0; --a: 360deg; } }
+
+/* b) heading + subtitle rise in on scroll */
+@supports (animation-timeline: view()) {
+  .av-steps-h h2, .av-steps-h .av-lead { animation: avStepIn both cubic-bezier(.2,.8,.2,1) view() entry 0% entry 45%; }
+  .av-steps-h .av-lead { animation-range: entry 8% entry 55%; }
+}
+
+/* c) per-step icon personalities */
+.av-step:nth-child(1) .av-step-top img { animation: avUpload 2.6s ease-in-out infinite; }
+@keyframes avUpload { 0%, 100% { translate: 0 0; } 40% { translate: 0 -7px; } 60% { translate: 0 -7px; } }
+.av-step:nth-child(2) .av-step-top img { animation: avBreathe 3.2s ease-in-out infinite; }
+@keyframes avBreathe { 0%, 100% { scale: 1; filter: brightness(0) invert(1) drop-shadow(0 0 0 rgba(176,124,255,0)); } 50% { scale: 1.12; filter: brightness(0) invert(1) drop-shadow(0 0 8px rgba(176,124,255,.9)); } }
+.av-step:nth-child(3) .av-step-top img { animation: avTilt 3.4s ease-in-out infinite; }
+@keyframes avTilt { 0%, 100% { rotate: 0deg; } 25% { rotate: -6deg; } 75% { rotate: 6deg; } }
+
+/* d) title accent underline draws on hover / when active */
+.av-step-t { position: relative; width: fit-content; }
+.av-step-t::after { content: ''; position: absolute; left: 0; bottom: -6px; height: 2px; width: 100%; border-radius: 2px; background: linear-gradient(90deg, #4e54f8, #ba2fe2, #f8624d); transform: scaleX(0); transform-origin: left; animation: avUnder 9s ease-in-out var(--st) infinite; }
+@keyframes avUnder { 0%, 4% { transform: scaleX(0); } 14%, 30% { transform: scaleX(1); } 38%, 100% { transform: scaleX(0); } }
+.av-step:hover .av-step-t::after { animation: none; transform: scaleX(1); transition: transform .5s cubic-bezier(.2,.8,.2,1); }
+
+/* e) photo corner pulse dot — "processing" feel on the active card */
+.av-step-img { --pulse: 0; }
+.av-step-img::before { content: ''; position: absolute; top: 14px; right: 14px; width: 10px; height: 10px; border-radius: 50%; z-index: 3; background: #ba2fe2; box-shadow: 0 0 0 0 rgba(186,47,226,.7); opacity: 0; animation: avPing 9s ease-out var(--st) infinite; }
+@keyframes avPing { 0%, 6% { opacity: 0; box-shadow: 0 0 0 0 rgba(186,47,226,.7); } 8% { opacity: 1; } 12%, 18%, 24% { box-shadow: 0 0 0 0 rgba(186,47,226,.7); } 15%, 21%, 27% { box-shadow: 0 0 0 12px rgba(186,47,226,0); } 30%, 100% { opacity: 0; } }
+
+.av-steps-l:hover .av-step::before, .av-steps-l:hover .av-step-t::after, .av-steps-l:hover .av-step-img::before { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+  .av-step::before, .av-step-t::after, .av-step-img::before, .av-step-top img, .av-steps-h h2, .av-steps-h .av-lead { animation: none !important; }
+  .av-step::before, .av-step-img::before { display: none; }
+}
+
+/* why-teams card: radiating glow (ambient halo + rotating logo-gradient edge + cursor spotlight) */
+.av-why-card { position: relative; isolation: isolate; }
+.av-why-card > * { position: relative; z-index: 1; }
+/* rotating gradient edge */
+.av-why-card::before { content: ''; position: absolute; inset: -1px; border-radius: inherit; padding: 1.5px; pointer-events: none; z-index: 0; background: conic-gradient(from var(--a, 0deg), transparent 0 55%, rgba(78,84,248,.9), rgba(186,47,226,.95), rgba(248,98,77,.9), transparent); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); animation: av-orbit 7s linear infinite; }
+/* cursor spotlight + breathing inner glow */
+.av-why-card::after { content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: 0; background: radial-gradient(460px circle at var(--mx, 50%) var(--my, 50%), rgba(186,47,226,.2), transparent 45%), radial-gradient(70% 55% at 50% 0%, rgba(124,92,255,.14), transparent 70%); opacity: .55; transition: opacity .4s; animation: avWhyBreathe 5s ease-in-out infinite; }
+.av-why-card:hover::after { opacity: 1; animation: none; }
+@keyframes avWhyBreathe { 0%, 100% { opacity: .4; } 50% { opacity: .85; } }
+/* outer halo that pulses outward */
+.av-why-card { animation: avWhyHalo 5s ease-in-out infinite; }
+@keyframes avWhyHalo { 0%, 100% { box-shadow: 0 30px 80px -30px rgba(0,0,0,.8), 0 0 40px -10px rgba(124,92,255,.25); } 50% { box-shadow: 0 30px 80px -30px rgba(0,0,0,.8), 0 0 90px -6px rgba(186,47,226,.45); } }
+.av-why-card:hover { box-shadow: 0 30px 80px -30px rgba(0,0,0,.8), 0 0 110px -4px rgba(186,47,226,.5); animation: none; }
+@media (prefers-reduced-motion: reduce) { .av-why-card, .av-why-card::before, .av-why-card::after { animation: none !important; } }

@@ -1,6 +1,6 @@
 import { findMany } from '@/lib/data'
 import { excerptOf, THEME_URL, words } from '@/components/theme/util'
-import { CardStack, CategoryShowcase, ScrollTicker, HeroShow, HScroll, Toggle, TryOnStage, LookStage, WhyShow } from '../client/Interactive'
+import { CardStack, CategoryShowcase, ScrollTicker, HeroShow, HScroll, Toggle, TryOnStage, LookStage } from '../client/Interactive'
 import { attr, buttons, inline, load, q, qa, src, tx } from '../html'
 import { CtaBand, FaqSection } from '../shell'
 import { Words } from '../Words'
@@ -282,32 +282,6 @@ export async function Home({ doc, gc }: { doc: any; gc: any }) {
                 <Rich html={s.d} />
               </article>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* WHY TEAMS CHOOSE */}
-      <section className="av-why">
-        <div className="av-wrap">
-          <p className="av-why-eyebrow">WHY TEAMS CHOOSE <b>AI VASTRA</b></p>
-          <div className="av-why-card" data-reveal>
-            <div className="av-why-stats">
-              {[['₹10', 'Per catalogue photo at scale'], ['₹100', 'Per product video'], ['1,000', 'Images in the largest pack'], ['1', 'Flat-lay photo is all it takes']].map(([n, l]) => (
-                <div className="av-why-stat" key={l}><b>{n}</b><span>{l}</span></div>
-              ))}
-            </div>
-            <div className="av-why-row">
-              <div className="av-why-copy">
-                <span className="av-why-tag">FOR FASHION BRANDS AND SELLERS</span>
-                <h3>Skip the studio shoot. <em>1,000 catalogue images for ₹10,000.</em></h3>
-                <p>Upload one flat-lay and get on-model catalogue photos in every pose and background, ready for your store and marketplaces.</p>
-              </div>
-              <WhyShow sets={[
-                { tab: 'Women', label: 'Dress', src: '/hero/flat/flatlay-dress.png', out: ['/hero/after-red.png', '/hero/after-cream.png', '/hero/flat/model-main.png'] },
-                { tab: 'Men', label: 'Sherwani set', src: '/garments/men/sherwani-and-pyjama.webp', out: ['https://aivastra.com/wp-content/uploads/2026/10/Nehru-jacket.webp', 'https://aivastra.com/wp-content/uploads/2026/08/Rectangle-49-1.webp', 'https://aivastra.com/wp-content/uploads/2026/10/Nehru-jacket-Img.webp'] },
-                { tab: 'Jewellery', label: 'Necklace set', src: '/hero/jewel/jewellery-set.png', out: ['/hero/jewel/model-pose-3.png', `${THEME_URL}/images/jewelleryimg.webp`, '/hero/jewel/model-main.png'] },
-              ]} />
-            </div>
           </div>
         </div>
       </section>

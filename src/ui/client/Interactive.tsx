@@ -509,7 +509,7 @@ export function FooterMark() {
 }
 
 /* "Why teams choose" visual: pick a category, the flat-lay and catalogue fan change together */
-export function WhyShow({ sets }: { sets: { tab: string; label: string; src: string; out: [string, string, string] }[] }) {
+export function WhyShow({ sets, srcLabel = 'YOUR PHOTO', outLabel = 'YOUR CATALOGUE' }: { srcLabel?: string; outLabel?: string; sets: { tab: string; label: string; src: string; out: [string, string, string] }[] }) {
   const [i, setI] = useState(0)
   const [paused, setPaused] = useState(false)
   const [picked, setPicked] = useState(false) // a manual pick stops the auto-rotation
@@ -527,9 +527,9 @@ export function WhyShow({ sets }: { sets: { tab: string; label: string; src: str
         ))}
       </div>
       <div className="av-why-visual" key={i}>
-        <div className="av-why-col"><small>YOUR PHOTO</small><img className="av-why-src" src={s.src} alt={s.label} loading="lazy" /><b>{s.label}</b></div>
+        <div className="av-why-col"><small>{srcLabel}</small><img className="av-why-src" src={s.src} alt={s.label} loading="lazy" /><b>{s.label}</b></div>
         <span className="av-why-arrow" aria-hidden="true" />
-        <div className="av-why-col wide"><small>YOUR CATALOGUE</small>
+        <div className="av-why-col wide"><small>{outLabel}</small>
           <div className="av-why-fan">
             <img src={s.out[0]} alt="" loading="lazy" />
             <img src={s.out[1]} alt="" loading="lazy" />
