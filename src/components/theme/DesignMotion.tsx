@@ -47,7 +47,7 @@ export function DesignMotion() {
     window.addEventListener('scroll', onScroll, { passive: true })
 
     // spotlight: card glow follows the cursor
-    const CARDS = '.hm-brand-choose-card,.inr-aiphoto-rit-btm-itm,.step-card,.card-itm,.guide-category-card,.hm-results-col,.blog-card,.hm-catlgue-crtion-itm'
+    const CARDS = '.hm-brand-choose-card,.inr-aiphoto-rit-btm-itm,.step-card,.card-itm,.guide-category-card,.hm-results-col,.blog-card,.hm-catlgue-crtion-itm,.Shoppers-card,.inr-int-item'
     const onMove = (e: PointerEvent) => {
       const c = (e.target as HTMLElement | null)?.closest?.(CARDS) as HTMLElement | null
       if (!c) return

@@ -1135,7 +1135,7 @@ p:empty {display: none;}
 .sticky-mobinav ul li a.drop:after { content: ""; background: url(https://aivastra.com/wp-content/themes/aivastrachild/images/sprite_icons.webp) no-repeat left top; background-position: 0px 0px; width: 13px; height: 13px; position: absolute; right: 50px; top: 9px; }
 .sticky-mobinav ul li a.drop.open:after { background-position: -28px 0px; }
 #floatingMenu { position: fixed; top: 0; left: 0; -webkit-transform: translateX(-100%); -moz-transform: translateX(-100%); -ms-transform: translateX(-100%); -o-transform: translateX(-100%); transform: translateX(-100%); -webkit-transition: all 0.3s ease-in-out 0s; -moz-transition: all 0.3s ease-in-out 0s; -ms-transition: all 0.3s ease-in-out 0s; -o-transition: all 0.3s ease-in-out 0s; transition: all 0.3s ease-in-out 0s; text-align: left; display: flex; width: 100%; height: 100vh; z-index: 99999; }
-.floatingMenu-list { width: 400px; display: block; background: linear-gradient(to right, #f6516a, #f5a646); background-repeat: no-repeat; transition: all 0.4s ease; overflow: hidden; overflow-y: auto; padding: 10px 10px; height: 100vh; position: relative; }
+.floatingMenu-list { width: 400px; display: block; background: linear-gradient(to right, #b07cff, #7c5cff); background-repeat: no-repeat; transition: all 0.4s ease; overflow: hidden; overflow-y: auto; padding: 10px 10px; height: 100vh; position: relative; }
 #floatingMenu.openMenu { display: flex; -webkit-transform: translateX(0); -moz-transform: translateX(0); -ms-transform: translateX(0); -o-transform: translateX(0); transform: translateX(0); }
 #cloaseFloatingMenu { text-align: right; font-size: 37px; line-height: 1; font-weight: 700; display: block; background: transparent; clear: both; outline: 0; border: 0; padding: 0; color: #ffffff; float: right; position: relative; z-index: 999; cursor: pointer; }
 button#cloaseFloatingMenu2 { flex-grow: 1; width: calc(100% - 280px); height: 100%; font-size: 0px !important; background: transparent; border: 0; }
@@ -1217,11 +1217,11 @@ header.site-header.is-sticky .logo-section { padding: 15px 0 10px; }
 #mobile-navigation .sub-menu { padding-left: 15px; max-height: 0; overflow: hidden; transition: max-height 0.8s ease; }
 #mobile-navigation .sub-menu.open { max-height: 900px; transition: max-height 0.8s ease; }
 .text-heading { font-family: "Poppins", sans-serif; font-style: normal; font-weight: 600; font-size: 60px; line-height: 1.2; color: #141414; margin-bottom: 45px; }
-a.cmn-btn { font-family: "Poppins", sans-serif; font-weight: 600; font-size: 16px; letter-spacing: 0; line-height: 1; color: #fff; display: inline-block; padding: 18px 46px 18px 21px; position: relative; transition: all 0.4s ease; overflow: hidden; box-sizing: border-box; border-radius: 8px; background: linear-gradient(to right, #f6516a, #f5a646); }
+a.cmn-btn { font-family: "Poppins", sans-serif; font-weight: 600; font-size: 16px; letter-spacing: 0; line-height: 1; color: #fff; display: inline-block; padding: 18px 46px 18px 21px; position: relative; transition: all 0.4s ease; overflow: hidden; box-sizing: border-box; border-radius: 8px; background: linear-gradient(to right, #b07cff, #7c5cff); }
 a.cmn-btn:before { position: absolute; content: ""; background-image: url(https://aivastra.com/wp-content/themes/aivastrachild/images/arrow.webp); background-repeat: no-repeat; background-size: contain; right: 17px; top: 0px; margin: auto; width:20px; height:20px; bottom: 0; }
 .tophdr-btn a.cmn-btn{ font-family: "Poppins", sans-serif; font-weight: 600; font-size: 16px; letter-spacing: 0; line-height: 1; color: #434343; display: inline-block; padding: 13px 20px 13px; position: relative; transition: all 0.4s ease; overflow: hidden; box-sizing: border-box; background: rgba(227, 227, 227, 0.2); border: 1px solid #E3E3E3; border-radius: 8px; }
 .tophdr-btn a.cmn-btn:before{ display:none }
-.tophdr-btn.sign a.cmn-btn, .tophdr-btn a.cmn-btn:hover{ color:#fff; position: relative; transition: all 0.4s ease; overflow: hidden; box-sizing: border-box; border-radius: 8px; background: linear-gradient(to right, #f6516a, #f5a646); }
+.tophdr-btn.sign a.cmn-btn, .tophdr-btn a.cmn-btn:hover{ color:#fff; position: relative; transition: all 0.4s ease; overflow: hidden; box-sizing: border-box; border-radius: 8px; background: linear-gradient(to right, #b07cff, #7c5cff); }
 a.cmn-btn:hover{ background: linear-gradient(to right, #EB4B6A, #E4A13E); }
 a.cmn-btn:hover:before { right: 15px; }
 .tophdr-btn.sign a.cmn-btn:hover{ color: #434343; background: rgba(227, 227, 227, 0.2);border: 1px solid #000; }
@@ -1282,7 +1282,7 @@ main.page-content.shopify-page .hm-steps-sec.topsec.btm .guide-category-grid.img
 .step-top-cnt { display: flex; flex-direction: column; gap: 20px; }
 .step-card.stp::before{ display:none; }
 .step-top-img { background-color: #f7f6f8; border-radius: 10px; }
-.step-card:hover .step-icon{ background: linear-gradient(to right, #f6516a, #f5a646); }
+.step-card:hover .step-icon{ background: linear-gradient(to right, #b07cff, #7c5cff); }
 .hm-photoshoots-sec .container { max-width: 100%; }
 .hm-photoshoots-sec { background: linear-gradient(90deg, #0a0a0a, #111111, #0d0d0d, #111111, #0a0a0a); padding: 100px 30px 50px 40px; }
 .hm-photoshoots-content h2 { color: #fff; margin-bottom: 15px; }
@@ -1316,7 +1316,7 @@ main.page-content.shopify-page .hm-steps-sec.topsec.btm .guide-category-grid.img
 .hm-catlgue-crtion-itm-cnt p, #page-column .hm-catlgue-crtion-itm-cnt p { font-family: "Poppins", sans-serif; font-style: normal; font-weight: 500; font-size: 16px; line-height: 1.5; color: #626262; margin: 0; }
 .hm-brand-choose-sec { position: relative; padding: 95px 0; z-index:9; }
 .hm-brand-choose-sec .container { max-width: 1480px; }
-.hm-brand-choose-sec:before { background: linear-gradient(to right, #f6516a, #f5a646); opacity: 3%; position: absolute; content: ""; width: 100%; height: 100%; top: 0; bottom: 0; margin: auto; left: 0; right: 0; z-index:-1; }
+.hm-brand-choose-sec:before { background: linear-gradient(to right, #b07cff, #7c5cff); opacity: 3%; position: absolute; content: ""; width: 100%; height: 100%; top: 0; bottom: 0; margin: auto; left: 0; right: 0; z-index:-1; }
 .hm-brand-choose-header h2{ color: #141414; margin-bottom: 15px; text-align: center; }
 .hm-brand-choose-header p, .hm-results-header p{ font-family: "Poppins", sans-serif; font-style: normal; font-weight: 500; font-size: 20px; line-height: 1.5; color: #626262; margin: 0; text-align: center; }
 .hm-brand-choose-header, .hm-results-header { margin-bottom: 60px; }
@@ -1377,7 +1377,7 @@ main.page-content.shopify-page .hm-steps-sec.topsec.btm .guide-category-grid.img
 .ftr-lnks-blk { width: 24%; }
 .ftr-loca-itm, .ftrlnks-itm, .share-scl-blk{ width: 50%; }
 .ftrlnks-itm li:before { position: absolute; content: ""; background-color: #fff; width: 8px; height: 8px; border-radius: 100%; left: 0; top: 9px; margin: 0 auto; }
-.ftrlnks-itm li:hover:before { background: linear-gradient(to right, #f6516a, #f5a646); }
+.ftrlnks-itm li:hover:before { background: linear-gradient(to right, #b07cff, #7c5cff); }
 .ftrlnks-itm li { position: relative; padding-left: 15px; margin-bottom: 12px; }
 .ftr-contact .ftr-links { position: relative; padding-left: 35px; margin-bottom: 20px; }
 .ftrlnks-itm.cnt .ftr-contact { display: flex;  width: 50%; flex-direction: column; }
@@ -1417,7 +1417,7 @@ p.copy-para { display: flex; gap: 25px; }
 .hmblg-item .hmblg-post-img img { width: 100%; display: block; border-radius: 12px; }
 .hmblg-post-img { margin-bottom: 20px; }
 .hmblg-item .blog-meta { font-family: "Poppins", sans-serif; font-style: normal; font-weight: 500; font-size: 16px; line-height: 1.2; color: #939393; margin: 0 0 18px; position: relative; }
-.hmblg-item .blog-meta span.gradient-text { background: linear-gradient(to right, #f6516a, #f5a646); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block; font-weight: 600; }
+.hmblg-item .blog-meta span.gradient-text { background: linear-gradient(to right, #b07cff, #7c5cff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block; font-weight: 600; }
 .hmblg-item h3, .hmblg-item p{ font-family: "Poppins", sans-serif; font-size: 20px; font-weight: 600; line-height: 1.4; margin-bottom: 10px; color: #141414; }
 .hmblg-item p { color: #626262; font-weight: 500; line-height: 1.6; margin-bottom: 18px; }
 .hmpost_btn a { font-family: "Poppins", sans-serif; font-style: normal; font-weight: 600; font-size: 16px; line-height: 1.5; color: #141414; margin: 0; padding-right:25px; position: relative; }
@@ -1455,10 +1455,10 @@ a.cmn-btn.two:hover::before { background-image: url(https://aivastra.com/wp-cont
 #page-column li ul { padding: 15px 0 0 10px; margin: 0; position: relative; }
 #page-column ol, #page-column ul { margin: 0 0 40px 0px; list-style-position: inside; }
 #page-column ul li { list-style: none; padding-left: 15px; position: relative; margin: 0 0 16px; }
-#page-column ul li:before { -webkit-text-fill-color: transparent; display: inline-block; font-weight: 600; background:linear-gradient(to right, #f6516a, #f5a646); border-radius: 100%; width: 8px; height: 8px; position: absolute; content: ""; left: 0; top:7px; }
+#page-column ul li:before { -webkit-text-fill-color: transparent; display: inline-block; font-weight: 600; background:linear-gradient(to right, #b07cff, #7c5cff); border-radius: 100%; width: 8px; height: 8px; position: absolute; content: ""; left: 0; top:7px; }
 #page-column a, #page-column li a { -webkit-text-fill-color: transparent; display: inline-block; font-weight: 600; background: linear-gradient(to right, rgb(246, 81, 106), rgb(245, 166, 70)) text; }
-#page-column a.cmn-btn { -webkit-text-fill-color: #fff; display: inline-block; font-weight: 600; background: linear-gradient(to right, #f6516a, #f5a646); }
-#page-column a.cmn-btn:hover { -webkit-text-fill-color: #fff; background: linear-gradient(to right, #f6516a, #f5a646); }
+#page-column a.cmn-btn { -webkit-text-fill-color: #fff; display: inline-block; font-weight: 600; background: linear-gradient(to right, #b07cff, #7c5cff); }
+#page-column a.cmn-btn:hover { -webkit-text-fill-color: #fff; background: linear-gradient(to right, #b07cff, #7c5cff); }
 #page-column a:hover, #page-column li a:hover { -webkit-text-fill-color: #626262; background: transparent; color:#626262; }
 #page-column ol { counter-reset: my-sec-counter; list-style-position: inside; }
 #page-column ol li { list-style: none; margin: 0 0 12px; position: relative; padding-left: 15px; }
@@ -1513,7 +1513,7 @@ a.cmn-btn.two:hover::before { background-image: url(https://aivastra.com/wp-cont
 .pricing-table .credits { font-size: 24px; font-weight: 700; margin-bottom: 20px; font-family: "Poppins", sans-serif; line-height: 1; color: #111827; }
 .pricing-table button { background: #141414; color: #fff; font-size: 16px; border: none; padding: 14px 105px; border-radius: 8px; font-weight: 600; cursor: pointer; font-family: "Poppins", sans-serif; line-height: 1; }
 th.features.img { background-image: url(https://aivastra.com/wp-content/themes/aivastrachild/images/Features.webp); background-position: 14px; background-repeat: no-repeat; padding-left: 38px; }
-.pricing-table .highlight { background: linear-gradient(to right, #f6516a, #f5a646); color: #fff; position: relative; }
+.pricing-table .highlight { background: linear-gradient(to right, #b07cff, #7c5cff); color: #fff; position: relative; }
 .pricing-table .highlight .desc{ color:#f4f4f4; }
 .pricing-table .highlight button{ background:#fff; color:#111; }
 .pricing-table .tag { position: absolute; top: -17px; right: 0; left: 0; background: #fff; color: #111; font-size: 12px; padding: 9px 6px 9px 23px; border-radius: 8px; font-weight: 700; display: inline-block; width: 100px; margin: auto; border: 2px solid #E5E7EB; text-transform: capitalize; background-image: url(https://aivastra.com/wp-content/themes/aivastrachild/images/star.webp); background-position: 4px; background-repeat: no-repeat; }
@@ -1558,7 +1558,7 @@ th.features.img { background-image: url(https://aivastra.com/wp-content/themes/a
 .card-thumb-holder img, .single-guide .blog-image img { width: 100%; display: block; border-radius: 12px 12px 0 0; transition: 1s; height: 100%; object-fit: cover; }
 .blog-card:hover .card-thumb-holder img, .single-guide .blog-card:hover .blog-image img{ transform: scale(1.03); transition: 1s; }
 .card-meta-line { font-family: "Poppins", sans-serif; font-style: normal; font-weight: 500; font-size: 16px; line-height: 1.2; color: #939393; margin: 0 0 18px; position: relative; }
-.card-category-tag { background: linear-gradient(to right, #f6516a, #f5a646); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block; font-weight: 600; }
+.card-category-tag { background: linear-gradient(to right, #b07cff, #7c5cff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block; font-weight: 600; }
 .card-title-text, p.card-excerpt-text { font-family: "Poppins", sans-serif; font-size: 20px; font-weight: 600; line-height: 1.4; margin-bottom: 10px; color: #141414; }
 p.card-excerpt-text { color: #626262; font-weight: 500; line-height: 1.6; margin-bottom: 18px; }
 a.card-learn-more-link { font-family: "Poppins", sans-serif; font-style: normal; font-weight: 600; font-size: 16px; line-height: 1.5; color: #141414; margin: 0; padding-right: 25px; position: relative; }
@@ -1716,7 +1716,7 @@ span.comment-count-badge { display: flex; align-items: center; gap: 3px; padding
 .blg-form-sec { width: 50%; }
 .frm-itm.subscribe-box p { display: flex; }
 .frm-itm.subscribe-box input { border-radius: 8px 0 0 8px; margin: 0; font-family: "Poppins", sans-serif; font-weight: 600; font-size: 14px; letter-spacing: 0; line-height: 1; color: #939393 !important; padding: 11px 0px 10px 35px; width: 328px; background-image: url(https://aivastra.com/wp-content/themes/aivastrachild/images/mailblg.webp); background-repeat: no-repeat; background-position: left 13px center; border: 1px solid #E8E8E8; border-right: 0; }
-.frm-itm.subscribe-box input[type="submit"] { border-radius: 0px 8px 8px 0px; width: fit-content; font-family: "Poppins", sans-serif; font-weight: 600; font-size: 14px; letter-spacing: 0; line-height: 1; color: #fff !important; display: inline-block; padding: 13px 7px 13px 7px; position: relative; box-sizing: border-box; background: linear-gradient(to right, #f6516a, #f5a646); }
+.frm-itm.subscribe-box input[type="submit"] { border-radius: 0px 8px 8px 0px; width: fit-content; font-family: "Poppins", sans-serif; font-weight: 600; font-size: 14px; letter-spacing: 0; line-height: 1; color: #fff !important; display: inline-block; padding: 13px 7px 13px 7px; position: relative; box-sizing: border-box; background: linear-gradient(to right, #b07cff, #7c5cff); }
 .frm-itm.subscribe-box p { display: flex; margin: 0; padding-top: 20px; }
 .blg-form-sec .wpcf7 form .wpcf7-response-output { margin: 0.5em 0.5em 0em; padding: 0.2em 1em; border: 0; }
 .comments-title { font-size: 18px; font-weight: 700; color: #111111; margin-bottom: 20px; letter-spacing: -0.2px; }
@@ -1972,7 +1972,7 @@ main.page-content.shopify-page .hm-steps-sec.topsec.btm .guide-category-grid.img
 main.page-content.shopify-page .hm-steps-sec.topsec.btm .guide-category-grid.img .guide-category-card img {display: block; width: 100%; border-radius:15px;margin-bottom:15px;}
 .shopify-page .step-top .step-icon img{width:25px !important;margin-bottom: 0px !important;border-radius:0 !important;}
 .hm-banner-btn.spfy a.cmn-btn,.frm-lft .hm-banner-btn.sp-form.spfy a.cmn-btn {background: #000; padding: 18px 21px 18px 46px;}
-.hm-banner-btn.spfy a.cmn-btn:hover, .frm-lft .hm-banner-btn.sp-form.spfy a.cmn-btn:hover{background: linear-gradient(to right, #f6516a, #f5a646);color:#fff;}
+.hm-banner-btn.spfy a.cmn-btn:hover, .frm-lft .hm-banner-btn.sp-form.spfy a.cmn-btn:hover{background: linear-gradient(to right, #b07cff, #7c5cff);color:#fff;}
 .share-scl-icon.shpfy img.dsk {display: block;}
 .share-scl-icon.shpfy img.mob {display: none;}
 .share-scl-icon.shpfy:hover img.mob {display: block;}
@@ -2044,7 +2044,7 @@ div#tryon-plan .pricing-table { align-items: center; }
 .page-template-category .inr-aiphoto-lft-img { background-color: #fff; }
 .page-template-market-places main.page-content.tryon-page .container { max-width: 1300px; }
 .page-template-market-places .guide-category-sec.document-page .container { padding: 0 !important; }
-.page-template-market-places #main-heading .inr-bnr-top-title-cnt, .page-template-market-places #page-column .cmn-sub-title { background: linear-gradient(to right, #f6516a, #f5a646); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: block; text-transform: uppercase; text-align: center; }
+.page-template-market-places #main-heading .inr-bnr-top-title-cnt, .page-template-market-places #page-column .cmn-sub-title { background: linear-gradient(to right, #b07cff, #7c5cff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: block; text-transform: uppercase; text-align: center; }
 .built-itm-img img { width: 100%; display: block; }
 .traditional-sec.side .about-generate-creation-cnt, .page-template-market-places #page-column .traditional-sec.side .cmn-sub-title { text-align: left; }
 .traditional-sec.side table.comparison-table td.mid:before { position: absolute; content: ""; width: 16px; height: 16px; background-image: url(https://aivastra.com/wp-content/themes/aivastrachild/images/tradition-list-bfor.webp); background-repeat: no-repeat; background-size: contain; left: 19px; top: 19px; }
@@ -2073,7 +2073,7 @@ table.comparison-table td, table.comparison-table th{ border-color: #E5E7EB; }
 .page-template-template-parts .hm-steps-sec.model .about-generate-creation-cnt { margin: 0; }
 #page-column .traditional-sec.math table.comparison-table th, #page-column .traditional-sec.math table.comparison-table td{ color: #fff; }
 #page-column .traditional-sec.math table.comparison-table td.mid { color: rgba(255 255 255 / 53%); text-decoration: line-through; }
-#page-column .traditional-sec.math table.comparison-table td.math-lst, #page-column .traditional-sec.math table.comparison-table th.math-lst { background: linear-gradient(to right, #f6516a, #f5a646); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+#page-column .traditional-sec.math table.comparison-table td.math-lst, #page-column .traditional-sec.math table.comparison-table th.math-lst { background: linear-gradient(to right, #b07cff, #7c5cff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 .math-sec-btm-cnt { width: 60%; margin: auto; padding: 20px; border: 1px solid #E3E3E3; border-radius: 20px; background-color: rgba(252 252 252 / 30%); text-align: center; }
 #page-column .math-sec-btm-cnt p { font-size: 16px; margin: 0; color: #fff; }
 .page-template-market-places .hm-steps-sec.document-page.built { background: #F9F8F8; }
@@ -2081,7 +2081,7 @@ table.comparison-table td, table.comparison-table th{ border-color: #E5E7EB; }
 #page-column ol.launch-photography-lst li { padding-left: 20px; }
 .launch-photography-lft { width: 45%; }
 .launch-photography-rit { width: 45%; padding: 30px; border: 1px solid #E3E3E3; border-radius: 20px; background-color: rgba(0 0 0 / 58%); text-align: center; border: 2px solid transparent; background: linear-gradient(rgb(255 255 255 / 90%), rgb(255 255 255 / 90%)) padding-box, linear-gradient(to right, #f8a5b5, #f8c98c) border-box; }
-#page-column .launch-photography-rit h4 { background: linear-gradient(to right, #f6516a, #f5a646); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: block; }
+#page-column .launch-photography-rit h4 { background: linear-gradient(to right, #b07cff, #7c5cff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: block; }
 #page-column .launch-photography-rit h5 { font-size: 25px; }
 #page-column .launch-photography-rit p { font-size: 16px; margin: 0; }
 table.comparison-table { border-radius: 20px; overflow: hidden; box-shadow: 0 0 3px rgb(0 0 0 / 25%); }
@@ -2090,7 +2090,7 @@ table.comparison-table { border-radius: 20px; overflow: hidden; box-shadow: 0 0 
 .page-template-category #main-heading .inr-bnr-top-title-cnt, .page-template-market-places #main-heading .inr-bnr-top-title-cnt { font-size: 15px; letter-spacing: 4px; font-weight: 300;}
 .page-template-category .hm-banner-sec-cnt.inr, .page-template-market-places .hm-banner-sec-cnt.inr { width: 100%; padding: 0; margin: 0 0 20px; }
 .page-template-category .inr-bnr-title, .market-bnr-cnt { width: 76%; margin: auto; }
-.page-template-category .hm-banner-sec-cnt.inr p, .page-template-category #page-column .cmn-sub-title { background: linear-gradient(to right, #f6516a, #f5a646); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: block; text-transform: uppercase; }
+.page-template-category .hm-banner-sec-cnt.inr p, .page-template-category #page-column .cmn-sub-title { background: linear-gradient(to right, #b07cff, #7c5cff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: block; text-transform: uppercase; }
 .page-template-category #page-column .cmn-sub-title, .page-template-market-places #page-column .cmn-sub-title { font-size: 15px; letter-spacing: 1.5px; font-weight: 300; }
 .page-template-category #page-column .cmn-top-cnt { font-size: 17px; }
 .page-template-category #page-column .text-heading.cmn-title, .page-template-market-places #page-column .text-heading.cmn-title { font-size: 46px; }
@@ -2110,7 +2110,7 @@ table.comparison-table { border-radius: 20px; overflow: hidden; box-shadow: 0 0 
 .page-template-category #page-column .hm-brand-choose-card p { font-size: 16px; margin: 0; }
 .your-western-btn { display: flex; }
 .page-template-category main.page-content.tryon-page .hm-steps-sec.document-page .container, .page-template-category main.page-content.tryon-page .hm-steps-sec.model .container,.page-template-category main.page-content.tryon-page .inr-aiphotoshoot-sec .container { max-width: 1300px; }
-.your-western-sec { display: flex; justify-content: center; align-items: center; gap: 20px; background: linear-gradient(to right, #f6516a, #f5a646); padding: 20px; }
+.your-western-sec { display: flex; justify-content: center; align-items: center; gap: 20px; background: linear-gradient(to right, #b07cff, #7c5cff); padding: 20px; }
 #page-column .your-western-sec a.cmn-btn { background: #141414; }
 #page-column .your-western-sec p{ margin: 0; color: #fff; }
 #page-column .hm-brand-choose-sec.inr h5 { margin: 0; }
@@ -2123,7 +2123,7 @@ main.page-content.tryon-page .hm-brand-choose-sec .container { max-width: 1400px
 .inr-aiphoto-lft-img img { width: 100%; display: block; }
 .inr-aiphoto-rit { width: 48%; }
 .inr-aiphoto-lft-itm { width: 48%; position: relative; }
-#page-column .inr-aiphoto-itm-title p { text-align: center; margin: 0; font-size: 16px; background: linear-gradient(to right, #f6516a, #f5a646); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: block; text-transform: uppercase; }
+#page-column .inr-aiphoto-itm-title p { text-align: center; margin: 0; font-size: 16px; background: linear-gradient(to right, #b07cff, #7c5cff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: block; text-transform: uppercase; }
 #page-column .inr-aiphoto-rit-top-title p { margin: 0; }
 .inr-aiphoto-lft-img { margin: 0 0 20px; border-radius: 25px; overflow: hidden; }
 .inr-aiphoto-rit-top { padding: 25px; border: 1px solid #E3E3E3; border-radius: 20px; background-color: rgba(252 252 252 / 30%); text-align: center; margin: 0 0 20px; }
@@ -2132,7 +2132,7 @@ main.page-content.tryon-page .hm-brand-choose-sec .container { max-width: 1400px
 .inr-aiphoto-rit-btm { display: flex; justify-content: center; gap: 20px; }
 .inr-aiphoto-rit-btm-itm { width: 31.6%; padding: 20px; border: 1px solid #E3E3E3; border-radius: 20px; background-color: rgba(252 252 252 / 30%); text-align: center; }
 #page-column .inr-aiphoto-rit-btm-itm p { color: #fff; }
-#page-column .inr-aiphoto-rit-btm-itm h5 { margin: 0 0 5px; background: linear-gradient(to right, #f6516a, #f5a646); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: block; }
+#page-column .inr-aiphoto-rit-btm-itm h5 { margin: 0 0 5px; background: linear-gradient(to right, #b07cff, #7c5cff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: block; }
 #page-column .inr-aiphoto-rit-btm-itm p{ margin: 0; font-size: 17px; }
 .inr-aiphoto-rit-top-logo img { width: 100%; display: block; }
 .inr-aiphoto-rit-top-logo { width: 13%; }
@@ -2299,18 +2299,18 @@ header.site-header.is-sticky  #main-navigation ul li a:before{bottom: -20px;}
 .showcase-itm { transition: transform 0.2s ease-out; }
 .showcase-itm:hover { transform: translateY(-8px) scale(1.05); z-index: 2; position: relative; }
 .inr-showcase-cnt { text-align: center; margin: 0 0 25px; }
-a.cmn-btn-two, #page-column a.cmn-btn-two { color: #f6516a; -webkit-text-fill-color: #f6516a; border: 2px solid transparent; background: linear-gradient(#f9f8f8, #f9f8f8) padding-box, linear-gradient(to right, #f6516a, #f5a646) border-box; padding: 16px 44px 16px 19px;}
+a.cmn-btn-two, #page-column a.cmn-btn-two { color: #b07cff; -webkit-text-fill-color: #b07cff; border: 2px solid transparent; background: linear-gradient(#f9f8f8, #f9f8f8) padding-box, linear-gradient(to right, #b07cff, #7c5cff) border-box; padding: 16px 44px 16px 19px;}
 a.cmn-btn-two::before, #page-column a.cmn-btn-two::before{ filter: brightness(0) saturate(100%) invert(70%) sepia(56%) saturate(650%) hue-rotate(343deg) brightness(101%) contrast(93%);}
 a.cmn-btn-two:hover::before, #page-column a.cmn-btn-two:hover::before{ filter: brightness(0) saturate(100%) invert(48%) sepia(66%) saturate(2128%) hue-rotate(309deg) brightness(101%) contrast(94%);}
-a.cmn-btn-two:hover, #page-column a.cmn-btn-two:hover{ color: #f5a646; -webkit-text-fill-color: #f5a646;background: linear-gradient(#f9f8f8, #f9f8f8) padding-box, linear-gradient(to right, #f6516a, #f5a646) border-box;}
+a.cmn-btn-two:hover, #page-column a.cmn-btn-two:hover{ color: #7c5cff; -webkit-text-fill-color: #7c5cff;background: linear-gradient(#f9f8f8, #f9f8f8) padding-box, linear-gradient(to right, #b07cff, #7c5cff) border-box;}
 .hm-banner-btn-lsting.shopify-ftr-btns-two { justify-content: flex-start; }
-.Shopify-why-teams-itm-title::before {position: absolute;content: counter(count, decimal-leading-zero);margin: auto;width: 48px;height: 48px;left: -3px;top: 11px;line-height: 47px;font-size: 19px;font-weight: 600;border-radius: 50px;text-align: center;color: #f6516a;-webkit-text-fill-color: #f6516a;border: 2px solid transparent;background: linear-gradient(#f9f8f8, #f9f8f8) padding-box, linear-gradient(to right, #f6516a, #f5a646) border-box;}
+.Shopify-why-teams-itm-title::before {position: absolute;content: counter(count, decimal-leading-zero);margin: auto;width: 48px;height: 48px;left: -3px;top: 11px;line-height: 47px;font-size: 19px;font-weight: 600;border-radius: 50px;text-align: center;color: #b07cff;-webkit-text-fill-color: #b07cff;border: 2px solid transparent;background: linear-gradient(#f9f8f8, #f9f8f8) padding-box, linear-gradient(to right, #b07cff, #7c5cff) border-box;}
 .page-template-shopify-page .Shopify-why-teams-itm-title { padding: 18px 20px 18px 60px !important; margin: 0 0 20px; position: relative;border: none; }
 .guide-category-grid{counter-reset: count;}
 .guide-category-card{counter-increment: count; position: relative;}
 .page-template-shopify-page #page-column .guide-category-grid h6 { font-weight: 600;margin-bottom: 0px;}
 .shopify-guide-category-grid{position: relative;}
-.shopify-guide-category-grid::before { position: absolute; content: ""; margin: auto; border: 1px solid transparent; background: linear-gradient(#f9f8f8, #f9f8f8) padding-box, linear-gradient(to right, #f6516a, #f5a646) border-box; width: 1px; height: 79%; left: 20px; top: 12px; }
+.shopify-guide-category-grid::before { position: absolute; content: ""; margin: auto; border: 1px solid transparent; background: linear-gradient(#f9f8f8, #f9f8f8) padding-box, linear-gradient(to right, #b07cff, #7c5cff) border-box; width: 1px; height: 79%; left: 20px; top: 12px; }
 /* 15-10-2026 */
 #page-column .Shoppers-card .Shoppers-title h6 { font-weight: 600; }
 #page-column .guide-category-grid-lst .items-start p { display: flex; flex-direction: column; align-items: flex-start; margin: 0 0 10px; }
@@ -2408,7 +2408,7 @@ main.page-content.shopify-page .hm-steps-sec.topsec.btm.image .guide-category-fl
 #page-column .hm-steps-sec.topsec.prjt .guide-category-grid.ply.in-stack-right .why-teams-itm-title h6 {font-family: 'Poppins';font-weight: 700;font-size: 20px;line-height: 30px;color: #141414;margin: 0 0 10px;}
 #page-column .hm-steps-sec.topsec.prjt .guide-category-grid.ply {gap: 21px;}
 #page-column .inr-stack-blk a.cmn-btn {background: #000;}
-#page-column .inr-stack-blk a.cmn-btn:hover{background: linear-gradient(to right, #f6516a, #f5a646);}
+#page-column .inr-stack-blk a.cmn-btn:hover{background: linear-gradient(to right, #b07cff, #7c5cff);}
 .in-stack-right .guide-category-card {width: 100% !important; margin: 0 !important; padding: 20px 20px; border: 1px solid #E3E3E3; border-radius: 12px; background-color: #fff; box-shadow: 0 8px 15px #4141410a;grid-column: span 2;}
 .page-template-shopify-page .in-stack-right .why-teams-itm-title{padding: 0px;border: 0px;}
 .in-stack-right .guide-category-card:nth-child(1),.in-stack-right .guide-category-card:nth-child(2) {grid-column: span 3;}
@@ -4423,10 +4423,10 @@ main.page-content.shopify-page .inr-shoppers-sec .Shoppers-grid .Shoppers-card:n
 .srcbox:before { content: ""; background: url(https://aivastra.com/wp-content/themes/aivastrachild/images/sprite_icons.png) no-repeat left top; background-position: -54px 0; position: absolute; left: 14px; top: 17px; width: 18px; height: 18px; }
 .mobile_src_nav .search-form { width: 100%; float: left; }
 .mobile_src_nav .container { position: relative; display: flex; justify-content: space-between; align-items: center; }
-.mobile_src_nav { display: block; background: linear-gradient(to right, #f6516a, #f5a646); }
+.mobile_src_nav { display: block; background: linear-gradient(to right, #b07cff, #7c5cff); }
 .showhide { display: block; display: flex; align-items: center; gap: 7px; }
 .showhide { color: #fff; width: 120px; cursor: pointer; padding: 0; position: relative; }
-.hdr-dskscr .srcbox { background: linear-gradient(to right, #f6516a, #f5a646); }
+.hdr-dskscr .srcbox { background: linear-gradient(to right, #b07cff, #7c5cff); }
 .hdr-dskscr .srcbox { top: 0; bottom: 0; margin: auto; }
 .srcbox { z-index: 99999995; background-color: #636466; position: absolute; top: -12px; right: 0; width: 0; overflow: hidden; height: 51px; }
 .mobile_src_nav .hdr-dskscr .srcshow { background-image: url(https://aivastra.com/wp-content/themes/aivastrachild/images/hdr-scr-icn.png); width: 18px; height: 18px; }
@@ -4453,10 +4453,10 @@ main.page-content.shopify-page .inr-shoppers-sec .Shoppers-grid .Shoppers-card:n
 .srcbox:before { content: ""; background: url(https://aivastra.com/wp-content/themes/aivastrachild/images/sprite_icons.png) no-repeat left top; background-position: -54px 0; position: absolute; left: 14px; top: 17px; width: 18px; height: 18px; }
 .mobile_src_nav .search-form { width: 100%; float: left; }
 .mobile_src_nav .container { position: relative; display: flex; justify-content: space-between; align-items: center; }
-.mobile_src_nav { display: block; background: linear-gradient(to right, #f6516a, #f5a646); }
+.mobile_src_nav { display: block; background: linear-gradient(to right, #b07cff, #7c5cff); }
 .showhide { display: block; display: flex; align-items: center; gap: 7px; }
 .showhide { color: #fff; width: 120px; cursor: pointer; padding: 0; position: relative; }
-.hdr-dskscr .srcbox { background: linear-gradient(to right, #f6516a, #f5a646); }
+.hdr-dskscr .srcbox { background: linear-gradient(to right, #b07cff, #7c5cff); }
 .hdr-dskscr .srcbox { top: 0; bottom: 0; margin: auto; }
 .srcbox { z-index: 99999995; background-color: #636466; position: absolute; top: -12px; right: 0; width: 0; overflow: hidden; height: 51px; }
 .mobile_src_nav .hdr-dskscr .srcshow { background-image: url(https://aivastra.com/wp-content/themes/aivastrachild/images/hdr-scr-icn.png); width: 18px; height: 18px; }

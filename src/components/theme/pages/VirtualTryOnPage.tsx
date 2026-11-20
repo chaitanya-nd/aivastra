@@ -1,5 +1,6 @@
 import { FooterFormBand } from '../Footer'
 import { html, strip } from '../util'
+import { CardStack } from '@/ui/client/Interactive'
 
 const Btn = ({ href, children, cls = 'cmn-btn' }: { href?: string; children?: string; cls?: string }) => (
   <a href={href || '#'} id="popupbtn" className={cls}>{strip(children)}</a>
@@ -90,18 +91,29 @@ export function VirtualTryOnPage({ doc, gc }: { doc: any; gc: any }) {
                 <div className="hm-about-generate-btn"><Btn href={g('wardrobe_button_link')}>{g('wardrobe_button')}</Btn></div>
               </div>
             </div>
-            <div className="hm-catalogue-creation-cnt tryon">
-              <h2 className="text-heading">{strip(g('fashion_title'))}</h2>
-              <p dangerouslySetInnerHTML={html(g('fashion_content'))} />
-            </div>
-            {fashion.length > 0 && (
-              <div className="hm-catalogue-creation-lst">
-                {fashion.map((f, i) => (
-                  <div className="hm-catlgue-crtion-itm" key={i}>
-                    <div className="hm-catlgue-crtion-itm-img">{f.virtual_try_on_fashion_list_image && <img src={f.virtual_try_on_fashion_list_image} alt={strip(f.virtual_try_on_fashion_list_title)} />}</div>
-                    <div className="hm-catlgue-crtion-itm-cnt"><h5>{strip(f.virtual_try_on_fashion_list_title)}</h5><p>{strip(f.virtual_try_on_fashion_list_sub_title)}</p></div>
-                  </div>
-                ))}
+            {fashion.length > 0 ? (
+              <div className="av-cc av-tryon-stack">
+                <CardStack
+                  intro={
+                    <div className="av-cc-intro">
+                      <h2 className="av-display sm">{strip(g('fashion_title'))}</h2>
+                      <p className="av-lead light" dangerouslySetInnerHTML={html(g('fashion_content'))} />
+                    </div>
+                  }
+                  cards={fashion.map((f, i) => (
+                    <article className="av-cc-card" key={i}>
+                      <figure>{f.virtual_try_on_fashion_list_image && <img src={/boutique/i.test(f.virtual_try_on_fashion_list_title ?? '') ? 'https://aivastra.com/wp-content/uploads/2026/04/mens-traditional-1-3-1024x673-1.png' : f.virtual_try_on_fashion_list_image} alt={strip(f.virtual_try_on_fashion_list_title)} loading="lazy" />}</figure>
+                      <span className="av-cc-n">0{i + 1}</span>
+                      <h3>{strip(f.virtual_try_on_fashion_list_title)}</h3>
+                      <p>{strip(f.virtual_try_on_fashion_list_sub_title)}</p>
+                    </article>
+                  ))}
+                />
+              </div>
+            ) : (
+              <div className="hm-catalogue-creation-cnt tryon">
+                <h2 className="text-heading">{strip(g('fashion_title'))}</h2>
+                <p dangerouslySetInnerHTML={html(g('fashion_content'))} />
               </div>
             )}
           </section>

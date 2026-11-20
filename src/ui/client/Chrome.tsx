@@ -29,7 +29,7 @@ export function HeaderBar({ logo, items, signText, signHref, catalogueText }: { 
     <>
       <header className={`av-hdr${solid ? ' is-solid' : ''}${hide && !open ? ' is-hide' : ''}`}>
         <div className="av-hdr-pill">
-          <a href="/" rel="home" className="av-logo"><img src={logo} alt="Ai Vastra" width={155} height={44} /></a>
+          <a href="/" rel="home" className="av-logo"><img src={logo} alt="Ai Vastra" width={174} height={34} /></a>
           <nav className="av-nav" aria-label="Primary">
             {items.map((it) => (
               <div className={`av-nav-i${it.children?.length ? ' has-sub' : ''}`} key={it.label + it.href}>

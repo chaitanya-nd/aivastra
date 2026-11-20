@@ -3,6 +3,32 @@ import { Accordion, THEME_URL } from '../util'
 
 const sanitizeTitle = (t: string) => t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
 
+const UP = 'https://aivastra.com/wp-content/uploads'
+/** Starter images for tabs the CMS has left empty (matched by tab slug). */
+const FALLBACK: Record<string, [string, string][]> = {
+  'men-ethnic-wear': [
+    [`${UP}/2026/10/Nehru-jacket-Img.webp`, 'Nehru jacket with kurta pyjama on AI model'],
+    [`${UP}/2026/10/Nehru-jacket.webp`, 'Embroidered Nehru jacket set on AI model'],
+    [`${UP}/2026/10/jacket-set-img.webp`, 'Jacket set with kurta on AI model'],
+    [`${UP}/2026/10/Embroidered-jacket-set.webp`, 'Embroidered jacket set on AI model'],
+    [`${UP}/2026/08/Rectangle-49-1.webp`, 'Sherwani with shawl on AI model'],
+  ],
+  'kids-wear': [
+    [`${UP}/2026/10/boys-vest-img.webp`, 'Boys vest on AI model'],
+    [`${UP}/2026/10/Boys-vest.webp`, 'Boys vest and track pants on AI model'],
+    [`${UP}/2026/10/kidswear.webp`, 'Boys jacket and cargo pants on AI model'],
+    [`${UP}/2026/04/Rectangle-45-2.webp`, 'Boys denim jacket and jeans on AI model'],
+    [`${UP}/2026/08/Rectangle-44-2.webp`, 'Girls denim jacket on AI model'],
+  ],
+  accessories: [
+    [`${THEME_URL}/images/jewelleryimg.webp`, 'Jewellery set on AI model'],
+    [`${UP}/2026/08/Rectangle-49-2.webp`, 'Earrings on AI model'],
+    [`${UP}/2026/08/photoshoots-item4.webp`, 'Necklace on AI model'],
+    ['/hero/jewel/model-main.png', 'Jewellery set styled on AI model'],
+    ['/hero/jewel/model-pose-3.png', 'Earrings close-up on AI model'],
+  ],
+}
+
 /** ai-showcase-page.php (catalogue-showcase) */
 export function ShowcasePage({ doc, gc }: { doc: any; gc: any }) {
   const a = doc.acf ?? {}
@@ -29,7 +55,7 @@ export function ShowcasePage({ doc, gc }: { doc: any; gc: any }) {
               {tabs.map((t, i) => (
                 <div key={i} id={`tab-${i}`} className={`tab-content ${sanitizeTitle(t.tab_title)} ${i === 0 ? 'show' : ''}`}>
                   <div className="gallery-grid">
-                    {((t.tab_images ?? []) as any[]).map((img, j) => (
+                    {(((t.tab_images ?? []) as any[]).length ? (t.tab_images as any[]) : (FALLBACK[sanitizeTitle(t.tab_title)] ?? []).map(([url, alt]) => ({ url, alt }))).map((img: any, j: number) => (
                       <div className="gallery-item" key={j}>
                         <img src={img.url} alt={img.alt || ''} loading="lazy" />
                         <div className="image-overlay">

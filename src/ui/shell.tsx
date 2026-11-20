@@ -2,6 +2,7 @@ import { FormRenderer } from '@/components/FormRenderer'
 import { getGlobalContent, getNavigation, getSettings } from '@/lib/data'
 import { resolveLink } from '@/lib/links'
 import { strip } from "@/components/theme/util"
+import { FooterMark } from './client/Interactive'
 import { DemoModal, HeaderBar, type NavItem } from './client/Chrome'
 import { Faq } from './client/Interactive'
 
@@ -19,7 +20,7 @@ const toItems = (arr: any[]): NavItem[] =>
 
 export async function AvHeader() {
   const [nav, g] = await Promise.all([getNavigation(), getGlobalContent() as Promise<any>])
-  return <HeaderBar logo={`${THEME}/images/newlogohorizontal.svg`} items={toItems((nav.header ?? []) as any[])} signText={g.sign_text} signHref={g.sign_link} catalogueText={g.catalogue_content} />
+  return <HeaderBar logo={"/brand/av-logo-horizontal.png"} items={toItems((nav.header ?? []) as any[])} signText={g.sign_text} signHref={g.sign_link} catalogueText={g.catalogue_content} />
 }
 
 export async function AvFooter() {
@@ -34,7 +35,7 @@ export async function AvFooter() {
         <div className="av-wrap">
           <div className="av-ftr-grid">
             <div className="av-ftr-brand">
-              <a href="/" rel="home"><img src={`${THEME}/images/newlogohorizontal-white.svg`} alt={settings.siteName} width={344} height={78} /></a>
+              <a href="/" rel="home"><img src={"/brand/av-logo-horizontal.png"} alt={settings.siteName} width={344} height={78} /></a>
               <div className="av-ftr-loc">
                 <div>
                   <h4 className="av-eyebrow">{g.corporate_title}</h4>
@@ -71,7 +72,7 @@ export async function AvFooter() {
               </div>
             ))}
           </div>
-          <div className="av-ftr-mark" aria-hidden="true">aivastra</div>
+          <FooterMark />
           <div className="av-ftr-bottom">
             <p>© {new Date().getFullYear()} {settings.siteName} • All Rights Reserved. </p>
             <p>A product by <a href="https://www.nicedigitals.com/" target="_blank" rel="noopener"><img src={`${THEME}/images/nice-digitals-logo.webp`} alt="Nice Digitals" width={500} height={130} /></a></p>

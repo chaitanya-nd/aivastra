@@ -1,6 +1,6 @@
 import { findMany } from '@/lib/data'
 import { excerptOf, THEME_URL, words } from '@/components/theme/util'
-import { HeroShow, HScroll, Toggle, TryOnStage, LookStage } from '../client/Interactive'
+import { CardStack, CategoryShowcase, ScrollTicker, HeroShow, HScroll, Toggle, TryOnStage, LookStage, WhyShow } from '../client/Interactive'
 import { attr, buttons, inline, load, q, qa, src, tx } from '../html'
 import { CtaBand, FaqSection } from '../shell'
 import { Words } from '../Words'
@@ -13,7 +13,6 @@ const Btn = ({ b, ghost = false }: { b: { text: string; href: string; newTab: bo
     <i aria-hidden="true">→</i>
   </a>
 )
-const EYE_ICONS = ['/hero/icon-hanger.png', '/hero/flat/icon-badge-sparkle.png', '/hero/jewel/icon-badge-gem.png']
 const Rich = ({ html: h, className = '' }: { html: string; className?: string }) => <p className={className} dangerouslySetInnerHTML={{ __html: h }} />
 
 export async function Home({ doc, gc }: { doc: any; gc: any }) {
@@ -44,6 +43,23 @@ export async function Home({ doc, gc }: { doc: any; gc: any }) {
   const cr = load(a.hm_create_ready_section)
   const crBox = q(cr, '.container')
   const crCats = qa(cr, '.hm-create-ready-category').map((c, i) => ({ t: tx(q(c, '.hm-create-ready-title')), k: ['menimg', 'womenimg', 'jewelleryimg'][i], kh: ['menimghover', 'womenuimghover', 'jewelleryimghover'][i] }))
+  // Category showcase — labels come from the CMS; images are the site's own (WP uploads + theme + hero assets)
+  const UP = 'https://aivastra.com/wp-content/uploads'
+  // on-model photo shown on the person when a garment is applied (garments without one keep the previous look)
+  const ON: Record<string, Record<string, string>> = {
+    women: { 'saree-flat-lay': '2026/08/Rectangle-50.webp', 'half-saree-mannequin': '2026/08/Rectangle-48.webp', suit: '2026/05/Rectangle-56.webp', blazer: '2026/05/Rectangle-56.webp', jacket: '2026/08/Rectangle-47.webp', cocktail: '2026/05/Rectangle-45-3.webp', 'long-frock': '2026/06/photoshoots-item2.webp', 'kurti-and-pyjama': '2026/10/kurti-Output.webp', top: '2026/05/Rectangle-52-1.webp', 'full-sleeve-shirt': '2026/08/Rectangle-45.webp', 'half-sleeve-shirt': '2026/08/Rectangle-45.webp' },
+    men: { 'sherwani-and-pyjama': '2026/08/Rectangle-49-1.webp', kurta: '2026/10/Nehru-jacket-Img.webp', hoodie: '2026/06/stepimgs3.webp', 'half-sleeve-tshirt': '2026/06/stepimg3.webp', 'full-sleeve-tshirt': '2026/06/stepimg3.webp', polo: '2026/07/Rectangle-53.png', 'full-sleeve-shirt': '2026/07/Rectangle-52-2.png', 'half-sleeve-shirt': '2026/07/Rectangle-45-1.png', suit: '2026/04/Rectangle-44.webp', formal: '2026/04/Rectangle-44.webp' },
+    boys: { jacket: '2026/10/kidswear.webp', 'half-sleeve-tshirt': '2026/10/boys-vest-img.webp', 'full-sleeve-tshirt': '2026/10/Boys-vest.webp', jean: '2026/04/Rectangle-45-2.webp', cargo: '2026/10/kidswear.webp' },
+    girls: { blazer: '2026/08/Rectangle-44-2.webp', 'long-frock': '2026/10/Chaniya-choli-img.webp', 'mini-frock': '2026/10/lehenga-output.webp' },
+  }
+  const G = (cat: string, names: string[]) => names.map((n) => ({ src: `/garments/${cat}/${n}.webp`, on: ON[cat]?.[n] ? `${UP}/${ON[cat][n]}` : undefined }))
+  const showcase = [
+    { label: 'Women', icon: 'dress', input: '/hero/flat/model-main.png', inputLabel: 'AI Model Output', images: G('women', ['blazer', 'chudidar', 'cocktail', 'crop-top', 'full-sleeve-shirt', 'full-sleeve-tshirt', 'half-saree-mannequin', 'half-sleeve-shirt', 'half-sleeve-tshirt', 'hoodie', 'jacket', 'jumpsuit', 'kurti-and-pyjama', 'long-frock', 'saree-flat-lay', 'suit', 'sweatshirt', 'top']) },
+    { label: 'Men', icon: 'shirt', input: `${UP}/2026/06/stepimgs3.webp`, inputLabel: 'AI Model Output', images: G('men', ['baggy-jean', 'blazer', 'formal', 'full-sleeve-shirt', 'full-sleeve-tshirt', 'half-sleeve-shirt', 'half-sleeve-tshirt', 'hoodie', 'jean', 'kurta', 'one-piece-suit', 'polo', 'sherwani-and-pyjama', 'suit', 'sweatshirt']) },
+    { label: 'Boys', icon: 'shirt', input: `${UP}/2026/10/kidswear.webp`, inputLabel: 'AI Model Output', images: G('boys', ['blazer', 'cargo', 'casual-pant', 'full-sleeve-shirt', 'full-sleeve-tshirt', 'half-sleeve-shirt', 'half-sleeve-tshirt', 'hoodie', 'jacket', 'jean', 'kurta', 'polo', 'short', 'suit', 'sweatshirt', 'track', 'trouser']) },
+    { label: 'Girls', icon: 'dress', input: `${UP}/2026/10/lehenga-output.webp`, inputLabel: 'AI Model Output', images: G('girls', ['blazer', 'full-sleeve-shirt', 'full-sleeve-tshirt', 'half-sleeve-shirt', 'half-sleeve-tshirt', 'hoodie', 'long-frock', 'mini-frock', 'mini-frock-on-mannequin', 'sweatshirt']) },
+    { label: 'Jewellery', icon: 'gem', input: '/hero/jewel/model-main.png', inputLabel: 'AI Model Output', images: [{ src: '/hero/jewel/jewellery-set.png', on: undefined as string | undefined }] },
+  ].map((c) => ({ ...c, icon: c.icon as 'dress' | 'shirt' | 'gem' }))
   // ── steps
   const st = load(a.home_steps_section)
   const tabs = qa(st, '.tab-btn').map(tx)
@@ -80,7 +96,6 @@ export async function Home({ doc, gc }: { doc: any; gc: any }) {
 
   const hero = slides.map((s, n) => (
     <div className="av-hero-txt" key={n}>
-      <p className={`av-eyebrow${n > 0 ? ' pill' : ''}`}><img className="av-hanger" src={EYE_ICONS[n] ?? EYE_ICONS[2]} alt="" width={26} height={22} />{s.eyebrow}</p>
       <h1 className="av-mega">
         {s.title.map((l, i) => <span className="av-line" key={i}><span>{l}</span>{i < s.title.length - 1 ? ' ' : ''}</span>)}
       </h1>
@@ -121,7 +136,7 @@ export async function Home({ doc, gc }: { doc: any; gc: any }) {
                 before="/hero/model-before.png"
                 labels={{ before: 'Before', after: 'After – Virtual Try-On' }}
               />,
-              <LookStage key="s1" kind="flat" inputLabel="Flat Lay Input" inputIcon="/hero/flat/icon-upload.png" inputImg="/hero/flat/flatlay-dress.png" main={{ src: '/hero/flat/model-main.png' }} thumbs={[{ src: '/hero/flat/model-pose-1.png' }, { src: '/hero/flat/model-pose-2.png' }, { src: '/hero/flat/model-pose-3.png' }]} pill="On-Model Catalogue" arrow="/hero/flat/arrow-2.png" />,
+              <LookStage key="s1" kind="flat" inputLabel="Flat Lay Input" inputIcon="/hero/flat/icon-upload.png" inputImg="/hero/flat/flatlay-dress.png" main={{ src: '/hero/flat/model-main.png' }} thumbs={[{ src: '/hero/jewel/model-pose-3.png' }, { src: '/hero/flat/model-pose-3.png' }, { src: '/hero/flat/model-pose-3.png' }]} pill="On-Model Catalogue" arrow="/hero/flat/arrow-2.png" />,
               <LookStage key="s2" kind="jewel" inputLabel="Jewellery Input" inputIcon="/hero/jewel/icon-jewellery-input.png" inputImg="/hero/jewel/jewellery-set.png" main={{ src: '/hero/jewel/model-main.png' }} thumbs={[{ src: '/hero/jewel/model-main.png', pos: 'center 22%', big: { src: '/hero/jewel/model-main.png', pos: 'center top' } }, { src: '/hero/jewel/model-main.png', pos: 'center 62%', big: { src: '/hero/jewel/model-main.png', pos: 'center 62%', zoom: 1.3 } }, { src: '/hero/jewel/model-pose-3.png', pos: 'center 20%', big: { src: '/hero/jewel/model-main.png', pos: '30% 30%', zoom: 1.4 } }]} pill="AI Generated Catalogue" arrow="/hero/flat/arrow-1.png" />,
             ]}
           />
@@ -147,21 +162,26 @@ export async function Home({ doc, gc }: { doc: any; gc: any }) {
       {/* PLATFORM */}
       <section className="av-ink av-platform">
         <div className="av-wrap">
-          <Words as="h2" text={tx(q(crBox, 'h2'))} className="av-display" accent={2} />
-          <div className="av-platform-row">
-            <Rich html={inline(crBox)} className="av-lead light" />
-            {buttons(crBox).map((b, i) => <Btn b={b} key={i} />)}
-          </div>
-          <div className="av-cats">
-            {crCats.map((c, i) => (
-              <article className="av-cat" data-tilt data-reveal={i * 0.1} key={c.t}>
-                <img className="a" src={`${THEME_URL}/images/${c.k}.webp`} alt="" />
-                <img className="b" src={`${THEME_URL}/images/${c.kh}.webp`} alt="" />
-                <h3>{c.t}</h3>
-                <span className="av-cat-n">0{i + 1}</span>
-              </article>
-            ))}
-          </div>
+          <CategoryShowcase tabs={showcase}
+            aside={
+              <>
+                <span className="av-eyebrow">AI Fashion Catalogue</span>
+                <h2 className="av-showcase-h">Turn a Flatlay into <em>Complete Catalogue</em></h2>
+                <p className="av-showcase-p">Upload a flatlay or product image and generate on-model photos, lifestyle scenes and more across all categories.</p>
+                <ul className="av-showcase-feats">
+                  {[['/hero/flat/icon-sparkles.png', 'AI-Generated Visuals', 'Studio, lifestyle & more'], ['/hero/jewel/icon-layers.png', 'All Categories', 'Men, Women, Boys, Girls & Jewellery'], ['/hero/flat/icon-images.png', 'Multiple Outputs', 'On-model, flatlay, 360° & more']].map(([ic, t, d]) => (
+                    <li key={t}><img src={ic} alt="" width={22} height={22} /><span><b>{t}</b><small>{d}</small></span></li>
+                  ))}
+                </ul>
+              </>
+            }
+            footer={
+              <>
+                <a className="av-btn av-btn-grad" href="/contact" data-magnetic><span>Generate Catalogue</span><i aria-hidden="true">→</i></a>
+                <a className="av-btn ghost" data-demo data-magnetic><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="1.6" /><path d="M10 8.5v7l6-3.5z" fill="currentColor" /></svg><span>Watch How It Works</span></a>
+              </>
+            }
+          />
         </div>
       </section>
 
@@ -227,13 +247,15 @@ export async function Home({ doc, gc }: { doc: any; gc: any }) {
 
       {/* CATALOGUE CREATION — pinned horizontal scroll */}
       <section className="av-ink av-cc">
-        <HScroll>
-          <div className="av-cc-intro">
-            <Words as="h2" text={tx(q(ccH, 'h2'))} className="av-display sm" accent={2} />
-            <p className="av-serif">{tx(q(ccH, 'i'))}</p>
-            <Rich html={inline(ccH)} className="av-lead light" />
-          </div>
-          {ccItems.map((c, i) => (
+        <CardStack
+          intro={
+            <div className="av-cc-intro">
+              <Words as="h2" text={tx(q(ccH, 'h2'))} className="av-display sm" accent={2} />
+              <p className="av-serif">{tx(q(ccH, 'i'))}</p>
+              <Rich html={inline(ccH)} className="av-lead light" />
+            </div>
+          }
+          cards={ccItems.map((c, i) => (
             <article className="av-cc-card" key={i}>
               <figure><img src={c.img} alt="" loading="lazy" /></figure>
               <span className="av-cc-n">0{i + 1}</span>
@@ -241,7 +263,7 @@ export async function Home({ doc, gc }: { doc: any; gc: any }) {
               <Rich html={c.d} />
             </article>
           ))}
-        </HScroll>
+        />
       </section>
 
       {/* STATS */}
@@ -264,6 +286,32 @@ export async function Home({ doc, gc }: { doc: any; gc: any }) {
         </div>
       </section>
 
+      {/* WHY TEAMS CHOOSE */}
+      <section className="av-why">
+        <div className="av-wrap">
+          <p className="av-why-eyebrow">WHY TEAMS CHOOSE <b>AI VASTRA</b></p>
+          <div className="av-why-card" data-reveal>
+            <div className="av-why-stats">
+              {[['₹10', 'Per catalogue photo at scale'], ['₹100', 'Per product video'], ['1,000', 'Images in the largest pack'], ['1', 'Flat-lay photo is all it takes']].map(([n, l]) => (
+                <div className="av-why-stat" key={l}><b>{n}</b><span>{l}</span></div>
+              ))}
+            </div>
+            <div className="av-why-row">
+              <div className="av-why-copy">
+                <span className="av-why-tag">FOR FASHION BRANDS AND SELLERS</span>
+                <h3>Skip the studio shoot. <em>1,000 catalogue images for ₹10,000.</em></h3>
+                <p>Upload one flat-lay and get on-model catalogue photos in every pose and background, ready for your store and marketplaces.</p>
+              </div>
+              <WhyShow sets={[
+                { tab: 'Women', label: 'Dress', src: '/hero/flat/flatlay-dress.png', out: ['/hero/after-red.png', '/hero/after-cream.png', '/hero/flat/model-main.png'] },
+                { tab: 'Men', label: 'Sherwani set', src: '/garments/men/sherwani-and-pyjama.webp', out: ['https://aivastra.com/wp-content/uploads/2026/10/Nehru-jacket.webp', 'https://aivastra.com/wp-content/uploads/2026/08/Rectangle-49-1.webp', 'https://aivastra.com/wp-content/uploads/2026/10/Nehru-jacket-Img.webp'] },
+                { tab: 'Jewellery', label: 'Necklace set', src: '/hero/jewel/jewellery-set.png', out: ['/hero/jewel/model-pose-3.png', `${THEME_URL}/images/jewelleryimg.webp`, '/hero/jewel/model-main.png'] },
+              ]} />
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CUSTOMERS */}
       <section className="av-split rev">
         <div className="av-wrap av-split-in">
@@ -282,13 +330,7 @@ export async function Home({ doc, gc }: { doc: any; gc: any }) {
           <Words as="h2" text={tx(q(rsH, 'h2'))} className="av-display" accent={2} />
           <Rich html={inline(rsH)} className="av-lead light" />
         </div>
-        <div className="av-masonry">
-          {rsCols.map((col, i) => (
-            <div className="av-masonry-c" data-drift={i % 2 ? -0 : 0} data-parallax={0.06 + (i % 3) * 0.06} key={i}>
-              {col.map((s) => <figure key={s} data-tilt><img src={s} alt="" loading="lazy" /></figure>)}
-            </div>
-          ))}
-        </div>
+        <ScrollTicker cols={rsCols} />
         <div className="av-center">{rsBtn && <Btn b={rsBtn} />}</div>
       </section>
 
