@@ -132,3 +132,37 @@ Still to do: connect R2 + move images into the Media library, add analytics (Sit
 - **Comments**: `comments` collection (pending / approved / spam / trash, threaded). Public submit/list API `/api/av/comment` (honeypot, time trap, rate limit, duplicate check, WordPress moderation rules). Rendered on posts by `components/Comments*.tsx`. Settings in Plugin settings → Discussion (default **off**, same as the original site; per-post override in the post's Discussion box).
 - **Other screens**: Settings → Permalinks (read-only: structure is fixed to WordPress's), Appearance → Widgets (hub to each widget area), Tools → Export & Import (JSON, matched by slug).
 - **Not built**: WordPress plugin/theme install screens.
+
+## Deploying a test copy safely (no indexing, no side effects)
+
+Search engines are blocked unless **all three** hold: `SITE_ENV=production`, the site host is in `INDEXABLE_HOSTS`,
+and **Admin → Search visibility → Block search engines** is OFF. Anything else = blocked (noindex meta + `X-Robots-Tag`
+on every response, `robots.txt` Disallow, sitemap/feed/`llms.txt` return 404).
+
+Test deploy `.env`:
+
+```
+SITE_ENV=staging
+NEXT_PUBLIC_SITE_URL=https://test.example.com
+INDEXABLE_HOSTS=                 # leave empty
+TEST_MAIL_TO=you@example.com     # optional: form mail goes here instead of real recipients
+```
+
+Analytics/tracking scripts, form emails and Mailchimp are off on any non-live host. After deploying:
+
+```
+pnpm check:indexing https://test.example.com
+```
+
+Go-live: `SITE_ENV=production`, `INDEXABLE_HOSTS=aivastra.com,www.aivastra.com`, then turn the
+switch OFF in Search visibility (it asks you to type ALLOW; every change is logged with who/when).
+
+## After deploying this version
+
+```
+pnpm payload migrate        # applies the new migrations
+pnpm seo:rescore            # stores the SEO score for existing content (list column / filters)
+pnpm media:regenerate       # only after media files are local: builds the new medium/large sizes
+```
+
+Scheduled publishing needs the app server to stay running (built-in job runner, `JOBS_AUTORUN`).

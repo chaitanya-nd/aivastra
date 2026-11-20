@@ -6,7 +6,7 @@ import { Motion } from '@/ui/client/Motion'
 import { AvFooter, AvHeader } from '@/ui/shell'
 import { ThemeScripts } from '@/components/theme/ThemeScripts'
 import { getSettings, getPluginSettings } from '@/lib/data'
-import { crawlersBlocked } from '@/lib/env'
+import { crawlersBlocked, trackingAllowed } from '@/lib/env'
 import { organizationSchema } from '@/lib/schema'
 import { SITE_URL } from '@/lib/urls'
 import './theme.css'
@@ -22,7 +22,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: { default: s.siteName, template: s.titleTemplate || '%s - AI Vastra' },
     description: s.defaultDescription || undefined,
     robots: crawlersBlocked(s) ? { index: false, follow: false } : undefined,
-    alternates: { types: { 'application/rss+xml': `${SITE_URL}/feed/` } },
+    alternates: { types: { 'application/rss+xml': `${SITE_URL}/feed/`, 'application/atom+xml': `${SITE_URL}/feed/atom/` } },
   }
 }
 
@@ -30,7 +30,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   const s = await getSettings()
   const ps: any = await getPluginSettings()
   return (
-    <html lang="en">
+    <html lang={(s as any).siteLanguage || 'en'}>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -45,11 +45,11 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <AvHeader />
         <main id="main">{children}</main>
         <AvFooter />
-        {s.headScripts && <div hidden dangerouslySetInnerHTML={{ __html: s.headScripts }} />}
-        {ps?.bodyOpenScripts && <div hidden dangerouslySetInnerHTML={{ __html: ps.bodyOpenScripts }} />}
-        {ps?.headerScripts && <div hidden dangerouslySetInnerHTML={{ __html: ps.headerScripts }} />}
-        {ps?.footerScripts && <div hidden dangerouslySetInnerHTML={{ __html: ps.footerScripts }} />}
-        {s.bodyScripts && <div hidden dangerouslySetInnerHTML={{ __html: s.bodyScripts }} />}
+        {trackingAllowed && s.headScripts && <div hidden dangerouslySetInnerHTML={{ __html: s.headScripts }} />}
+        {trackingAllowed && ps?.bodyOpenScripts && <div hidden dangerouslySetInnerHTML={{ __html: ps.bodyOpenScripts }} />}
+        {trackingAllowed && ps?.headerScripts && <div hidden dangerouslySetInnerHTML={{ __html: ps.headerScripts }} />}
+        {trackingAllowed && ps?.footerScripts && <div hidden dangerouslySetInnerHTML={{ __html: ps.footerScripts }} />}
+        {trackingAllowed && s.bodyScripts && <div hidden dangerouslySetInnerHTML={{ __html: s.bodyScripts }} />}
         <ThemeScripts />
       </body>
     </html>

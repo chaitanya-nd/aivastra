@@ -4,6 +4,7 @@ import { FieldDescription, FieldLabel, useField } from '@payloadcms/ui'
 import type { CodeFieldClientComponent } from 'payload'
 import { Editor } from '@tinymce/tinymce-react'
 import { useEffect, useRef, useState } from 'react'
+import { Ic } from './Ic'
 
 /**
  * WordPress "classic editor" for the HTML fields: a Visual tab (WYSIWYG, edit text directly)
@@ -13,6 +14,7 @@ export const WpEditor: CodeFieldClientComponent = ({ field, path, readOnly }) =>
   const { value, setValue } = useField<string>({ path })
   const [mode, setMode] = useState<'visual' | 'text'>('visual')
   const [media, setMedia] = useState(false)
+  const [patterns, setPatterns] = useState(false)
   const [near, setNear] = useState(false)
   const wrap = useRef<HTMLDivElement>(null)
   const ed = useRef<any>(null)
@@ -44,7 +46,7 @@ export const WpEditor: CodeFieldClientComponent = ({ field, path, readOnly }) =>
       <FieldLabel label={field.label} path={path} required={field.required} />
       <div className="wpe-box">
         <div className="wpe-top">
-          <div className="wpe-media"><button type="button" className="wp-btn" disabled={readOnly} onClick={() => setMedia(true)}>🖼 Add Media</button></div>
+          <div className="wpe-media"><button type="button" className="wp-btn" disabled={readOnly} onClick={() => setMedia(true)}><Ic n="media" /> Add media</button> <button type="button" className="wp-btn" disabled={readOnly} onClick={() => setPatterns(true)}><Ic n="page" /> Insert pattern</button></div>
           <div className="wpe-tabs" role="tablist">
             <button type="button" role="tab" aria-selected={mode === 'visual'} className={mode === 'visual' ? 'is-on' : ''} onClick={() => setMode('visual')}>Visual</button>
             <button type="button" role="tab" aria-selected={mode === 'text'} className={mode === 'text' ? 'is-on' : ''} onClick={() => setMode('text')}>Text</button>
@@ -66,12 +68,12 @@ export const WpEditor: CodeFieldClientComponent = ({ field, path, readOnly }) =>
                 promotion: false,
                 statusbar: true,
                 resize: true,
-                skin: 'oxide-dark',
-                content_css: 'dark',
+                skin: document.documentElement.dataset.theme === 'light' ? 'oxide' : 'oxide-dark',
+                content_css: document.documentElement.dataset.theme === 'light' ? 'default' : 'dark',
                 toolbar_mode: 'wrap',
-                plugins: ['lists', 'link', 'image', 'charmap', 'fullscreen', 'wordcount', 'searchreplace', 'code', 'autoresize'],
+                plugins: ['lists', 'link', 'image', 'media', 'table', 'pagebreak', 'charmap', 'fullscreen', 'wordcount', 'searchreplace', 'code', 'autoresize'],
                 // WordPress classic-editor toolbar: row 1 + the "kitchen sink" row
-                toolbar: 'blocks bold italic bullist numlist blockquote alignleft aligncenter alignright link unlink | strikethrough hr forecolor pastetext removeformat charmap outdent indent undo redo fullscreen',
+                toolbar: 'blocks bold italic bullist numlist blockquote alignleft aligncenter alignright link unlink | strikethrough hr forecolor pastetext removeformat charmap table media wpmore pagebreak outdent indent undo redo fullscreen',
                 block_formats: 'Paragraph=p; Heading 1=h1; Heading 2=h2; Heading 3=h3; Heading 4=h4; Heading 5=h5; Heading 6=h6; Preformatted=pre',
                 // keep the theme markup exactly as written (carousels, wrappers, data-attributes…)
                 verify_html: false,
@@ -87,8 +89,14 @@ export const WpEditor: CodeFieldClientComponent = ({ field, path, readOnly }) =>
                 autoresize_bottom_margin: 12,
                 min_height: 260,
                 max_height: 700,
-                content_style: 'body{font:16px/1.65 -apple-system,Segoe UI,Roboto,sans-serif;padding:10px 14px;color:#dfe2ec;background:#0e1016}img{max-width:100%;height:auto}a{color:#a99fff}',
-                setup: (editor) => { editor.on('PastePreProcess', (e) => { e.content = cleanPaste(e.content) }) },
+                content_style: (() => { const c = getComputedStyle(document.documentElement); const v = (n: string, d: string) => c.getPropertyValue(n).trim() || d; return `body{font:16px/1.65 -apple-system,Segoe UI,Roboto,sans-serif;padding:10px 14px;color:${v('--av-text', '#dfe2ec')};background:${v('--av-input', '#0e1016')}}img{max-width:100%;height:auto}a{color:${v('--av-link', '#a99fff')}}` })(),
+                pagebreak_separator: '<!--nextpage-->',
+                pagebreak_split_block: true,
+                setup: (editor) => {
+                  editor.on('PastePreProcess', (e) => { e.content = cleanPaste(e.content) })
+                  // WordPress "Insert Read More tag": the excerpt on the blog ends here
+                  editor.ui.registry.addButton('wpmore', { text: 'More', tooltip: 'Insert Read More tag', onAction: () => editor.insertContent('<!--more-->') })
+                },
               }}
             />
           ) : <div className="wpe-ph">Loading editor…</div>
@@ -97,6 +105,7 @@ export const WpEditor: CodeFieldClientComponent = ({ field, path, readOnly }) =>
         )}
         <div className="wpe-foot">Word count: {words}{mode === 'text' ? ' · HTML (theme classes are kept as-is)' : ''}</div>
       </div>
+      {patterns && <PatternModal onClose={() => setPatterns(false)} onInsert={(h) => { insertHtml(h); setPatterns(false) }} />}
       {media && <MediaModal onClose={() => setMedia(false)} onInsert={(h) => { insertHtml(h); setMedia(false) }} />}
       <FieldDescription description={field.admin?.description as string | undefined} path={path} />
     </div>
@@ -141,6 +150,9 @@ function MediaModal({ onClose, onInsert }: { onClose: () => void; onInsert: (htm
   const [tab, setTab] = useState<'lib' | 'up' | 'url'>('lib')
   const [items, setItems] = useState<M[]>([])
   const [sel, setSel] = useState<M | null>(null)
+  const [galleryMode, setGalleryMode] = useState(false)
+  const [picked, setPicked] = useState<M[]>([])
+  const [cols, setCols] = useState(3)
   const [alt, setAlt] = useState('')
   const [url, setUrl] = useState('')
   const [busy, setBusy] = useState(false)
@@ -174,13 +186,53 @@ function MediaModal({ onClose, onInsert }: { onClose: () => void; onInsert: (htm
         </div>
         <div className="wpe-modal-body">
           {err && <p className="wpw-err">{err}</p>}
-          {tab === 'lib' && (items.length ? <ul className="wpe-grid">{items.map((m) => <li key={m.id} className={sel?.id === m.id ? 'on' : ''} onClick={() => { setSel(m); setAlt(m.alt ?? '') }}>{m.mimeType?.startsWith('image') ? <img src={m.url} alt={m.alt ?? ''} /> : <span>{m.filename}</span>}</li>)}</ul> : <p className="wpx-mute">No media found. Use “Upload files” or “Insert from URL”.</p>)}
+          {tab === 'lib' && (items.length ? <ul className="wpe-grid">{items.map((m) => <li key={m.id} className={(galleryMode ? picked.some((x) => x.id === m.id) : sel?.id === m.id) ? 'on' : ''} onClick={() => { if (galleryMode) setPicked((p) => (p.some((x) => x.id === m.id) ? p.filter((x) => x.id !== m.id) : [...p, m])); else { setSel(m); setAlt(m.alt ?? '') } }}>{m.mimeType?.startsWith('image') ? <img src={m.url} alt={m.alt ?? ''} /> : <span>{m.filename}</span>}</li>)}</ul> : <p className="wpx-mute">No media found. Use “Upload files” or “Insert from URL”.</p>)}
           {tab === 'up' && <div className="wpe-drop"><p>Drop files to upload</p><label className="wp-btn primary">{busy ? 'Uploading…' : 'Select Files'}<input type="file" multiple hidden onChange={(e) => upload(e.target.files)} /></label></div>}
           {tab === 'url' && <div className="wpe-url"><label>Image URL<input value={url} onChange={(e) => setUrl(e.target.value)} placeholder="https://" /></label><label>Alternative Text<input value={alt} onChange={(e) => setAlt(e.target.value)} /></label></div>}
         </div>
         <div className="wpe-modal-f">
+          {tab === 'lib' && <label className="wpe-galtoggle"><input type="checkbox" checked={galleryMode} onChange={(e) => { setGalleryMode(e.target.checked); setPicked([]) }} /> Create gallery</label>}
+          {galleryMode && tab === 'lib' ? (
+            <>
+              <label>Columns <select value={cols} onChange={(e) => setCols(Number(e.target.value))}>{[2, 3, 4, 5].map((n) => <option key={n} value={n}>{n}</option>)}</select></label>
+              <button type="button" className="wp-btn primary" disabled={picked.length < 2} onClick={() => onInsert(`<figure class="wp-block-gallery av-gallery columns-${cols}">${picked.map((m) => `<figure class="wp-block-image"><a href="${esc(m.url ?? '')}"><img src="${esc(m.url ?? '')}" alt="${esc(m.alt ?? '')}" /></a></figure>`).join('')}</figure><p></p>`)}>Insert gallery ({picked.length})</button>
+            </>
+          ) : (<>
           {tab === 'lib' && sel && <label>Alt text <input value={alt} onChange={(e) => setAlt(e.target.value)} /></label>}
           <button type="button" className="wp-btn primary" disabled={tab === 'lib' ? !sel : tab === 'url' ? !url : true} onClick={() => onInsert(tab === 'url' ? `<img src="${esc(url)}" alt="${esc(alt)}" />` : `<img src="${esc(sel?.url ?? '')}" alt="${esc(alt)}" />`)}>Insert into post</button>
+          </>)}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+type P = { id: number; title: string; category?: string; contentHtml?: string }
+
+/** Patterns (WordPress reusable blocks / unsynced patterns): pick one and its HTML is inserted at the cursor. */
+function PatternModal({ onClose, onInsert }: { onClose: () => void; onInsert: (html: string) => void }) {
+  const [list, setList] = useState<P[] | null>(null)
+  const [q, setQ] = useState('')
+  useEffect(() => {
+    fetch('/api/patterns?limit=200&depth=0&sort=title', { credentials: 'include' }).then((r) => r.json()).then((j) => setList(j.docs ?? [])).catch(() => setList([]))
+  }, [])
+  const shown = (list ?? []).filter((p) => !q || `${p.title} ${p.category ?? ''}`.toLowerCase().includes(q.toLowerCase()))
+  return (
+    <div className="wpe-modal" onClick={onClose}>
+      <div className="wpe-modal-box" onClick={(e) => e.stopPropagation()}>
+        <div className="wpe-modal-h"><h3>Insert pattern</h3><button type="button" className="wpx-link" onClick={onClose}>✕ Close</button></div>
+        <div className="wpe-modal-body">
+          <input placeholder="Search patterns" value={q} onChange={(e) => setQ(e.target.value)} style={{ width: '100%', marginBottom: 12 }} />
+          {list === null && <p className="wpe-ph">Loading…</p>}
+          {list && shown.length === 0 && <p className="wpe-ph">No patterns yet. Create them under Content → Patterns.</p>}
+          <ul className="wpe-patterns">
+            {shown.map((p) => (
+              <li key={p.id}>
+                <div><b>{p.title}</b>{p.category && <small>{p.category}</small>}</div>
+                <button type="button" className="wp-btn primary" onClick={() => onInsert(p.contentHtml || '')}>Insert</button>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </div>

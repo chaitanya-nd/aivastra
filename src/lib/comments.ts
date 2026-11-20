@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto'
 import { getClient, getPluginSettings } from '@/lib/data'
 
 export type Settings = {
@@ -54,7 +55,10 @@ export async function moderate(input: { content: string; email?: string; name?: 
   return 'approved'
 }
 
-export type PublicComment = { id: number; name: string; url: string | null; content: string; date: string; parent: number | null }
+export type PublicComment = { id: number; name: string; url: string | null; content: string; date: string; parent: number | null; avatar: string | null }
+
+/** Gravatar (WordPress default avatars), 'mp' silhouette when the email has none. */
+export const gravatar = (email?: string | null, size = 64) => (email ? `https://www.gravatar.com/avatar/${createHash('md5').update(email.trim().toLowerCase()).digest('hex')}?s=${size}&d=mp&r=g` : null)
 /** Approved comments for a document: one page of top-level comments plus all replies. */
 export async function listComments(coll: string, id: string | number, page = 1): Promise<{ page: number; totalPages: number; comments: PublicComment[] }> {
   const payload = await getClient()
@@ -62,6 +66,6 @@ export async function listComments(coll: string, id: string | number, page = 1):
   const base: any[] = [{ 'post.value': { equals: id } }, { 'post.relationTo': { equals: coll } }, { status: { equals: 'approved' } }]
   const top = await payload.find({ collection: 'comments' as any, where: { and: [...base, ...(s.threaded ? [{ parent: { exists: false } }] : [])] }, sort: s.order === 'desc' ? '-createdAt' : 'createdAt', limit: s.perPage || 500, page, depth: 0, overrideAccess: true })
   const replies = s.threaded && top.docs.length ? (await payload.find({ collection: 'comments' as any, where: { and: [...base, { parent: { exists: true } }] }, sort: 'createdAt', limit: 1000, pagination: false, depth: 0, overrideAccess: true })).docs : []
-  const pick = (d: any): PublicComment => ({ id: d.id, name: d.authorName || 'Anonymous', url: d.authorUrl || null, content: d.content, date: d.createdAt, parent: typeof d.parent === 'object' ? d.parent?.id ?? null : d.parent ?? null })
+  const pick = (d: any): PublicComment => ({ avatar: gravatar(d.authorEmail), id: d.id, name: d.authorName || 'Anonymous', url: d.authorUrl || null, content: d.content, date: d.createdAt, parent: typeof d.parent === 'object' ? d.parent?.id ?? null : d.parent ?? null })
   return { page, totalPages: top.totalPages, comments: [...top.docs, ...replies].map(pick) }
 }

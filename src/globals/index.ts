@@ -1,8 +1,11 @@
+import { randomBytes } from 'node:crypto'
 import type { GlobalConfig } from 'payload'
-import { canEditSEO, canEditContent, anyone, isAdmin } from '@/access'
+import { canEditSEO, canEditContent, anyone, isAdmin, can } from '@/access'
+import { bustCaps } from '@/access/caps'
 import { globalContentFields } from '@/acf/build'
 import { linkField } from '@/fields/link'
 import { revalidateGlobal } from '@/hooks/revalidate'
+import { logIndexingChange } from '@/hooks/indexingLog'
 
 const robotsOptions = [
   { label: 'No Index', value: 'noindex' },
@@ -15,16 +18,22 @@ const schemaOptions = [
   { label: 'Automatic (by content type)', value: 'auto' },
   { label: 'Article', value: 'Article' },
   { label: 'BlogPosting', value: 'BlogPosting' },
+  { label: 'NewsArticle', value: 'NewsArticle' },
   { label: 'WebPage', value: 'WebPage' },
+  { label: 'HowTo', value: 'HowTo' },
+  { label: 'Product', value: 'Product' },
+  { label: 'SoftwareApplication', value: 'SoftwareApplication' },
+  { label: 'Course', value: 'Course' },
   { label: 'None', value: 'none' },
 ]
+const TIMEZONES = ['Asia/Kolkata', 'UTC', 'Asia/Dubai', 'Asia/Singapore', 'Europe/London', 'Europe/Berlin', 'America/New_York', 'America/Chicago', 'America/Los_Angeles', 'Australia/Sydney']
 
 export const SiteSettings: GlobalConfig = {
   slug: 'site-settings',
   label: 'General & SEO Settings',
   admin: { group: 'Settings' },
-  access: { read: anyone, update: canEditSEO },
-  hooks: { afterChange: [revalidateGlobal('site-settings')] },
+  access: { read: anyone, update: can('manage_options') },
+  hooks: { afterChange: [revalidateGlobal('site-settings'), logIndexingChange] },
   fields: [
     {
       type: 'tabs',
@@ -36,6 +45,22 @@ export const SiteSettings: GlobalConfig = {
             { name: 'tagline', type: 'text' },
             { name: 'logo', type: 'upload', relationTo: 'media' },
             { name: 'favicon', type: 'upload', relationTo: 'media' },
+            { type: 'row', fields: [
+              { name: 'siteLanguage', type: 'text', label: 'Site language', defaultValue: 'en', admin: { description: 'BCP 47 code for <html lang>, e.g. en, en-IN, hi' } },
+              { name: 'timezone', type: 'select', label: 'Timezone', defaultValue: 'Asia/Kolkata', options: TIMEZONES },
+              { name: 'dateFormat', type: 'select', label: 'Date format', defaultValue: 'MMM d, yyyy', options: [
+                { label: 'Nov 20, 2026', value: 'MMM d, yyyy' }, { label: 'November 20, 2026', value: 'MMMM d, yyyy' }, { label: '20 November 2026', value: 'd MMMM yyyy' },
+                { label: '2026-11-20', value: 'yyyy-MM-dd' }, { label: '20/11/2026', value: 'dd/MM/yyyy' }, { label: '11/20/2026', value: 'MM/dd/yyyy' },
+              ] },
+            ] },
+            { name: 'homepageDisplays', type: 'radio', label: 'Your homepage displays', defaultValue: 'page', options: [{ label: 'A static page (the page with slug “home”, or the one chosen below)', value: 'page' }, { label: 'Your latest posts', value: 'posts' }] },
+            { name: 'homepagePage', type: 'relationship', relationTo: 'pages', label: 'Homepage', admin: { condition: (_: any, s: any) => s?.homepageDisplays !== 'posts', description: 'Leave empty to use the page with slug “home”.' } },
+            { name: 'privacyPolicyPage', type: 'relationship', relationTo: 'pages', label: 'Privacy Policy page', admin: { description: 'Linked from registration and comment forms.' } },
+            { type: 'collapsible', label: 'Maintenance mode', admin: { initCollapsed: true }, fields: [
+              { name: 'maintenanceMode', type: 'checkbox', label: 'Show a maintenance page to visitors', defaultValue: false, access: { update: ({ req: { user } }) => (user as any)?.role === 'admin' }, admin: { description: 'Logged-in staff still see the site. Visitors get HTTP 503 with Retry-After, so search engines keep your rankings.' } },
+              { name: 'maintenanceTitle', type: 'text', label: 'Heading', defaultValue: 'We’ll be back soon' },
+              { name: 'maintenanceMessage', type: 'textarea', label: 'Message', defaultValue: 'We are doing some scheduled maintenance. Please check back shortly.' },
+            ] },
           ],
         },
         {
@@ -52,9 +77,10 @@ export const SiteSettings: GlobalConfig = {
             {
               name: 'blockIndexing',
               type: 'checkbox',
-              label: 'Discourage search engines from indexing this site',
-              defaultValue: false,
-              admin: { description: 'Reading → Search engine visibility. Adds noindex + Disallow: / — keep ON until launch day!' },
+              label: 'Block search engines',
+              defaultValue: true,
+              access: { update: ({ req: { user } }) => (user as any)?.role === 'admin' },
+              admin: { description: 'ON by default. Search engines are only allowed in when this is OFF and the deployment is the live site (SITE_ENV=production, host in INDEXABLE_HOSTS). Manage it in Admin → Search visibility.' },
             },
           ],
         },
@@ -183,13 +209,29 @@ export const SiteSettings: GlobalConfig = {
           ],
         },
         {
-          label: 'Schema (Organization)',
+          label: 'Schema & Local SEO',
           fields: [
             { name: 'legalName', type: 'text' },
             { name: 'foundingYear', type: 'text' },
             { name: 'email', type: 'email' },
             { name: 'phone', type: 'text' },
-            { name: 'address', type: 'textarea' },
+            { name: 'address', type: 'textarea', admin: { description: 'Free-text address (used when the structured address below is empty).' } },
+
+            { name: 'orgType', type: 'select', label: 'Person or company type', defaultValue: 'Organization', options: ['Organization', 'Corporation', 'LocalBusiness', 'ProfessionalService', 'Store', 'OnlineBusiness'] },
+            { name: 'localAddress', type: 'group', label: 'Structured address (Local SEO)', fields: [
+              { type: 'row', fields: [{ name: 'street', type: 'text', label: 'Street' }, { name: 'locality', type: 'text', label: 'City' }, { name: 'region', type: 'text', label: 'State' }] },
+              { type: 'row', fields: [{ name: 'postalCode', type: 'text', label: 'PIN / ZIP' }, { name: 'country', type: 'text', label: 'Country code', defaultValue: 'IN' }] },
+            ] },
+            { type: 'row', fields: [
+              { name: 'geoLat', type: 'number', label: 'Latitude' },
+              { name: 'geoLng', type: 'number', label: 'Longitude' },
+              { name: 'priceRange', type: 'text', label: 'Price range', admin: { description: 'e.g. ₹₹' } },
+            ] },
+            { name: 'openingHours', type: 'array', label: 'Opening hours', admin: { description: 'Local businesses only.' }, fields: [{ type: 'row', fields: [
+              { name: 'days', type: 'select', hasMany: true, options: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] },
+              { name: 'opens', type: 'text', label: 'Opens (HH:MM)' },
+              { name: 'closes', type: 'text', label: 'Closes (HH:MM)' },
+            ] }] },
             {
               name: 'socials',
               type: 'array',
@@ -221,7 +263,7 @@ export const Navigation: GlobalConfig = {
   slug: 'navigation',
   label: 'Menus (Appearance)',
   admin: { group: 'Settings', components: { views: { edit: { default: { Component: '/components/admin/MenuBuilder#MenuBuilder' } } } } },
-  access: { read: anyone, update: canEditContent },
+  access: { read: anyone, update: can('edit_theme_options') },
   hooks: { afterChange: [revalidateGlobal('navigation')] },
   fields: [
     {
@@ -272,7 +314,7 @@ export const GlobalContent: GlobalConfig = {
   slug: 'global-content',
   label: 'Global content',
   admin: { group: 'Settings', description: 'Header buttons, footer, contact details and socials (the old ACF "Global Content" options page).' },
-  access: { read: anyone, update: canEditContent },
+  access: { read: anyone, update: can('edit_theme_options') },
   hooks: { afterChange: [revalidateGlobal('global-content')] },
   fields: [
     ...globalContentFields,
@@ -283,12 +325,22 @@ export const GlobalContent: GlobalConfig = {
 
 export { isAdmin }
 
+/** Users → Role Manager: which capabilities each role has (admin & subscriber are fixed). */
+export const RoleCapabilities: GlobalConfig = {
+  slug: 'role-capabilities',
+  label: 'Role capabilities',
+  admin: { hidden: true },
+  access: { read: ({ req: { user } }) => Boolean(user), update: isAdmin },
+  hooks: { afterChange: [() => bustCaps()] },
+  fields: [{ name: 'matrix', type: 'json' }],
+}
+
 export const PluginSettings: GlobalConfig = {
   slug: 'plugin-settings',
   label: 'Plugin Settings',
   admin: { group: 'Settings', description: 'Options of the former WordPress plugins: Rank Math sitemap, Breadcrumb NavXT, LuckyWP Table of Contents, Mailchimp, Insert Headers & Footers.' },
-  access: { read: anyone, update: canEditSEO },
-  hooks: { afterChange: [revalidateGlobal('plugin-settings')] },
+  access: { read: anyone, update: can('manage_options') },
+  hooks: { afterChange: [revalidateGlobal('plugin-settings')], beforeChange: [({ data }) => { if (!data.indexNowKey) data.indexNowKey = randomBytes(16).toString('hex'); return data }] },
   fields: [
     {
       type: 'tabs',
@@ -345,6 +397,22 @@ export const PluginSettings: GlobalConfig = {
           { name: 'commentsMaxLinks', type: 'number', label: 'Hold a comment in the queue if it contains this many or more links', defaultValue: 2 },
           { name: 'commentsModWords', type: 'textarea', label: 'Comment Moderation', admin: { description: 'One word, IP or email per line. Matching comments are held for moderation.' } },
           { name: 'commentsBlockWords', type: 'textarea', label: 'Disallowed Comment Keys', admin: { description: 'One word, IP or email per line. Matching comments are marked as spam.' } },
+        ] },
+        { label: 'Writing & publishing', fields: [
+          { name: 'notifyOnPublish', type: 'checkbox', label: 'Email when a post is published', defaultValue: false, admin: { description: 'Sends one email the first time a post, guide, case study, update or review goes live. Only on the live site.' } },
+          { name: 'notifyOnPublishTo', type: 'text', label: 'Send publish notifications to', admin: { condition: (_: any, s: any) => Boolean(s?.notifyOnPublish), description: 'Comma separated. Falls back to ADMIN_EMAIL.' } },
+          { name: 'relatedMode', type: 'select', label: '“Read more” under articles shows', defaultValue: 'latest', options: [{ label: 'Latest posts (as on the old site)', value: 'latest' }, { label: 'Related posts (same categories / tags)', value: 'related' }] },
+          { name: 'showPrevNext', type: 'checkbox', label: 'Show previous / next post links under articles', defaultValue: false },
+          { name: 'usersCanRegister', type: 'checkbox', label: 'Anyone can register', defaultValue: false, admin: { description: 'Settings → General → Membership. New accounts get the Subscriber role (can comment, no admin access). Registration page: /register/' } },
+        ] },
+        { label: 'Instant indexing & sitemaps', fields: [
+          { name: 'indexNowEnabled', type: 'checkbox', label: 'Submit URLs to IndexNow (Bing, Yandex, Seznam, Naver) on publish', defaultValue: true, admin: { description: 'Only runs on the live site with search engines allowed (Search visibility).' } },
+          { name: 'indexNowKey', type: 'text', label: 'IndexNow API key', admin: { readOnly: true, description: 'Generated automatically (until saved, a key derived from PAYLOAD_SECRET is used); served at /<key>.txt for verification.' } },
+          { name: 'dateArchives', type: 'checkbox', label: 'Enable date archives (/2026/ and /2026/11/)', defaultValue: true, admin: { description: 'Always noindex, as in Rank Math.' } },
+          { name: 'authorArchives', type: 'checkbox', label: 'Enable author archives (/author/name/)', defaultValue: true },
+          { name: 'newsSitemap', type: 'checkbox', label: 'News sitemap (/news-sitemap.xml)', defaultValue: false, admin: { description: 'Posts published in the last 48 hours, for Google News publishers.' } },
+          { name: 'newsPublicationName', type: 'text', label: 'News publication name', defaultValue: 'AI Vastra', admin: { condition: (_: any, s: any) => Boolean(s?.newsSitemap) } },
+          { name: 'videoSitemap', type: 'checkbox', label: 'Video sitemap (/video-sitemap.xml)', defaultValue: false, admin: { description: 'Posts with an embedded YouTube / Vimeo video or a Video schema.' } },
         ] },
       ],
     },

@@ -1,10 +1,14 @@
 import type { CollectionConfig, Field } from 'payload'
-import { canEditContent, publishedOrStaff } from '@/access'
+import { contentAccess, notifyReview, workflowBeforeChange, workflowFields } from '@/access/content'
 import { slugField } from '@/fields/slug'
 import { publishedAtField } from '@/fields/publishedAt'
 import { revalidateAfterChange, revalidateAfterDelete } from '@/hooks/revalidate'
 import { slugChangeRedirect } from '@/hooks/slugRedirect'
 import { getPath, SITE_URL } from '@/lib/urls'
+import { bustLinkIndex, countLinks, incomingMap, pathById } from '@/lib/linkIndex'
+import { notifyOnPublish } from '@/hooks/publishNotify'
+import { storeSeoScore } from '@/hooks/seoScore'
+import { pingIndexNow } from '@/hooks/indexNow'
 
 /**
  * Shared shape of every public content type: drafts + autosave + scheduled
@@ -32,12 +36,7 @@ export function contentCollection(opts: {
       },
       preview: (doc) => `${SITE_URL}/api/preview?path=${encodeURIComponent(getPath(slug, doc as any))}`,
     },
-    access: {
-      read: publishedOrStaff,
-      create: canEditContent,
-      update: canEditContent,
-      delete: canEditContent,
-    },
+    access: contentAccess(slug),
     trash: true,
     versions: {
       maxPerDoc: 25,
@@ -51,14 +50,20 @@ export function contentCollection(opts: {
           if (operation === 'update' && !context?.keepModified) data.modifiedAt = new Date().toISOString()
           return data
         },
+        workflowBeforeChange(slug),
+        storeSeoScore(slug),
         ...(hooks?.beforeChange ?? []),
       ],
       afterChange: [
         slugChangeRedirect(slug),
         revalidateAfterChange(slug),
+        ({ doc }) => { bustLinkIndex(); return doc },
+        notifyOnPublish(slug),
+        pingIndexNow(slug),
+        notifyReview(slug),
         ...(hooks?.afterChange ?? []),
       ],
-      afterDelete: [revalidateAfterDelete(slug), ...(hooks?.afterDelete ?? [])],
+      afterDelete: [revalidateAfterDelete(slug), () => bustLinkIndex(), ...(hooks?.afterDelete ?? [])],
     },
     fields: [
       { type: 'ui', name: 'publishBox', admin: { position: 'sidebar', components: { Field: '/components/admin/wp/PublishBox#PublishBox' } } },
@@ -72,7 +77,34 @@ export function contentCollection(opts: {
         type: 'date',
         admin: { position: 'sidebar', readOnly: true, components: { Field: '/components/admin/wp/Hidden#Hidden' } },
       },
+      ...linkStatFields(slug),
+      ...workflowFields(slug),
+      { name: 'seoScore', type: 'number', label: 'SEO score', index: true, admin: { readOnly: true, position: 'sidebar', components: { Field: '/components/admin/wp/Hidden#Hidden', Cell: '/components/admin/wp/SeoScoreCell#SeoScoreCell' } } },
     ],
     ...extra,
   }
+}
+
+/** Rank Math "Link counter": internal / external links in the body and incoming links from other content (computed, not stored). */
+function linkStatFields(slug: string): Field[] {
+  const out = (k: 'internal' | 'external'): Field => ({
+    name: `${k}Links`, type: 'number', virtual: true, label: k === 'internal' ? 'Internal links' : 'External links',
+    admin: { readOnly: true, position: 'sidebar', disableListColumn: true, disableListFilter: true, components: { Field: '/components/admin/wp/Hidden#Hidden' } },
+    hooks: { afterRead: [({ data }) => countLinks(String(data?.contentHtml || ''))[k]] },
+  })
+  return [
+    // One sortless "Links" column (Rank Math link counter): internal · external · incoming
+    { name: 'links', type: 'ui', label: 'Links', admin: { components: { Field: '/components/admin/wp/Hidden#Hidden', Cell: '/components/admin/wp/LinksCell#LinksCell' } } },
+    out('internal'),
+    out('external'),
+    {
+      name: 'incomingLinks', type: 'number', virtual: true, label: 'Incoming links',
+      admin: { readOnly: true, position: 'sidebar', disableListColumn: true, disableListFilter: true, components: { Field: '/components/admin/wp/Hidden#Hidden' } },
+      hooks: { afterRead: [async ({ data, req }) => {
+        const map = await incomingMap(req.payload)
+        const path = data?.slug ? `${getPath(slug, data as any).replace(/\/+$/, '')}/`.toLowerCase() : pathById.get(`${slug}:${data?.id}`)
+        return path ? (map.get(path) ?? 0) : 0
+      }] },
+    },
+  ]
 }

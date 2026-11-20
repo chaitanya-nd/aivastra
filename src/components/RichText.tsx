@@ -5,6 +5,8 @@ import {
 import type { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical'
 import Link from 'next/link'
 import { withHeadingIds } from '@/lib/body'
+import { enhanceHtml } from '@/lib/enhanceHtml'
+import { applyAutoLinks, autoLinkRules } from '@/lib/autoLinks'
 import { slugify } from '@/lib/slug'
 import { getPath, withTrailingSlash } from '@/lib/urls'
 
@@ -50,8 +52,13 @@ const converters: JSXConvertersFunction = ({ defaultConverters }) => {
   }
 }
 
-export function RichText({ data, className }: { data: SerializedEditorState | string; className?: string }) {
-  if (typeof data === 'string') return <div className={`prose ${className ?? ''}`} dangerouslySetInnerHTML={{ __html: withHeadingIds(data) }} />
+/** `autoLink`: the page's own path — turns on SEO → Auto links for this body (never links a page to itself). */
+export async function RichText({ data, className, autoLink }: { data: SerializedEditorState | string; className?: string; autoLink?: string }) {
+  if (typeof data === 'string') {
+    let html = enhanceHtml(withHeadingIds(data))
+    if (autoLink !== undefined) html = applyAutoLinks(html, await autoLinkRules(), autoLink)
+    return <div className={`prose ${className ?? ''}`} dangerouslySetInnerHTML={{ __html: html }} />
+  }
   if (!data) return null
   return <PayloadRichText converters={converters} data={data} className={`prose ${className ?? ''}`} />
 }

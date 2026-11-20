@@ -3,6 +3,8 @@
 import { PreviewButton, PublishButton, SaveDraftButton, useDocumentInfo, useField } from '@payloadcms/ui'
 import Link from 'next/link'
 import { useState } from 'react'
+import { Ic } from '../Ic'
+import { useCaps } from '../useCaps'
 
 const toLocal = (iso?: string | null) => {
   if (!iso) return ''
@@ -17,9 +19,21 @@ export function PublishBox() {
   const { id, collectionSlug, versionCount, data } = useDocumentInfo() as any
   const status = useField<string>({ path: '_status' })
   const pub = useField<string>({ path: 'publishedAt' })
+  const vis = useField<string>({ path: 'visibility' })
+  const pw = useField<string>({ path: 'postPassword' })
+  const sticky = useField<boolean>({ path: 'sticky' })
+  const review = useField<string>({ path: 'reviewStatus' })
+  const caps = useCaps()
+  const canPublish = !caps || caps.has('publish_posts')
+  const submitForReview = () => {
+    review.setValue('pending')
+    setTimeout(() => (document.getElementById('action-save-draft') as HTMLButtonElement | null)?.click(), 50)
+  }
+  const [editVis, setEditVis] = useState(false)
   const [editDate, setEditDate] = useState(false)
   const [busy, setBusy] = useState(false)
   const published = status.value === 'published'
+  const pending = !published && review.value === 'pending'
   const future = pub.value && new Date(pub.value) > new Date()
 
   async function trash() {
@@ -39,10 +53,22 @@ export function PublishBox() {
           <PreviewButton />
         </div>
         <ul className="wpx-misc">
-          <li><span className="wpx-ic">◉</span> Status: <b>{published ? 'Published' : 'Draft'}</b></li>
-          <li><span className="wpx-ic">◐</span> Visibility: <b>Public</b></li>
+          <li><Ic n="status" className="wpx-ic" /> Status: <b>{published ? 'Published' : pending ? 'Pending Review' : 'Draft'}</b></li>
+          <li style={{ flexWrap: 'wrap' }}>
+            <Ic n="eye" className="wpx-ic" /> Visibility: <b>{vis.value === 'private' ? 'Private' : vis.value === 'password' ? 'Password protected' : 'Public'}{sticky.value ? ', Sticky' : ''}</b>
+            {collectionSlug === 'posts' && <button type="button" className="wpx-link" onClick={() => setEditVis(!editVis)}>{editVis ? 'Close' : 'Edit'}</button>}
+            {editVis && collectionSlug === 'posts' && (
+              <div className="wpx-vis">
+                {(['public', 'password', 'private'] as const).map((k) => (
+                  <label key={k}><input type="radio" name="wpx-vis" checked={(vis.value || 'public') === k} onChange={() => vis.setValue(k)} /> {k === 'public' ? 'Public' : k === 'password' ? 'Password protected' : 'Private'}</label>
+                ))}
+                {vis.value === 'password' && <input type="text" placeholder="Password" value={pw.value || ''} onChange={(e) => pw.setValue(e.target.value)} />}
+                {(vis.value || 'public') === 'public' && <label><input type="checkbox" checked={Boolean(sticky.value)} onChange={(e) => sticky.setValue(e.target.checked)} /> Stick this post to the front page</label>}
+              </div>
+            )}
+          </li>
           <li>
-            <span className="wpx-ic">▦</span>{' '}
+            <Ic n="calendar" className="wpx-ic" />{' '}
             {future ? 'Schedule for' : published ? 'Published on' : 'Publish'}: <b>{pub.value ? nice(pub.value) : 'immediately'}</b>{' '}
             <button type="button" className="wpx-link" onClick={() => setEditDate(!editDate)}>Edit</button>
             {editDate && (
@@ -52,13 +78,15 @@ export function PublishBox() {
               </div>
             )}
           </li>
-          {id && <li><span className="wpx-ic">↺</span> Revisions: <b>{versionCount ?? 0}</b> <Link href={`/admin/collections/${collectionSlug}/${id}/versions`}>Browse</Link></li>}
-          {data?.modifiedAt && <li><span className="wpx-ic">✎</span> Last modified: <b>{nice(data.modifiedAt)}</b></li>}
+          {id && <li><Ic n="history" className="wpx-ic" /> Revisions: <b>{versionCount ?? 0}</b> <Link href={`/admin/collections/${collectionSlug}/${id}/versions`}>Browse</Link></li>}
+          {data?.modifiedAt && <li><Ic n="edit" className="wpx-ic" /> Last modified: <b>{nice(data.modifiedAt)}</b></li>}
         </ul>
       </div>
       <div className="wpx-foot">
         {id ? <button type="button" className="wpx-trash" disabled={busy} onClick={trash}>Move to Trash</button> : <span />}
-        <PublishButton label={published ? 'Update' : future ? 'Schedule' : 'Publish'} />
+        {canPublish
+          ? <PublishButton label={published ? 'Update' : future ? 'Schedule' : 'Publish'} />
+          : <button type="button" className="wp-btn primary" onClick={submitForReview}>{pending ? 'Update review request' : 'Submit for Review'}</button>}
       </div>
     </div>
   )

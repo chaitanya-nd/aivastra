@@ -1,5 +1,6 @@
 import { createHash } from 'node:crypto'
 import type { CollectionAfterChangeHook } from 'payload'
+import { outboundAllowed } from '@/lib/env'
 import { parseAdditional } from './formSettings'
 
 /**
@@ -8,7 +9,7 @@ import { parseAdditional } from './formSettings'
  * are set. Never blocks or fails the submission.
  */
 export const syncToMailchimp: CollectionAfterChangeHook = async ({ doc, operation, req }) => {
-  if (operation !== 'create') return doc
+  if (operation !== 'create' || !outboundAllowed) return doc // never subscribe real people from a test deploy
   const key = process.env.MAILCHIMP_API_KEY
   const ps: any = await req.payload.findGlobal({ slug: 'plugin-settings', depth: 0, req }).catch(() => ({}))
   const list = ps?.mcAudienceId || process.env.MAILCHIMP_LIST_ID

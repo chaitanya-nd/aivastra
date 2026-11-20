@@ -1,3 +1,4 @@
+import { outboundAllowed } from '@/lib/env'
 import { APIError, type CollectionAfterChangeHook, type CollectionBeforeChangeHook } from 'payload'
 
 /** Contact Form 7 "Additional settings": one `name: value` per line. */
@@ -44,5 +45,8 @@ export const dropIfNotStored: CollectionAfterChangeHook = async ({ doc, operatio
 /** formBuilderPlugin beforeEmail: skip_mail / demo_mode send nothing. */
 export const beforeEmail = async (emails: any[], params: any) => {
   const f = await formFlags(params.req, params.data?.form)
-  return f.skipMail || f.demo ? [] : emails
+  if (f.skipMail || f.demo) return []
+  // Test/staging deploys must never email real recipients: drop mail, or redirect it to TEST_MAIL_TO.
+  if (!outboundAllowed) return process.env.TEST_MAIL_TO ? emails.map((e) => ({ ...e, to: process.env.TEST_MAIL_TO })) : []
+  return emails
 }

@@ -1,23 +1,18 @@
 import type { Access, FieldAccess } from 'payload'
+import { can, fieldCan, isStaff } from './caps'
 
-type Role = 'admin' | 'seo' | 'editor'
-type U = { role?: Role } | null | undefined
+export { can, fieldCan, isStaff, userCan, capsOf } from './caps'
 
 export const isLoggedIn: Access = ({ req: { user } }) => Boolean(user)
-export const hasRole =
-  (...roles: Role[]): Access =>
-  ({ req: { user } }) =>
-    Boolean(user && roles.includes((user as U)?.role as Role))
-export const isAdmin = hasRole('admin')
-export const canEditContent = hasRole('admin', 'seo', 'editor')
-export const canEditSEO = hasRole('admin', 'seo')
+export const isAdmin: Access = ({ req: { user } }) => (user as any)?.role === 'admin'
+/** Any staff role (not subscribers). */
+export const isStaffAccess: Access = ({ req: { user } }) => isStaff(user)
 
-/** Published docs are public; drafts only for logged-in staff. */
-export const publishedOrStaff: Access = ({ req: { user } }) => {
-  if (user) return true
-  return { _status: { equals: 'published' } }
-}
+// Capability-backed helpers (names kept for existing call sites)
+export const canEditContent = can('edit_posts')
+export const canEditSEO = can('manage_seo_tools')
+export const seoFieldAccess: FieldAccess = fieldCan('edit_seo')
+
+/** Published docs are public; drafts only for staff (subscribers are logged in but not staff). */
+export const publishedOrStaff: Access = ({ req: { user } }) => (isStaff(user) ? true : { _status: { equals: 'published' } })
 export const anyone: Access = () => true
-
-export const seoFieldAccess: FieldAccess = ({ req: { user } }) =>
-  Boolean(user && ['admin', 'seo'].includes((user as U)?.role as string))

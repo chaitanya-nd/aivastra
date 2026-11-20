@@ -29,7 +29,13 @@ export const words = (s: string, n: number) => {
   return w.length > n ? `${w.slice(0, n).join(' ')}...` : w.join(' ')
 }
 export const bodyText = (doc: any): string => (typeof doc?.contentHtml === 'string' && doc.contentHtml.trim() ? htmlText(doc.contentHtml) : lexicalText(doc?.content?.root))
-export const excerptOf = (doc: any, n = 10) => words(doc.excerpt || bodyText(doc), n)
+/** <!--more--> (WordPress Read More tag): the text before it is the automatic excerpt. */
+const beforeMore = (doc: any): string | null => {
+  const h = typeof doc?.contentHtml === 'string' ? doc.contentHtml : ''
+  const i = h.indexOf('<!--more-->')
+  return i > 0 ? words(htmlText(h.slice(0, i)), 55) : null
+}
+export const excerptOf = (doc: any, n = 10) => (doc.excerpt ? words(doc.excerpt, n) : beforeMore(doc) ?? words(bodyText(doc), n))
 
 /** ACF "accordion_list" repeater → the theme's FAQ accordion (markup incl. FAQPage microdata). */
 export function Accordion({ a, className = '', wrap = true }: { a: any; className?: string; wrap?: boolean }): ReactNode {

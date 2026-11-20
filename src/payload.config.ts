@@ -18,7 +18,7 @@ import {
 import { buildConfig } from 'payload'
 import sharp from 'sharp'
 
-import { canEditContent, canEditSEO } from '@/access'
+import { can, canEditContent, canEditSEO } from '@/access'
 import { ExternalImage } from '@/blocks/lexical'
 import { Cases } from '@/collections/Cases'
 import { Guides } from '@/collections/Guides'
@@ -33,8 +33,16 @@ import { extraSeoFields } from '@/fields/seo'
 import { syncToMailchimp } from '@/hooks/mailchimp'
 import { bustRedirectCache } from '@/lib/redirects'
 import { beforeEmail, dropIfNotStored, guardSubmission } from '@/hooks/formSettings'
-import { GlobalContent, Navigation, PluginSettings, SiteSettings } from '@/globals'
+import { GlobalContent, Navigation, PluginSettings, RoleCapabilities, SiteSettings } from '@/globals'
 import { NotFoundLog } from '@/collections/NotFoundLog'
+import { IndexingLog } from '@/collections/IndexingLog'
+import { Patterns } from '@/collections/Patterns'
+import { RankSnapshots } from '@/collections/RankSnapshots'
+import { ActivityLog } from '@/collections/ActivityLog'
+import { AutoLinks } from '@/collections/AutoLinks'
+import { rankSnapshotTask } from '@/jobs/rankSnapshot'
+import { activityPlugin } from '@/hooks/activity'
+import { MediaFolders } from '@/collections/MediaFolders'
 import { Comments } from '@/collections/Comments'
 import { getPath, SITE_URL } from '@/lib/urls'
 import { storagePlugins } from '@/storage'
@@ -63,7 +71,7 @@ export default buildConfig({
   secret: process.env.PAYLOAD_SECRET || '',
   admin: {
     user: Users.slug,
-    theme: 'dark', // dark admin (no toggle)
+    theme: 'all', // dark + light, switched from the top-bar toggle
     importMap: { baseDir: path.resolve(dirname) },
     meta: { titleSuffix: ' — AI Vastra CMS' },
     components: {
@@ -80,9 +88,18 @@ export default buildConfig({
         permalinks: { Component: '/components/admin/Permalinks#Permalinks', path: '/permalinks' },
         widgets: { Component: '/components/admin/Widgets#Widgets', path: '/widgets' },
         exportImport: { Component: '/components/admin/ExportImport#ExportImport', path: '/export-import' },
+        twoFactor: { Component: '/components/admin/TwoFactor#TwoFactor', path: '/two-factor' },
+        seoBulk: { Component: '/components/admin/SeoBulk#SeoBulk', path: '/seo-bulk' },
+        linkReport: { Component: '/components/admin/LinkReport#LinkReport', path: '/link-report' },
+        privacy: { Component: '/components/admin/Privacy#Privacy', path: '/privacy' },
+        mediaUsage: { Component: '/components/admin/MediaUsage#MediaUsage', path: '/media-usage' },
+        calendar: { Component: '/components/admin/EditorialCalendar#EditorialCalendar', path: '/calendar' },
+        analytics: { Component: '/components/admin/Analytics#Analytics', path: '/analytics' },
+        searchVisibility: { Component: '/components/admin/SearchVisibility#SearchVisibility', path: '/search-visibility' },
         siteHealth: { Component: '/components/admin/SiteHealth#SiteHealth', path: '/site-health' },
       },
       Nav: '/components/admin/WpNav#WpNav',
+      graphics: { Logo: '/components/admin/Brand#Logo', Icon: '/components/admin/Brand#Icon' },
       header: ['/components/admin/AdminBar#AdminBar'],
     },
     livePreview: {
@@ -107,9 +124,16 @@ export default buildConfig({
     Media,
     Users,
     NotFoundLog,
+    IndexingLog,
+    Patterns,
+    RankSnapshots,
+    ActivityLog,
+    AutoLinks,
+    MediaFolders,
     Comments,
   ],
-  globals: [SiteSettings, Navigation, GlobalContent, PluginSettings],
+  globals: [
+    RoleCapabilities, SiteSettings, Navigation, GlobalContent, PluginSettings],
   editor: lexicalEditor({
     features: ({ defaultFeatures }) => [
       ...defaultFeatures,
@@ -120,6 +144,14 @@ export default buildConfig({
       InlineToolbarFeature(),
     ],
   }),
+  // WP-Cron equivalent: runs scheduled publish / unpublish every minute and the daily Search Console snapshot.
+  // On serverless hosts set JOBS_AUTORUN=false and call /api/payload-jobs/run from an external cron instead.
+  jobs: {
+    tasks: [rankSnapshotTask],
+    autoRun: [{ cron: '* * * * *', allQueues: true, limit: 20 }],
+    shouldAutoRun: () => process.env.JOBS_AUTORUN !== 'false',
+    deleteJobOnComplete: true,
+  },
   db: postgresAdapter({
     pool: { connectionString: process.env.DATABASE_URL },
     // Dev: schema auto-sync. Switch to migrations (`payload migrate:create`) before production.
@@ -166,9 +198,9 @@ export default buildConfig({
           {
             type: 'tabs',
             tabs: [
-              { label: 'General', fields: [...d('overview'), ...e('focusKeyword'), ...d('title'), ...d('description'), ...d('preview')] },
+              { label: 'General', fields: [{ type: 'ui', name: 'seoAnalysis', admin: { components: { Field: '/components/admin/seo/SeoPanel#SeoPanel' } } }, ...e('focusKeyword', 'secondaryKeywords'), ...d('title'), ...d('description')] },
               { label: 'Advanced', fields: [{ ...robots, fields: robots.fields.map((f: any) => ({ ...f, label: f.name === 'noindex' ? 'Robots Meta: No Index' : 'Robots Meta: No Follow' })) }, ...e('canonicalUrl')] },
-              { label: 'Schema', fields: e('schemaType', 'customSchema') },
+              { label: 'Schema', fields: e('schemaType', 'schemaData', 'customSchema') },
               { label: 'Social', fields: [...e('ogTitle', 'ogDescription'), ...d('image')] },
             ],
           },
@@ -236,9 +268,11 @@ export default buildConfig({
             },
           ]
         },
-        access: { read: () => true, create: canEditContent, update: canEditContent, delete: canEditContent },
+        access: { read: () => true, create: can('manage_forms'), update: can('manage_forms'), delete: can('manage_forms') },
       },
       formSubmissionOverrides: { admin: { group: 'SEO & Tools' }, hooks: { beforeChange: [guardSubmission], afterChange: [syncToMailchimp, dropIfNotStored] } },
     }),
+    // must stay last: audits the collections added by the plugins above too
+    activityPlugin,
   ],
 })

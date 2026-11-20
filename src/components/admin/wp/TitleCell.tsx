@@ -64,7 +64,7 @@ export function TitleCell(props: any) {
   if (!id) return <>{String(cellData ?? '')}</>
   return (
     <div className="wpl-title">
-      <Link href={edit} className="wpl-t">{String(cellData || '(no title)')}{rowData?._status === 'draft' && <em> — Draft</em>}</Link>
+      <Link href={edit} className="wpl-t">{String(cellData || '(no title)')}{rowData?._status === 'draft' && <em> — {rowData?.reviewStatus === 'pending' ? 'Pending' : 'Draft'}</em>}</Link>
       <div className="wpl-actions">
         {inTrash
           ? <><button type="button" onClick={restore}>Restore</button> | <button type="button" className="del" onClick={purge}>Delete Permanently</button></>

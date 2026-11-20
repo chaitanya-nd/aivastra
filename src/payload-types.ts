@@ -79,6 +79,12 @@ export interface Config {
     media: Media;
     users: User;
     'not-found-log': NotFoundLog;
+    'indexing-log': IndexingLog;
+    patterns: Pattern;
+    'rank-snapshots': RankSnapshot;
+    'activity-log': ActivityLog;
+    'auto-links': AutoLink;
+    'media-folders': MediaFolder;
     comments: Comment;
     redirects: Redirect;
     forms: Form;
@@ -103,6 +109,12 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'not-found-log': NotFoundLogSelect<false> | NotFoundLogSelect<true>;
+    'indexing-log': IndexingLogSelect<false> | IndexingLogSelect<true>;
+    patterns: PatternsSelect<false> | PatternsSelect<true>;
+    'rank-snapshots': RankSnapshotsSelect<false> | RankSnapshotsSelect<true>;
+    'activity-log': ActivityLogSelect<false> | ActivityLogSelect<true>;
+    'auto-links': AutoLinksSelect<false> | AutoLinksSelect<true>;
+    'media-folders': MediaFoldersSelect<false> | MediaFoldersSelect<true>;
     comments: CommentsSelect<false> | CommentsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
@@ -118,16 +130,20 @@ export interface Config {
   };
   fallbackLocale: null;
   globals: {
+    'role-capabilities': RoleCapability;
     'site-settings': SiteSetting;
     navigation: Navigation;
     'global-content': GlobalContent;
     'plugin-settings': PluginSetting;
+    'payload-jobs-stats': PayloadJobsStat;
   };
   globalsSelect: {
+    'role-capabilities': RoleCapabilitiesSelect<false> | RoleCapabilitiesSelect<true>;
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
     navigation: NavigationSelect<false> | NavigationSelect<true>;
     'global-content': GlobalContentSelect<false> | GlobalContentSelect<true>;
     'plugin-settings': PluginSettingsSelect<false> | PluginSettingsSelect<true>;
+    'payload-jobs-stats': PayloadJobsStatsSelect<false> | PayloadJobsStatsSelect<true>;
   };
   locale: null;
   widgets: {
@@ -136,6 +152,7 @@ export interface Config {
   user: User;
   jobs: {
     tasks: {
+      rankSnapshot: TaskRankSnapshot;
       schedulePublish: TaskSchedulePublish;
       inline: {
         input: unknown;
@@ -876,6 +893,12 @@ export interface Page {
   hideFromSitemap?: boolean | null;
   publishedAt?: string | null;
   modifiedAt?: string | null;
+  internalLinks?: number | null;
+  externalLinks?: number | null;
+  incomingLinks?: number | null;
+  createdBy?: (number | null) | User;
+  reviewStatus?: ('none' | 'pending') | null;
+  seoScore?: number | null;
   parent?: (number | null) | Page;
   breadcrumbs?:
     | {
@@ -887,9 +910,13 @@ export interface Page {
     | null;
   meta?: {
     /**
-     * Primary keyword this page targets (used by the SEO audit).
+     * Primary keyword this page targets — scored live in the SEO analysis above.
      */
     focusKeyword?: string | null;
+    /**
+     * Optional, comma separated. Each one is checked in the analysis.
+     */
+    secondaryKeywords?: string | null;
     title?: string | null;
     description?: string | null;
     noindex?: boolean | null;
@@ -898,7 +925,57 @@ export interface Page {
      * Leave empty to use the page URL. Set only to point elsewhere.
      */
     canonicalUrl?: string | null;
-    schemaType?: ('auto' | 'Article' | 'BlogPosting' | 'WebPage' | 'FAQPage' | 'SoftwareApplication' | 'none') | null;
+    schemaType?:
+      | (
+          | 'auto'
+          | 'Article'
+          | 'BlogPosting'
+          | 'NewsArticle'
+          | 'WebPage'
+          | 'FAQPage'
+          | 'HowTo'
+          | 'Product'
+          | 'SoftwareApplication'
+          | 'Course'
+          | 'Event'
+          | 'VideoObject'
+          | 'none'
+        )
+      | null;
+    /**
+     * Fill in what applies to the selected schema type. Empty fields are left out.
+     */
+    schemaData?: {
+      name?: string | null;
+      description?: string | null;
+      totalTime?: string | null;
+      steps?:
+        | {
+            name: string;
+            text?: string | null;
+            image?: string | null;
+            id?: string | null;
+          }[]
+        | null;
+      price?: string | null;
+      currency?: string | null;
+      availability?: ('InStock' | 'OutOfStock' | 'PreOrder' | 'OnlineOnly') | null;
+      brand?: string | null;
+      sku?: string | null;
+      applicationCategory?: string | null;
+      operatingSystem?: string | null;
+      ratingValue?: number | null;
+      reviewCount?: number | null;
+      provider?: string | null;
+      startDate?: string | null;
+      endDate?: string | null;
+      eventMode?: ('OnlineEventAttendanceMode' | 'OfflineEventAttendanceMode' | 'MixedEventAttendanceMode') | null;
+      location?: string | null;
+      videoUrl?: string | null;
+      duration?: string | null;
+      uploadDate?: string | null;
+      thumbnailUrl?: string | null;
+    };
     /**
      * Optional raw <script type="application/ld+json"> (kept from the old Schema plugin).
      */
@@ -984,10 +1061,15 @@ export interface HeroBlock {
 export interface Media {
   id: number;
   /**
-   * Alt text — required for SEO and accessibility.
+   * Alt text — required for SEO and accessibility. Filled from the file name if left empty.
    */
-  alt: string;
+  alt?: string | null;
   caption?: string | null;
+  folder?: (number | null) | MediaFolder;
+  /**
+   * Remote file this record points at (WordPress import).
+   */
+  externalUrl?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -1001,6 +1083,22 @@ export interface Media {
   focalY?: number | null;
   sizes?: {
     thumbnail?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    medium?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    large?: {
       url?: string | null;
       width?: number | null;
       height?: number | null;
@@ -1033,6 +1131,16 @@ export interface Media {
       filename?: string | null;
     };
   };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media-folders".
+ */
+export interface MediaFolder {
+  id: number;
+  name: string;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1074,6 +1182,24 @@ export interface Post {
       }[]
     | null;
   author?: (number | null) | User;
+  visibility?: ('public' | 'password' | 'private') | null;
+  postPassword?: string | null;
+  sticky?: boolean | null;
+  /**
+   * Post format — adds a format-* class for the theme.
+   */
+  format?:
+    ('standard' | 'aside' | 'gallery' | 'link' | 'image' | 'quote' | 'status' | 'video' | 'audio' | 'chat') | null;
+  /**
+   * Free-form name / value pairs (WordPress post meta). Available in the API.
+   */
+  customFields?:
+    | {
+        key: string;
+        value?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   commentsMode?: ('default' | 'open' | 'closed') | null;
   categories?: (number | Category)[] | null;
   primaryCategory?: (number | null) | Category;
@@ -1091,11 +1217,20 @@ export interface Post {
   readingTime?: number | null;
   publishedAt?: string | null;
   modifiedAt?: string | null;
+  internalLinks?: number | null;
+  externalLinks?: number | null;
+  incomingLinks?: number | null;
+  reviewStatus?: ('none' | 'pending') | null;
+  seoScore?: number | null;
   meta?: {
     /**
-     * Primary keyword this page targets (used by the SEO audit).
+     * Primary keyword this page targets — scored live in the SEO analysis above.
      */
     focusKeyword?: string | null;
+    /**
+     * Optional, comma separated. Each one is checked in the analysis.
+     */
+    secondaryKeywords?: string | null;
     title?: string | null;
     description?: string | null;
     noindex?: boolean | null;
@@ -1104,7 +1239,57 @@ export interface Post {
      * Leave empty to use the page URL. Set only to point elsewhere.
      */
     canonicalUrl?: string | null;
-    schemaType?: ('auto' | 'Article' | 'BlogPosting' | 'WebPage' | 'FAQPage' | 'SoftwareApplication' | 'none') | null;
+    schemaType?:
+      | (
+          | 'auto'
+          | 'Article'
+          | 'BlogPosting'
+          | 'NewsArticle'
+          | 'WebPage'
+          | 'FAQPage'
+          | 'HowTo'
+          | 'Product'
+          | 'SoftwareApplication'
+          | 'Course'
+          | 'Event'
+          | 'VideoObject'
+          | 'none'
+        )
+      | null;
+    /**
+     * Fill in what applies to the selected schema type. Empty fields are left out.
+     */
+    schemaData?: {
+      name?: string | null;
+      description?: string | null;
+      totalTime?: string | null;
+      steps?:
+        | {
+            name: string;
+            text?: string | null;
+            image?: string | null;
+            id?: string | null;
+          }[]
+        | null;
+      price?: string | null;
+      currency?: string | null;
+      availability?: ('InStock' | 'OutOfStock' | 'PreOrder' | 'OnlineOnly') | null;
+      brand?: string | null;
+      sku?: string | null;
+      applicationCategory?: string | null;
+      operatingSystem?: string | null;
+      ratingValue?: number | null;
+      reviewCount?: number | null;
+      provider?: string | null;
+      startDate?: string | null;
+      endDate?: string | null;
+      eventMode?: ('OnlineEventAttendanceMode' | 'OfflineEventAttendanceMode' | 'MixedEventAttendanceMode') | null;
+      location?: string | null;
+      videoUrl?: string | null;
+      duration?: string | null;
+      uploadDate?: string | null;
+      thumbnailUrl?: string | null;
+    };
     /**
      * Optional raw <script type="application/ld+json"> (kept from the old Schema plugin).
      */
@@ -1134,11 +1319,46 @@ export interface Post {
 export interface User {
   id: number;
   name: string;
-  role: 'admin' | 'seo' | 'editor';
+  role: 'admin' | 'seo' | 'editor' | 'author' | 'contributor' | 'subscriber';
+  /**
+   * Author archive: /author/<slug>/. Filled from the name if empty.
+   */
+  slug?: string | null;
   avatar?: (number | null) | Media;
+  /**
+   * Two-factor login. Manage it in Users → Two-factor login.
+   */
+  totpEnabled?: boolean | null;
+  totpSecret?: string | null;
+  totpPending?: string | null;
+  recoveryCodes?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  emailVerified?: boolean | null;
+  verifyToken?: string | null;
+  /**
+   * Shown in the author box and in Person schema.
+   */
+  jobTitle?: string | null;
+  /**
+   * Shown in the author box under posts and on the author archive.
+   */
   bio?: string | null;
+  website?: string | null;
+  twitter?: string | null;
+  linkedin?: string | null;
   updatedAt: string;
   createdAt: string;
+  enableAPIKey?: boolean | null;
+  apiKey?: string | null;
+  apiKeyIndex?: string | null;
+  hasAPIKey?: boolean | null;
   email: string;
   resetPasswordToken?: string | null;
   resetPasswordExpiration?: string | null;
@@ -1172,9 +1392,13 @@ export interface Category {
   parent?: (number | null) | Category;
   meta?: {
     /**
-     * Primary keyword this page targets (used by the SEO audit).
+     * Primary keyword this page targets — scored live in the SEO analysis above.
      */
     focusKeyword?: string | null;
+    /**
+     * Optional, comma separated. Each one is checked in the analysis.
+     */
+    secondaryKeywords?: string | null;
     title?: string | null;
     description?: string | null;
     noindex?: boolean | null;
@@ -1183,7 +1407,57 @@ export interface Category {
      * Leave empty to use the page URL. Set only to point elsewhere.
      */
     canonicalUrl?: string | null;
-    schemaType?: ('auto' | 'Article' | 'BlogPosting' | 'WebPage' | 'FAQPage' | 'SoftwareApplication' | 'none') | null;
+    schemaType?:
+      | (
+          | 'auto'
+          | 'Article'
+          | 'BlogPosting'
+          | 'NewsArticle'
+          | 'WebPage'
+          | 'FAQPage'
+          | 'HowTo'
+          | 'Product'
+          | 'SoftwareApplication'
+          | 'Course'
+          | 'Event'
+          | 'VideoObject'
+          | 'none'
+        )
+      | null;
+    /**
+     * Fill in what applies to the selected schema type. Empty fields are left out.
+     */
+    schemaData?: {
+      name?: string | null;
+      description?: string | null;
+      totalTime?: string | null;
+      steps?:
+        | {
+            name: string;
+            text?: string | null;
+            image?: string | null;
+            id?: string | null;
+          }[]
+        | null;
+      price?: string | null;
+      currency?: string | null;
+      availability?: ('InStock' | 'OutOfStock' | 'PreOrder' | 'OnlineOnly') | null;
+      brand?: string | null;
+      sku?: string | null;
+      applicationCategory?: string | null;
+      operatingSystem?: string | null;
+      ratingValue?: number | null;
+      reviewCount?: number | null;
+      provider?: string | null;
+      startDate?: string | null;
+      endDate?: string | null;
+      eventMode?: ('OnlineEventAttendanceMode' | 'OfflineEventAttendanceMode' | 'MixedEventAttendanceMode') | null;
+      location?: string | null;
+      videoUrl?: string | null;
+      duration?: string | null;
+      uploadDate?: string | null;
+      thumbnailUrl?: string | null;
+    };
     /**
      * Optional raw <script type="application/ld+json"> (kept from the old Schema plugin).
      */
@@ -1218,9 +1492,13 @@ export interface Tag {
   description?: string | null;
   meta?: {
     /**
-     * Primary keyword this page targets (used by the SEO audit).
+     * Primary keyword this page targets — scored live in the SEO analysis above.
      */
     focusKeyword?: string | null;
+    /**
+     * Optional, comma separated. Each one is checked in the analysis.
+     */
+    secondaryKeywords?: string | null;
     title?: string | null;
     description?: string | null;
     noindex?: boolean | null;
@@ -1229,7 +1507,57 @@ export interface Tag {
      * Leave empty to use the page URL. Set only to point elsewhere.
      */
     canonicalUrl?: string | null;
-    schemaType?: ('auto' | 'Article' | 'BlogPosting' | 'WebPage' | 'FAQPage' | 'SoftwareApplication' | 'none') | null;
+    schemaType?:
+      | (
+          | 'auto'
+          | 'Article'
+          | 'BlogPosting'
+          | 'NewsArticle'
+          | 'WebPage'
+          | 'FAQPage'
+          | 'HowTo'
+          | 'Product'
+          | 'SoftwareApplication'
+          | 'Course'
+          | 'Event'
+          | 'VideoObject'
+          | 'none'
+        )
+      | null;
+    /**
+     * Fill in what applies to the selected schema type. Empty fields are left out.
+     */
+    schemaData?: {
+      name?: string | null;
+      description?: string | null;
+      totalTime?: string | null;
+      steps?:
+        | {
+            name: string;
+            text?: string | null;
+            image?: string | null;
+            id?: string | null;
+          }[]
+        | null;
+      price?: string | null;
+      currency?: string | null;
+      availability?: ('InStock' | 'OutOfStock' | 'PreOrder' | 'OnlineOnly') | null;
+      brand?: string | null;
+      sku?: string | null;
+      applicationCategory?: string | null;
+      operatingSystem?: string | null;
+      ratingValue?: number | null;
+      reviewCount?: number | null;
+      provider?: string | null;
+      startDate?: string | null;
+      endDate?: string | null;
+      eventMode?: ('OnlineEventAttendanceMode' | 'OfflineEventAttendanceMode' | 'MixedEventAttendanceMode') | null;
+      location?: string | null;
+      videoUrl?: string | null;
+      duration?: string | null;
+      uploadDate?: string | null;
+      thumbnailUrl?: string | null;
+    };
     /**
      * Optional raw <script type="application/ld+json"> (kept from the old Schema plugin).
      */
@@ -1296,11 +1624,21 @@ export interface Guide {
   order?: number | null;
   publishedAt?: string | null;
   modifiedAt?: string | null;
+  internalLinks?: number | null;
+  externalLinks?: number | null;
+  incomingLinks?: number | null;
+  createdBy?: (number | null) | User;
+  reviewStatus?: ('none' | 'pending') | null;
+  seoScore?: number | null;
   meta?: {
     /**
-     * Primary keyword this page targets (used by the SEO audit).
+     * Primary keyword this page targets — scored live in the SEO analysis above.
      */
     focusKeyword?: string | null;
+    /**
+     * Optional, comma separated. Each one is checked in the analysis.
+     */
+    secondaryKeywords?: string | null;
     title?: string | null;
     description?: string | null;
     noindex?: boolean | null;
@@ -1309,7 +1647,57 @@ export interface Guide {
      * Leave empty to use the page URL. Set only to point elsewhere.
      */
     canonicalUrl?: string | null;
-    schemaType?: ('auto' | 'Article' | 'BlogPosting' | 'WebPage' | 'FAQPage' | 'SoftwareApplication' | 'none') | null;
+    schemaType?:
+      | (
+          | 'auto'
+          | 'Article'
+          | 'BlogPosting'
+          | 'NewsArticle'
+          | 'WebPage'
+          | 'FAQPage'
+          | 'HowTo'
+          | 'Product'
+          | 'SoftwareApplication'
+          | 'Course'
+          | 'Event'
+          | 'VideoObject'
+          | 'none'
+        )
+      | null;
+    /**
+     * Fill in what applies to the selected schema type. Empty fields are left out.
+     */
+    schemaData?: {
+      name?: string | null;
+      description?: string | null;
+      totalTime?: string | null;
+      steps?:
+        | {
+            name: string;
+            text?: string | null;
+            image?: string | null;
+            id?: string | null;
+          }[]
+        | null;
+      price?: string | null;
+      currency?: string | null;
+      availability?: ('InStock' | 'OutOfStock' | 'PreOrder' | 'OnlineOnly') | null;
+      brand?: string | null;
+      sku?: string | null;
+      applicationCategory?: string | null;
+      operatingSystem?: string | null;
+      ratingValue?: number | null;
+      reviewCount?: number | null;
+      provider?: string | null;
+      startDate?: string | null;
+      endDate?: string | null;
+      eventMode?: ('OnlineEventAttendanceMode' | 'OfflineEventAttendanceMode' | 'MixedEventAttendanceMode') | null;
+      location?: string | null;
+      videoUrl?: string | null;
+      duration?: string | null;
+      uploadDate?: string | null;
+      thumbnailUrl?: string | null;
+    };
     /**
      * Optional raw <script type="application/ld+json"> (kept from the old Schema plugin).
      */
@@ -1347,9 +1735,13 @@ export interface SectionCategory {
   kind: 'guide' | 'case' | 'update';
   meta?: {
     /**
-     * Primary keyword this page targets (used by the SEO audit).
+     * Primary keyword this page targets — scored live in the SEO analysis above.
      */
     focusKeyword?: string | null;
+    /**
+     * Optional, comma separated. Each one is checked in the analysis.
+     */
+    secondaryKeywords?: string | null;
     title?: string | null;
     description?: string | null;
     noindex?: boolean | null;
@@ -1358,7 +1750,57 @@ export interface SectionCategory {
      * Leave empty to use the page URL. Set only to point elsewhere.
      */
     canonicalUrl?: string | null;
-    schemaType?: ('auto' | 'Article' | 'BlogPosting' | 'WebPage' | 'FAQPage' | 'SoftwareApplication' | 'none') | null;
+    schemaType?:
+      | (
+          | 'auto'
+          | 'Article'
+          | 'BlogPosting'
+          | 'NewsArticle'
+          | 'WebPage'
+          | 'FAQPage'
+          | 'HowTo'
+          | 'Product'
+          | 'SoftwareApplication'
+          | 'Course'
+          | 'Event'
+          | 'VideoObject'
+          | 'none'
+        )
+      | null;
+    /**
+     * Fill in what applies to the selected schema type. Empty fields are left out.
+     */
+    schemaData?: {
+      name?: string | null;
+      description?: string | null;
+      totalTime?: string | null;
+      steps?:
+        | {
+            name: string;
+            text?: string | null;
+            image?: string | null;
+            id?: string | null;
+          }[]
+        | null;
+      price?: string | null;
+      currency?: string | null;
+      availability?: ('InStock' | 'OutOfStock' | 'PreOrder' | 'OnlineOnly') | null;
+      brand?: string | null;
+      sku?: string | null;
+      applicationCategory?: string | null;
+      operatingSystem?: string | null;
+      ratingValue?: number | null;
+      reviewCount?: number | null;
+      provider?: string | null;
+      startDate?: string | null;
+      endDate?: string | null;
+      eventMode?: ('OnlineEventAttendanceMode' | 'OfflineEventAttendanceMode' | 'MixedEventAttendanceMode') | null;
+      location?: string | null;
+      videoUrl?: string | null;
+      duration?: string | null;
+      uploadDate?: string | null;
+      thumbnailUrl?: string | null;
+    };
     /**
      * Optional raw <script type="application/ld+json"> (kept from the old Schema plugin).
      */
@@ -1443,11 +1885,21 @@ export interface Case {
   category?: (number | null) | SectionCategory;
   publishedAt?: string | null;
   modifiedAt?: string | null;
+  internalLinks?: number | null;
+  externalLinks?: number | null;
+  incomingLinks?: number | null;
+  createdBy?: (number | null) | User;
+  reviewStatus?: ('none' | 'pending') | null;
+  seoScore?: number | null;
   meta?: {
     /**
-     * Primary keyword this page targets (used by the SEO audit).
+     * Primary keyword this page targets — scored live in the SEO analysis above.
      */
     focusKeyword?: string | null;
+    /**
+     * Optional, comma separated. Each one is checked in the analysis.
+     */
+    secondaryKeywords?: string | null;
     title?: string | null;
     description?: string | null;
     noindex?: boolean | null;
@@ -1456,7 +1908,57 @@ export interface Case {
      * Leave empty to use the page URL. Set only to point elsewhere.
      */
     canonicalUrl?: string | null;
-    schemaType?: ('auto' | 'Article' | 'BlogPosting' | 'WebPage' | 'FAQPage' | 'SoftwareApplication' | 'none') | null;
+    schemaType?:
+      | (
+          | 'auto'
+          | 'Article'
+          | 'BlogPosting'
+          | 'NewsArticle'
+          | 'WebPage'
+          | 'FAQPage'
+          | 'HowTo'
+          | 'Product'
+          | 'SoftwareApplication'
+          | 'Course'
+          | 'Event'
+          | 'VideoObject'
+          | 'none'
+        )
+      | null;
+    /**
+     * Fill in what applies to the selected schema type. Empty fields are left out.
+     */
+    schemaData?: {
+      name?: string | null;
+      description?: string | null;
+      totalTime?: string | null;
+      steps?:
+        | {
+            name: string;
+            text?: string | null;
+            image?: string | null;
+            id?: string | null;
+          }[]
+        | null;
+      price?: string | null;
+      currency?: string | null;
+      availability?: ('InStock' | 'OutOfStock' | 'PreOrder' | 'OnlineOnly') | null;
+      brand?: string | null;
+      sku?: string | null;
+      applicationCategory?: string | null;
+      operatingSystem?: string | null;
+      ratingValue?: number | null;
+      reviewCount?: number | null;
+      provider?: string | null;
+      startDate?: string | null;
+      endDate?: string | null;
+      eventMode?: ('OnlineEventAttendanceMode' | 'OfflineEventAttendanceMode' | 'MixedEventAttendanceMode') | null;
+      location?: string | null;
+      videoUrl?: string | null;
+      duration?: string | null;
+      uploadDate?: string | null;
+      thumbnailUrl?: string | null;
+    };
     /**
      * Optional raw <script type="application/ld+json"> (kept from the old Schema plugin).
      */
@@ -1517,11 +2019,21 @@ export interface Update {
   releaseDate?: string | null;
   publishedAt?: string | null;
   modifiedAt?: string | null;
+  internalLinks?: number | null;
+  externalLinks?: number | null;
+  incomingLinks?: number | null;
+  createdBy?: (number | null) | User;
+  reviewStatus?: ('none' | 'pending') | null;
+  seoScore?: number | null;
   meta?: {
     /**
-     * Primary keyword this page targets (used by the SEO audit).
+     * Primary keyword this page targets — scored live in the SEO analysis above.
      */
     focusKeyword?: string | null;
+    /**
+     * Optional, comma separated. Each one is checked in the analysis.
+     */
+    secondaryKeywords?: string | null;
     title?: string | null;
     description?: string | null;
     noindex?: boolean | null;
@@ -1530,7 +2042,57 @@ export interface Update {
      * Leave empty to use the page URL. Set only to point elsewhere.
      */
     canonicalUrl?: string | null;
-    schemaType?: ('auto' | 'Article' | 'BlogPosting' | 'WebPage' | 'FAQPage' | 'SoftwareApplication' | 'none') | null;
+    schemaType?:
+      | (
+          | 'auto'
+          | 'Article'
+          | 'BlogPosting'
+          | 'NewsArticle'
+          | 'WebPage'
+          | 'FAQPage'
+          | 'HowTo'
+          | 'Product'
+          | 'SoftwareApplication'
+          | 'Course'
+          | 'Event'
+          | 'VideoObject'
+          | 'none'
+        )
+      | null;
+    /**
+     * Fill in what applies to the selected schema type. Empty fields are left out.
+     */
+    schemaData?: {
+      name?: string | null;
+      description?: string | null;
+      totalTime?: string | null;
+      steps?:
+        | {
+            name: string;
+            text?: string | null;
+            image?: string | null;
+            id?: string | null;
+          }[]
+        | null;
+      price?: string | null;
+      currency?: string | null;
+      availability?: ('InStock' | 'OutOfStock' | 'PreOrder' | 'OnlineOnly') | null;
+      brand?: string | null;
+      sku?: string | null;
+      applicationCategory?: string | null;
+      operatingSystem?: string | null;
+      ratingValue?: number | null;
+      reviewCount?: number | null;
+      provider?: string | null;
+      startDate?: string | null;
+      endDate?: string | null;
+      eventMode?: ('OnlineEventAttendanceMode' | 'OfflineEventAttendanceMode' | 'MixedEventAttendanceMode') | null;
+      location?: string | null;
+      videoUrl?: string | null;
+      duration?: string | null;
+      uploadDate?: string | null;
+      thumbnailUrl?: string | null;
+    };
     /**
      * Optional raw <script type="application/ld+json"> (kept from the old Schema plugin).
      */
@@ -1597,11 +2159,21 @@ export interface Review {
   } | null;
   publishedAt?: string | null;
   modifiedAt?: string | null;
+  internalLinks?: number | null;
+  externalLinks?: number | null;
+  incomingLinks?: number | null;
+  createdBy?: (number | null) | User;
+  reviewStatus?: ('none' | 'pending') | null;
+  seoScore?: number | null;
   meta?: {
     /**
-     * Primary keyword this page targets (used by the SEO audit).
+     * Primary keyword this page targets — scored live in the SEO analysis above.
      */
     focusKeyword?: string | null;
+    /**
+     * Optional, comma separated. Each one is checked in the analysis.
+     */
+    secondaryKeywords?: string | null;
     title?: string | null;
     description?: string | null;
     noindex?: boolean | null;
@@ -1610,7 +2182,57 @@ export interface Review {
      * Leave empty to use the page URL. Set only to point elsewhere.
      */
     canonicalUrl?: string | null;
-    schemaType?: ('auto' | 'Article' | 'BlogPosting' | 'WebPage' | 'FAQPage' | 'SoftwareApplication' | 'none') | null;
+    schemaType?:
+      | (
+          | 'auto'
+          | 'Article'
+          | 'BlogPosting'
+          | 'NewsArticle'
+          | 'WebPage'
+          | 'FAQPage'
+          | 'HowTo'
+          | 'Product'
+          | 'SoftwareApplication'
+          | 'Course'
+          | 'Event'
+          | 'VideoObject'
+          | 'none'
+        )
+      | null;
+    /**
+     * Fill in what applies to the selected schema type. Empty fields are left out.
+     */
+    schemaData?: {
+      name?: string | null;
+      description?: string | null;
+      totalTime?: string | null;
+      steps?:
+        | {
+            name: string;
+            text?: string | null;
+            image?: string | null;
+            id?: string | null;
+          }[]
+        | null;
+      price?: string | null;
+      currency?: string | null;
+      availability?: ('InStock' | 'OutOfStock' | 'PreOrder' | 'OnlineOnly') | null;
+      brand?: string | null;
+      sku?: string | null;
+      applicationCategory?: string | null;
+      operatingSystem?: string | null;
+      ratingValue?: number | null;
+      reviewCount?: number | null;
+      provider?: string | null;
+      startDate?: string | null;
+      endDate?: string | null;
+      eventMode?: ('OnlineEventAttendanceMode' | 'OfflineEventAttendanceMode' | 'MixedEventAttendanceMode') | null;
+      location?: string | null;
+      videoUrl?: string | null;
+      duration?: string | null;
+      uploadDate?: string | null;
+      thumbnailUrl?: string | null;
+    };
     /**
      * Optional raw <script type="application/ld+json"> (kept from the old Schema plugin).
      */
@@ -2211,6 +2833,96 @@ export interface NotFoundLog {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "indexing-log".
+ */
+export interface IndexingLog {
+  id: number;
+  indexingAllowed?: boolean | null;
+  changedBy?: (number | null) | User;
+  changedByEmail?: string | null;
+  host?: string | null;
+  stillBlockedBy?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Reusable content (CTAs, tables, callouts). Insert one into any post from the editor’s “Insert pattern” button.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "patterns".
+ */
+export interface Pattern {
+  id: number;
+  title: string;
+  /**
+   * e.g. Call to action, Table, Callout
+   */
+  category?: string | null;
+  contentHtml?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "rank-snapshots".
+ */
+export interface RankSnapshot {
+  id: number;
+  date: string;
+  query?: string | null;
+  page?: string | null;
+  clicks?: number | null;
+  impressions?: number | null;
+  ctr?: number | null;
+  position?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Who created, updated, published, trashed or deleted what. Kept for 180 days.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "activity-log".
+ */
+export interface ActivityLog {
+  id: number;
+  action?:
+    ('create' | 'update' | 'publish' | 'unpublish' | 'trash' | 'restore' | 'delete' | 'login' | 'settings') | null;
+  summary?: string | null;
+  target?: string | null;
+  targetId?: string | null;
+  user?: (number | null) | User;
+  userEmail?: string | null;
+  ip?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * The first unlinked mention of each keyword in a post, guide or case study becomes a link. Never links a page to itself, inside headings or existing links.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "auto-links".
+ */
+export interface AutoLink {
+  id: number;
+  /**
+   * Comma-separate variants: "virtual try-on, virtual tryon"
+   */
+  keyword: string;
+  /**
+   * Path like /virtual-try-on/ or a full URL
+   */
+  url: string;
+  active?: boolean | null;
+  caseSensitive?: boolean | null;
+  newTab?: boolean | null;
+  nofollow?: boolean | null;
+  maxPerPage?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "comments".
  */
 export interface Comment {
@@ -2246,6 +2958,7 @@ export interface Comment {
   authorName?: string | null;
   authorEmail?: string | null;
   authorUrl?: string | null;
+  notifyReplies?: boolean | null;
   user?: (number | null) | User;
   ip?: string | null;
   userAgent?: string | null;
@@ -2402,7 +3115,7 @@ export interface PayloadJob {
     | {
         executedAt: string;
         completedAt: string;
-        taskSlug: 'inline' | 'schedulePublish';
+        taskSlug: 'inline' | 'rankSnapshot' | 'schedulePublish';
         taskID: string;
         input?:
           | {
@@ -2435,10 +3148,19 @@ export interface PayloadJob {
         id?: string | null;
       }[]
     | null;
-  taskSlug?: ('inline' | 'schedulePublish') | null;
+  taskSlug?: ('inline' | 'rankSnapshot' | 'schedulePublish') | null;
   queue?: string | null;
   waitUntil?: string | null;
   processing?: boolean | null;
+  meta?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -2496,6 +3218,30 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'not-found-log';
         value: number | NotFoundLog;
+      } | null)
+    | ({
+        relationTo: 'indexing-log';
+        value: number | IndexingLog;
+      } | null)
+    | ({
+        relationTo: 'patterns';
+        value: number | Pattern;
+      } | null)
+    | ({
+        relationTo: 'rank-snapshots';
+        value: number | RankSnapshot;
+      } | null)
+    | ({
+        relationTo: 'activity-log';
+        value: number | ActivityLog;
+      } | null)
+    | ({
+        relationTo: 'auto-links';
+        value: number | AutoLink;
+      } | null)
+    | ({
+        relationTo: 'media-folders';
+        value: number | MediaFolder;
       } | null)
     | ({
         relationTo: 'comments';
@@ -3113,6 +3859,12 @@ export interface PagesSelect<T extends boolean = true> {
   hideFromSitemap?: T;
   publishedAt?: T;
   modifiedAt?: T;
+  internalLinks?: T;
+  externalLinks?: T;
+  incomingLinks?: T;
+  createdBy?: T;
+  reviewStatus?: T;
+  seoScore?: T;
   parent?: T;
   breadcrumbs?:
     | T
@@ -3126,12 +3878,46 @@ export interface PagesSelect<T extends boolean = true> {
     | T
     | {
         focusKeyword?: T;
+        secondaryKeywords?: T;
         title?: T;
         description?: T;
         noindex?: T;
         nofollow?: T;
         canonicalUrl?: T;
         schemaType?: T;
+        schemaData?:
+          | T
+          | {
+              name?: T;
+              description?: T;
+              totalTime?: T;
+              steps?:
+                | T
+                | {
+                    name?: T;
+                    text?: T;
+                    image?: T;
+                    id?: T;
+                  };
+              price?: T;
+              currency?: T;
+              availability?: T;
+              brand?: T;
+              sku?: T;
+              applicationCategory?: T;
+              operatingSystem?: T;
+              ratingValue?: T;
+              reviewCount?: T;
+              provider?: T;
+              startDate?: T;
+              endDate?: T;
+              eventMode?: T;
+              location?: T;
+              videoUrl?: T;
+              duration?: T;
+              uploadDate?: T;
+              thumbnailUrl?: T;
+            };
         customSchema?: T;
         ogTitle?: T;
         ogDescription?: T;
@@ -3426,6 +4212,17 @@ export interface PostsSelect<T extends boolean = true> {
         id?: T;
       };
   author?: T;
+  visibility?: T;
+  postPassword?: T;
+  sticky?: T;
+  format?: T;
+  customFields?:
+    | T
+    | {
+        key?: T;
+        value?: T;
+        id?: T;
+      };
   commentsMode?: T;
   categories?: T;
   primaryCategory?: T;
@@ -3437,16 +4234,55 @@ export interface PostsSelect<T extends boolean = true> {
   readingTime?: T;
   publishedAt?: T;
   modifiedAt?: T;
+  internalLinks?: T;
+  externalLinks?: T;
+  incomingLinks?: T;
+  reviewStatus?: T;
+  seoScore?: T;
   meta?:
     | T
     | {
         focusKeyword?: T;
+        secondaryKeywords?: T;
         title?: T;
         description?: T;
         noindex?: T;
         nofollow?: T;
         canonicalUrl?: T;
         schemaType?: T;
+        schemaData?:
+          | T
+          | {
+              name?: T;
+              description?: T;
+              totalTime?: T;
+              steps?:
+                | T
+                | {
+                    name?: T;
+                    text?: T;
+                    image?: T;
+                    id?: T;
+                  };
+              price?: T;
+              currency?: T;
+              availability?: T;
+              brand?: T;
+              sku?: T;
+              applicationCategory?: T;
+              operatingSystem?: T;
+              ratingValue?: T;
+              reviewCount?: T;
+              provider?: T;
+              startDate?: T;
+              endDate?: T;
+              eventMode?: T;
+              location?: T;
+              videoUrl?: T;
+              duration?: T;
+              uploadDate?: T;
+              thumbnailUrl?: T;
+            };
         customSchema?: T;
         ogTitle?: T;
         ogDescription?: T;
@@ -3482,16 +4318,56 @@ export interface GuidesSelect<T extends boolean = true> {
   order?: T;
   publishedAt?: T;
   modifiedAt?: T;
+  internalLinks?: T;
+  externalLinks?: T;
+  incomingLinks?: T;
+  createdBy?: T;
+  reviewStatus?: T;
+  seoScore?: T;
   meta?:
     | T
     | {
         focusKeyword?: T;
+        secondaryKeywords?: T;
         title?: T;
         description?: T;
         noindex?: T;
         nofollow?: T;
         canonicalUrl?: T;
         schemaType?: T;
+        schemaData?:
+          | T
+          | {
+              name?: T;
+              description?: T;
+              totalTime?: T;
+              steps?:
+                | T
+                | {
+                    name?: T;
+                    text?: T;
+                    image?: T;
+                    id?: T;
+                  };
+              price?: T;
+              currency?: T;
+              availability?: T;
+              brand?: T;
+              sku?: T;
+              applicationCategory?: T;
+              operatingSystem?: T;
+              ratingValue?: T;
+              reviewCount?: T;
+              provider?: T;
+              startDate?: T;
+              endDate?: T;
+              eventMode?: T;
+              location?: T;
+              videoUrl?: T;
+              duration?: T;
+              uploadDate?: T;
+              thumbnailUrl?: T;
+            };
         customSchema?: T;
         ogTitle?: T;
         ogDescription?: T;
@@ -3542,16 +4418,56 @@ export interface CasesSelect<T extends boolean = true> {
   category?: T;
   publishedAt?: T;
   modifiedAt?: T;
+  internalLinks?: T;
+  externalLinks?: T;
+  incomingLinks?: T;
+  createdBy?: T;
+  reviewStatus?: T;
+  seoScore?: T;
   meta?:
     | T
     | {
         focusKeyword?: T;
+        secondaryKeywords?: T;
         title?: T;
         description?: T;
         noindex?: T;
         nofollow?: T;
         canonicalUrl?: T;
         schemaType?: T;
+        schemaData?:
+          | T
+          | {
+              name?: T;
+              description?: T;
+              totalTime?: T;
+              steps?:
+                | T
+                | {
+                    name?: T;
+                    text?: T;
+                    image?: T;
+                    id?: T;
+                  };
+              price?: T;
+              currency?: T;
+              availability?: T;
+              brand?: T;
+              sku?: T;
+              applicationCategory?: T;
+              operatingSystem?: T;
+              ratingValue?: T;
+              reviewCount?: T;
+              provider?: T;
+              startDate?: T;
+              endDate?: T;
+              eventMode?: T;
+              location?: T;
+              videoUrl?: T;
+              duration?: T;
+              uploadDate?: T;
+              thumbnailUrl?: T;
+            };
         customSchema?: T;
         ogTitle?: T;
         ogDescription?: T;
@@ -3579,16 +4495,56 @@ export interface UpdatesSelect<T extends boolean = true> {
   releaseDate?: T;
   publishedAt?: T;
   modifiedAt?: T;
+  internalLinks?: T;
+  externalLinks?: T;
+  incomingLinks?: T;
+  createdBy?: T;
+  reviewStatus?: T;
+  seoScore?: T;
   meta?:
     | T
     | {
         focusKeyword?: T;
+        secondaryKeywords?: T;
         title?: T;
         description?: T;
         noindex?: T;
         nofollow?: T;
         canonicalUrl?: T;
         schemaType?: T;
+        schemaData?:
+          | T
+          | {
+              name?: T;
+              description?: T;
+              totalTime?: T;
+              steps?:
+                | T
+                | {
+                    name?: T;
+                    text?: T;
+                    image?: T;
+                    id?: T;
+                  };
+              price?: T;
+              currency?: T;
+              availability?: T;
+              brand?: T;
+              sku?: T;
+              applicationCategory?: T;
+              operatingSystem?: T;
+              ratingValue?: T;
+              reviewCount?: T;
+              provider?: T;
+              startDate?: T;
+              endDate?: T;
+              eventMode?: T;
+              location?: T;
+              videoUrl?: T;
+              duration?: T;
+              uploadDate?: T;
+              thumbnailUrl?: T;
+            };
         customSchema?: T;
         ogTitle?: T;
         ogDescription?: T;
@@ -3625,16 +4581,56 @@ export interface ReviewsSelect<T extends boolean = true> {
   content?: T;
   publishedAt?: T;
   modifiedAt?: T;
+  internalLinks?: T;
+  externalLinks?: T;
+  incomingLinks?: T;
+  createdBy?: T;
+  reviewStatus?: T;
+  seoScore?: T;
   meta?:
     | T
     | {
         focusKeyword?: T;
+        secondaryKeywords?: T;
         title?: T;
         description?: T;
         noindex?: T;
         nofollow?: T;
         canonicalUrl?: T;
         schemaType?: T;
+        schemaData?:
+          | T
+          | {
+              name?: T;
+              description?: T;
+              totalTime?: T;
+              steps?:
+                | T
+                | {
+                    name?: T;
+                    text?: T;
+                    image?: T;
+                    id?: T;
+                  };
+              price?: T;
+              currency?: T;
+              availability?: T;
+              brand?: T;
+              sku?: T;
+              applicationCategory?: T;
+              operatingSystem?: T;
+              ratingValue?: T;
+              reviewCount?: T;
+              provider?: T;
+              startDate?: T;
+              endDate?: T;
+              eventMode?: T;
+              location?: T;
+              videoUrl?: T;
+              duration?: T;
+              uploadDate?: T;
+              thumbnailUrl?: T;
+            };
         customSchema?: T;
         ogTitle?: T;
         ogDescription?: T;
@@ -3658,12 +4654,46 @@ export interface CategoriesSelect<T extends boolean = true> {
     | T
     | {
         focusKeyword?: T;
+        secondaryKeywords?: T;
         title?: T;
         description?: T;
         noindex?: T;
         nofollow?: T;
         canonicalUrl?: T;
         schemaType?: T;
+        schemaData?:
+          | T
+          | {
+              name?: T;
+              description?: T;
+              totalTime?: T;
+              steps?:
+                | T
+                | {
+                    name?: T;
+                    text?: T;
+                    image?: T;
+                    id?: T;
+                  };
+              price?: T;
+              currency?: T;
+              availability?: T;
+              brand?: T;
+              sku?: T;
+              applicationCategory?: T;
+              operatingSystem?: T;
+              ratingValue?: T;
+              reviewCount?: T;
+              provider?: T;
+              startDate?: T;
+              endDate?: T;
+              eventMode?: T;
+              location?: T;
+              videoUrl?: T;
+              duration?: T;
+              uploadDate?: T;
+              thumbnailUrl?: T;
+            };
         customSchema?: T;
         ogTitle?: T;
         ogDescription?: T;
@@ -3684,12 +4714,46 @@ export interface TagsSelect<T extends boolean = true> {
     | T
     | {
         focusKeyword?: T;
+        secondaryKeywords?: T;
         title?: T;
         description?: T;
         noindex?: T;
         nofollow?: T;
         canonicalUrl?: T;
         schemaType?: T;
+        schemaData?:
+          | T
+          | {
+              name?: T;
+              description?: T;
+              totalTime?: T;
+              steps?:
+                | T
+                | {
+                    name?: T;
+                    text?: T;
+                    image?: T;
+                    id?: T;
+                  };
+              price?: T;
+              currency?: T;
+              availability?: T;
+              brand?: T;
+              sku?: T;
+              applicationCategory?: T;
+              operatingSystem?: T;
+              ratingValue?: T;
+              reviewCount?: T;
+              provider?: T;
+              startDate?: T;
+              endDate?: T;
+              eventMode?: T;
+              location?: T;
+              videoUrl?: T;
+              duration?: T;
+              uploadDate?: T;
+              thumbnailUrl?: T;
+            };
         customSchema?: T;
         ogTitle?: T;
         ogDescription?: T;
@@ -3711,12 +4775,46 @@ export interface SectionCategoriesSelect<T extends boolean = true> {
     | T
     | {
         focusKeyword?: T;
+        secondaryKeywords?: T;
         title?: T;
         description?: T;
         noindex?: T;
         nofollow?: T;
         canonicalUrl?: T;
         schemaType?: T;
+        schemaData?:
+          | T
+          | {
+              name?: T;
+              description?: T;
+              totalTime?: T;
+              steps?:
+                | T
+                | {
+                    name?: T;
+                    text?: T;
+                    image?: T;
+                    id?: T;
+                  };
+              price?: T;
+              currency?: T;
+              availability?: T;
+              brand?: T;
+              sku?: T;
+              applicationCategory?: T;
+              operatingSystem?: T;
+              ratingValue?: T;
+              reviewCount?: T;
+              provider?: T;
+              startDate?: T;
+              endDate?: T;
+              eventMode?: T;
+              location?: T;
+              videoUrl?: T;
+              duration?: T;
+              uploadDate?: T;
+              thumbnailUrl?: T;
+            };
         customSchema?: T;
         ogTitle?: T;
         ogDescription?: T;
@@ -3732,6 +4830,8 @@ export interface SectionCategoriesSelect<T extends boolean = true> {
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
   caption?: T;
+  folder?: T;
+  externalUrl?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -3747,6 +4847,26 @@ export interface MediaSelect<T extends boolean = true> {
     | T
     | {
         thumbnail?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        medium?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        large?:
           | T
           | {
               url?: T;
@@ -3795,10 +4915,25 @@ export interface MediaSelect<T extends boolean = true> {
 export interface UsersSelect<T extends boolean = true> {
   name?: T;
   role?: T;
+  slug?: T;
   avatar?: T;
+  totpEnabled?: T;
+  totpSecret?: T;
+  totpPending?: T;
+  recoveryCodes?: T;
+  emailVerified?: T;
+  verifyToken?: T;
+  jobTitle?: T;
   bio?: T;
+  website?: T;
+  twitter?: T;
+  linkedin?: T;
   updatedAt?: T;
   createdAt?: T;
+  enableAPIKey?: T;
+  apiKey?: T;
+  apiKeyIndex?: T;
+  hasAPIKey?: T;
   email?: T;
   resetPasswordToken?: T;
   resetPasswordExpiration?: T;
@@ -3831,6 +4966,84 @@ export interface NotFoundLogSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "indexing-log_select".
+ */
+export interface IndexingLogSelect<T extends boolean = true> {
+  indexingAllowed?: T;
+  changedBy?: T;
+  changedByEmail?: T;
+  host?: T;
+  stillBlockedBy?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "patterns_select".
+ */
+export interface PatternsSelect<T extends boolean = true> {
+  title?: T;
+  category?: T;
+  contentHtml?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "rank-snapshots_select".
+ */
+export interface RankSnapshotsSelect<T extends boolean = true> {
+  date?: T;
+  query?: T;
+  page?: T;
+  clicks?: T;
+  impressions?: T;
+  ctr?: T;
+  position?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "activity-log_select".
+ */
+export interface ActivityLogSelect<T extends boolean = true> {
+  action?: T;
+  summary?: T;
+  target?: T;
+  targetId?: T;
+  user?: T;
+  userEmail?: T;
+  ip?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "auto-links_select".
+ */
+export interface AutoLinksSelect<T extends boolean = true> {
+  keyword?: T;
+  url?: T;
+  active?: T;
+  caseSensitive?: T;
+  newTab?: T;
+  nofollow?: T;
+  maxPerPage?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media-folders_select".
+ */
+export interface MediaFoldersSelect<T extends boolean = true> {
+  name?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "comments_select".
  */
 export interface CommentsSelect<T extends boolean = true> {
@@ -3841,6 +5054,7 @@ export interface CommentsSelect<T extends boolean = true> {
   authorName?: T;
   authorEmail?: T;
   authorUrl?: T;
+  notifyReplies?: T;
   user?: T;
   ip?: T;
   userAgent?: T;
@@ -4066,6 +5280,7 @@ export interface PayloadJobsSelect<T extends boolean = true> {
   queue?: T;
   waitUntil?: T;
   processing?: T;
+  meta?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -4103,6 +5318,24 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "role-capabilities".
+ */
+export interface RoleCapability {
+  id: number;
+  matrix?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings".
  */
 export interface SiteSetting {
@@ -4111,6 +5344,40 @@ export interface SiteSetting {
   tagline?: string | null;
   logo?: (number | null) | Media;
   favicon?: (number | null) | Media;
+  /**
+   * BCP 47 code for <html lang>, e.g. en, en-IN, hi
+   */
+  siteLanguage?: string | null;
+  timezone?:
+    | (
+        | 'Asia/Kolkata'
+        | 'UTC'
+        | 'Asia/Dubai'
+        | 'Asia/Singapore'
+        | 'Europe/London'
+        | 'Europe/Berlin'
+        | 'America/New_York'
+        | 'America/Chicago'
+        | 'America/Los_Angeles'
+        | 'Australia/Sydney'
+      )
+    | null;
+  dateFormat?: ('MMM d, yyyy' | 'MMMM d, yyyy' | 'd MMMM yyyy' | 'yyyy-MM-dd' | 'dd/MM/yyyy' | 'MM/dd/yyyy') | null;
+  homepageDisplays?: ('page' | 'posts') | null;
+  /**
+   * Leave empty to use the page with slug “home”.
+   */
+  homepagePage?: (number | null) | Page;
+  /**
+   * Linked from registration and comment forms.
+   */
+  privacyPolicyPage?: (number | null) | Page;
+  /**
+   * Logged-in staff still see the site. Visitors get HTTP 503 with Retry-After, so search engines keep your rankings.
+   */
+  maintenanceMode?: boolean | null;
+  maintenanceTitle?: string | null;
+  maintenanceMessage?: string | null;
   /**
    * Used where a title template contains %sep%.
    */
@@ -4132,7 +5399,7 @@ export interface SiteSetting {
   twitterCard?: ('summary_large_image' | 'summary') | null;
   facebookUrl?: string | null;
   /**
-   * Reading → Search engine visibility. Adds noindex + Disallow: / — keep ON until launch day!
+   * ON by default. Search engines are only allowed in when this is OFF and the deployment is the live site (SITE_ENV=production, host in INDEXABLE_HOSTS). Manage it in Admin → Search visibility.
    */
   blockIndexing?: boolean | null;
   /**
@@ -4155,7 +5422,20 @@ export interface SiteSetting {
      */
     robots?: ('noindex' | 'nofollow' | 'noarchive' | 'noimageindex' | 'nosnippet')[] | null;
     inSitemap?: boolean | null;
-    schemaType?: ('auto' | 'Article' | 'BlogPosting' | 'WebPage' | 'none') | null;
+    schemaType?:
+      | (
+          | 'auto'
+          | 'Article'
+          | 'BlogPosting'
+          | 'NewsArticle'
+          | 'WebPage'
+          | 'HowTo'
+          | 'Product'
+          | 'SoftwareApplication'
+          | 'Course'
+          | 'none'
+        )
+      | null;
   };
   posts?: {
     /**
@@ -4171,7 +5451,20 @@ export interface SiteSetting {
      */
     robots?: ('noindex' | 'nofollow' | 'noarchive' | 'noimageindex' | 'nosnippet')[] | null;
     inSitemap?: boolean | null;
-    schemaType?: ('auto' | 'Article' | 'BlogPosting' | 'WebPage' | 'none') | null;
+    schemaType?:
+      | (
+          | 'auto'
+          | 'Article'
+          | 'BlogPosting'
+          | 'NewsArticle'
+          | 'WebPage'
+          | 'HowTo'
+          | 'Product'
+          | 'SoftwareApplication'
+          | 'Course'
+          | 'none'
+        )
+      | null;
   };
   guides?: {
     /**
@@ -4187,7 +5480,20 @@ export interface SiteSetting {
      */
     robots?: ('noindex' | 'nofollow' | 'noarchive' | 'noimageindex' | 'nosnippet')[] | null;
     inSitemap?: boolean | null;
-    schemaType?: ('auto' | 'Article' | 'BlogPosting' | 'WebPage' | 'none') | null;
+    schemaType?:
+      | (
+          | 'auto'
+          | 'Article'
+          | 'BlogPosting'
+          | 'NewsArticle'
+          | 'WebPage'
+          | 'HowTo'
+          | 'Product'
+          | 'SoftwareApplication'
+          | 'Course'
+          | 'none'
+        )
+      | null;
   };
   cases?: {
     /**
@@ -4203,7 +5509,20 @@ export interface SiteSetting {
      */
     robots?: ('noindex' | 'nofollow' | 'noarchive' | 'noimageindex' | 'nosnippet')[] | null;
     inSitemap?: boolean | null;
-    schemaType?: ('auto' | 'Article' | 'BlogPosting' | 'WebPage' | 'none') | null;
+    schemaType?:
+      | (
+          | 'auto'
+          | 'Article'
+          | 'BlogPosting'
+          | 'NewsArticle'
+          | 'WebPage'
+          | 'HowTo'
+          | 'Product'
+          | 'SoftwareApplication'
+          | 'Course'
+          | 'none'
+        )
+      | null;
   };
   updates?: {
     /**
@@ -4219,7 +5538,20 @@ export interface SiteSetting {
      */
     robots?: ('noindex' | 'nofollow' | 'noarchive' | 'noimageindex' | 'nosnippet')[] | null;
     inSitemap?: boolean | null;
-    schemaType?: ('auto' | 'Article' | 'BlogPosting' | 'WebPage' | 'none') | null;
+    schemaType?:
+      | (
+          | 'auto'
+          | 'Article'
+          | 'BlogPosting'
+          | 'NewsArticle'
+          | 'WebPage'
+          | 'HowTo'
+          | 'Product'
+          | 'SoftwareApplication'
+          | 'Course'
+          | 'none'
+        )
+      | null;
   };
   reviews?: {
     /**
@@ -4235,7 +5567,20 @@ export interface SiteSetting {
      */
     robots?: ('noindex' | 'nofollow' | 'noarchive' | 'noimageindex' | 'nosnippet')[] | null;
     inSitemap?: boolean | null;
-    schemaType?: ('auto' | 'Article' | 'BlogPosting' | 'WebPage' | 'none') | null;
+    schemaType?:
+      | (
+          | 'auto'
+          | 'Article'
+          | 'BlogPosting'
+          | 'NewsArticle'
+          | 'WebPage'
+          | 'HowTo'
+          | 'Product'
+          | 'SoftwareApplication'
+          | 'Course'
+          | 'none'
+        )
+      | null;
   };
   categories?: {
     /**
@@ -4251,7 +5596,20 @@ export interface SiteSetting {
      */
     robots?: ('noindex' | 'nofollow' | 'noarchive' | 'noimageindex' | 'nosnippet')[] | null;
     inSitemap?: boolean | null;
-    schemaType?: ('auto' | 'Article' | 'BlogPosting' | 'WebPage' | 'none') | null;
+    schemaType?:
+      | (
+          | 'auto'
+          | 'Article'
+          | 'BlogPosting'
+          | 'NewsArticle'
+          | 'WebPage'
+          | 'HowTo'
+          | 'Product'
+          | 'SoftwareApplication'
+          | 'Course'
+          | 'none'
+        )
+      | null;
   };
   tags?: {
     /**
@@ -4267,7 +5625,20 @@ export interface SiteSetting {
      */
     robots?: ('noindex' | 'nofollow' | 'noarchive' | 'noimageindex' | 'nosnippet')[] | null;
     inSitemap?: boolean | null;
-    schemaType?: ('auto' | 'Article' | 'BlogPosting' | 'WebPage' | 'none') | null;
+    schemaType?:
+      | (
+          | 'auto'
+          | 'Article'
+          | 'BlogPosting'
+          | 'NewsArticle'
+          | 'WebPage'
+          | 'HowTo'
+          | 'Product'
+          | 'SoftwareApplication'
+          | 'Course'
+          | 'none'
+        )
+      | null;
   };
   searchTitle?: string | null;
   notFoundTitle?: string | null;
@@ -4277,7 +5648,36 @@ export interface SiteSetting {
   foundingYear?: string | null;
   email?: string | null;
   phone?: string | null;
+  /**
+   * Free-text address (used when the structured address below is empty).
+   */
   address?: string | null;
+  orgType?:
+    ('Organization' | 'Corporation' | 'LocalBusiness' | 'ProfessionalService' | 'Store' | 'OnlineBusiness') | null;
+  localAddress?: {
+    street?: string | null;
+    locality?: string | null;
+    region?: string | null;
+    postalCode?: string | null;
+    country?: string | null;
+  };
+  geoLat?: number | null;
+  geoLng?: number | null;
+  /**
+   * e.g. ₹₹
+   */
+  priceRange?: string | null;
+  /**
+   * Local businesses only.
+   */
+  openingHours?:
+    | {
+        days?: ('Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday' | 'Sunday')[] | null;
+        opens?: string | null;
+        closes?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   socials?:
     | {
         platform?: ('facebook' | 'instagram' | 'linkedin' | 'x' | 'youtube' | 'pinterest' | 'other') | null;
@@ -4660,8 +6060,72 @@ export interface PluginSetting {
    * One word, IP or email per line. Matching comments are marked as spam.
    */
   commentsBlockWords?: string | null;
+  /**
+   * Sends one email the first time a post, guide, case study, update or review goes live. Only on the live site.
+   */
+  notifyOnPublish?: boolean | null;
+  /**
+   * Comma separated. Falls back to ADMIN_EMAIL.
+   */
+  notifyOnPublishTo?: string | null;
+  relatedMode?: ('latest' | 'related') | null;
+  showPrevNext?: boolean | null;
+  /**
+   * Settings → General → Membership. New accounts get the Subscriber role (can comment, no admin access). Registration page: /register/
+   */
+  usersCanRegister?: boolean | null;
+  /**
+   * Only runs on the live site with search engines allowed (Search visibility).
+   */
+  indexNowEnabled?: boolean | null;
+  /**
+   * Generated automatically (until saved, a key derived from PAYLOAD_SECRET is used); served at /<key>.txt for verification.
+   */
+  indexNowKey?: string | null;
+  /**
+   * Always noindex, as in Rank Math.
+   */
+  dateArchives?: boolean | null;
+  authorArchives?: boolean | null;
+  /**
+   * Posts published in the last 48 hours, for Google News publishers.
+   */
+  newsSitemap?: boolean | null;
+  newsPublicationName?: string | null;
+  /**
+   * Posts with an embedded YouTube / Vimeo video or a Video schema.
+   */
+  videoSitemap?: boolean | null;
   updatedAt?: string | null;
   createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-jobs-stats".
+ */
+export interface PayloadJobsStat {
+  id: number;
+  stats?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "role-capabilities_select".
+ */
+export interface RoleCapabilitiesSelect<T extends boolean = true> {
+  matrix?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -4672,6 +6136,15 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   tagline?: T;
   logo?: T;
   favicon?: T;
+  siteLanguage?: T;
+  timezone?: T;
+  dateFormat?: T;
+  homepageDisplays?: T;
+  homepagePage?: T;
+  privacyPolicyPage?: T;
+  maintenanceMode?: T;
+  maintenanceTitle?: T;
+  maintenanceMessage?: T;
   separator?: T;
   titleTemplate?: T;
   defaultDescription?: T;
@@ -4765,6 +6238,27 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   email?: T;
   phone?: T;
   address?: T;
+  orgType?: T;
+  localAddress?:
+    | T
+    | {
+        street?: T;
+        locality?: T;
+        region?: T;
+        postalCode?: T;
+        country?: T;
+      };
+  geoLat?: T;
+  geoLng?: T;
+  priceRange?: T;
+  openingHours?:
+    | T
+    | {
+        days?: T;
+        opens?: T;
+        closes?: T;
+        id?: T;
+      };
   socials?:
     | T
     | {
@@ -4953,6 +6447,28 @@ export interface PluginSettingsSelect<T extends boolean = true> {
   commentsMaxLinks?: T;
   commentsModWords?: T;
   commentsBlockWords?: T;
+  notifyOnPublish?: T;
+  notifyOnPublishTo?: T;
+  relatedMode?: T;
+  showPrevNext?: T;
+  usersCanRegister?: T;
+  indexNowEnabled?: T;
+  indexNowKey?: T;
+  dateArchives?: T;
+  authorArchives?: T;
+  newsSitemap?: T;
+  newsPublicationName?: T;
+  videoSitemap?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-jobs-stats_select".
+ */
+export interface PayloadJobsStatsSelect<T extends boolean = true> {
+  stats?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -4966,6 +6482,16 @@ export interface CollectionsWidget {
     [k: string]: unknown;
   };
   width: 'full';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskRankSnapshot".
+ */
+export interface TaskRankSnapshot {
+  input?: unknown;
+  output: {
+    stored?: number | null;
+  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

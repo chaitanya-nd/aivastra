@@ -28,7 +28,7 @@ const HELP: Record<string, string[]> = {
     'Publish box — Save Draft keeps it private; Publish makes it live; click Edit next to the date to schedule. Revisions → Browse lists earlier saves.',
     'Categories / Tags — tick categories (★ marks the primary one used for breadcrumbs); type tags separated by commas.',
     'Rank Math SEO — focus keyword, SEO title, description, social image, robots and canonical URL for this post.',
-    'Screen Options — hide the boxes you do not use.',
+    'View options — hide the boxes you do not use.',
   ],
   pages: [
     'Title & permalink — pages keep their parent path (e.g. /documentations/getting-started/).',
@@ -69,7 +69,7 @@ export function EditTop() {
   return (
     <div className="wpe-top-tabs">
       <div className="wpe-top-btns">
-        <button type="button" className={open === 'screen' ? 'on' : ''} onClick={() => setOpen(open === 'screen' ? '' : 'screen')}>Screen Options {open === 'screen' ? '▴' : '▾'}</button>
+        <button type="button" className={open === 'screen' ? 'on' : ''} onClick={() => setOpen(open === 'screen' ? '' : 'screen')}>View options {open === 'screen' ? '▴' : '▾'}</button>
         <button type="button" className={open === 'help' ? 'on' : ''} onClick={() => setOpen(open === 'help' ? '' : 'help')}>Help {open === 'help' ? '▴' : '▾'}</button>
       </div>
       {open === 'screen' && (

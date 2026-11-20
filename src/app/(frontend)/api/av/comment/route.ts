@@ -3,6 +3,8 @@ import { NextResponse } from 'next/server'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { COMMENTABLE } from '@/collections/Comments'
+import { userCan } from '@/access/caps'
+import { akismetIsSpam } from '@/lib/akismet'
 import { commentSettings, commentsOpen, listComments, moderate } from '@/lib/comments'
 import { getPath, SITE_URL } from '@/lib/urls'
 
@@ -61,8 +63,12 @@ export async function POST(req: Request) {
   const dup = await payload.count({ collection: 'comments' as any, where: { and: [{ content: { equals: content } }, { authorEmail: { equals: email } }, { 'post.value': { equals: id } }] }, overrideAccess: true })
   if (dup.totalDocs) return NextResponse.json({ error: 'Duplicate comment detected; it looks as though you have already said that.' }, { status: 409 })
 
-  const status = user && ['admin', 'seo', 'editor'].includes((user as any).role) ? 'approved' : await moderate({ content, email, name, url, ip }, s)
-  const created: any = await payload.create({ collection: 'comments' as any, data: { content, status, post: { relationTo: coll as any, value: id }, parent, authorName: name, authorEmail: email, authorUrl: url || undefined, user: user?.id, ip, userAgent: clean(req.headers.get('user-agent'), 250) } as any, overrideAccess: true })
+  let status: 'approved' | 'pending' | 'spam' = user && (await userCan(payload, user, 'moderate_comments')) ? 'approved' : await moderate({ content, email, name, url, ip }, s)
+  if (status !== 'spam' && !user) {
+    const spam = await akismetIsSpam({ ip, userAgent: req.headers.get('user-agent') || '', referrer: req.headers.get('referer') || '', permalink: `${SITE_URL}${getPath(coll, doc)}`, name, email, url, content })
+    if (spam) status = 'spam'
+  }
+  const created: any = await payload.create({ collection: 'comments' as any, data: { content, status, post: { relationTo: coll as any, value: id }, parent, authorName: name, authorEmail: email, authorUrl: url || undefined, notifyReplies: b.notify === '1' || b.notify === true, user: user?.id, ip, userAgent: clean(req.headers.get('user-agent'), 250) } as any, overrideAccess: true })
 
   if (status !== 'spam' && s.notify) {
     const to = s.notifyEmail || process.env.ADMIN_EMAIL || ''

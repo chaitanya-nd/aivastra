@@ -28,7 +28,7 @@ import { Home as FrontPage } from '@/ui/pages/Home'
 import { PricingPage } from '@/components/theme/pages/PricingPage'
 import { findMany, getGlobalContent, getSettings, isDraft } from '@/lib/data'
 import { extractHeadings } from '@/lib/richtext'
-import { articleSchema } from '@/lib/schema'
+import { articleSchema, withDefaultSchema } from '@/lib/schema'
 import { getPath, withTrailingSlash } from '@/lib/urls'
 
 const fmt = (d?: string | null) =>
@@ -103,7 +103,7 @@ export async function PostTemplate({ doc, collection = 'posts' }: { doc: any; co
   return (
     <>
       {draft && <LivePreview />}
-      <JsonLd data={articleSchema(doc, path, settings, collection === 'posts' ? 'BlogPosting' : 'Article')} />
+      <JsonLd data={articleSchema(withDefaultSchema(doc, collection, settings), path, settings, collection === 'posts' ? 'BlogPosting' : 'Article')} />
       <CustomSchema html={doc.meta?.customSchema} />
       <article className="container post">
         <Breadcrumbs items={crumbs} />

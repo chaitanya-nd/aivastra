@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload'
-import { anyone, canEditContent } from '@/access'
+import { anyone, can } from '@/access'
 import { slugField } from '@/fields/slug'
 import { revalidateAfterChange, revalidateAfterDelete } from '@/hooks/revalidate'
 import { slugChangeRedirect } from '@/hooks/slugRedirect'
@@ -8,7 +8,7 @@ const base = (slug: string, labels: { singular: string; plural: string }, unique
   slug,
   labels,
   admin: { useAsTitle: 'name', group: 'Taxonomy', defaultColumns: ['name', 'slug', 'updatedAt'] },
-  access: { read: anyone, create: canEditContent, update: canEditContent, delete: canEditContent },
+  access: { read: anyone, create: can('manage_categories'), update: can('manage_categories'), delete: can('manage_categories') },
   hooks: {
     afterChange: [slugChangeRedirect(slug), revalidateAfterChange(slug)],
     afterDelete: [revalidateAfterDelete(slug)],

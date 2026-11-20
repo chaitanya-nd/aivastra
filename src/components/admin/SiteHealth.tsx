@@ -1,5 +1,5 @@
 import type { AdminViewServerProps } from 'payload'
-import { SITE_ENV, crawlersBlocked } from '@/lib/env'
+import { INDEXABLE_HOSTS, SITE_ENV, blockReasons, isLiveHost, outboundAllowed, trackingAllowed } from '@/lib/env'
 import { SITE_URL } from '@/lib/urls'
 import { ToolView } from './ToolView'
 
@@ -18,7 +18,10 @@ export async function SiteHealth(props: AdminViewServerProps) {
   add('Environment', true, `SITE_ENV=${SITE_ENV}. ${SITE_ENV === 'production' ? 'Search engines may index the site.' : 'Search engines are blocked (noindex + robots Disallow) until SITE_ENV=production.'}`)
   const ss: any = await safe<any>(() => payload.findGlobal({ slug: 'site-settings', depth: 0 }), {})
   const ps: any = await safe<any>(() => payload.findGlobal({ slug: 'plugin-settings', depth: 0 }), {})
-  add('Search engine visibility', SITE_ENV !== 'production' || !crawlersBlocked(ss), SITE_ENV === 'production' ? 'Production site is set to discourage search engines (Settings → General & SEO).' : 'Local/staging is blocked from indexing, as it should be.')
+  const reasons = blockReasons(ss)
+  add('Search engine visibility', isLiveHost ? reasons.length === 0 : reasons.length > 0, reasons.length ? `Crawlers are blocked: ${reasons.join('; ')}.` : 'Crawlers are allowed (live host, switch OFF). Manage it in Search visibility.')
+  add('Indexable host allowlist', INDEXABLE_HOSTS.length > 0, INDEXABLE_HOSTS.length ? `INDEXABLE_HOSTS=${INDEXABLE_HOSTS.join(', ')}` : 'INDEXABLE_HOSTS is empty — the site can never be indexed (safe for test deploys; set it on the live site).')
+  add('Tracking & outbound mail isolation', isLiveHost || (!trackingAllowed && !outboundAllowed), isLiveHost ? 'Live host: analytics and real emails are active.' : 'Analytics scripts are off and form emails / Mailchimp are suppressed on this deployment.')
   add('HTTPS', SITE_ENV !== 'production' || SITE_URL.startsWith('https://'), `Site URL is ${SITE_URL}${SITE_ENV === 'production' && !SITE_URL.startsWith('https://') ? ' — production should use https.' : ''}`)
   add('Email delivery (SMTP)', !!process.env.SMTP_HOST, process.env.SMTP_HOST ? 'Form notifications are sent through SMTP.' : 'SMTP_HOST is empty — form notification emails are only logged to the console.')
   add('Mailchimp', !!process.env.MAILCHIMP_API_KEY && !!(ps?.mcAudienceId || process.env.MAILCHIMP_LIST_ID), 'Needs MAILCHIMP_API_KEY and an Audience ID (Settings → Plugin settings → Mailchimp).')

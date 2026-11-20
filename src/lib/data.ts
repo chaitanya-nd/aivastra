@@ -64,6 +64,8 @@ export async function findTerm<T = any>(collection: CollectionSlug, slug: string
   return (res.docs[0] as T) ?? null
 }
 
+const notPrivate = { or: [{ visibility: { exists: false } }, { visibility: { not_equals: 'private' } }] }
+
 export async function findMany<T = any>(
   collection: CollectionSlug,
   opts: { where?: Record<string, any>; limit?: number; page?: number; sort?: string; depth?: number } = {},
@@ -71,7 +73,8 @@ export async function findMany<T = any>(
   const payload = await getClient()
   const res = await payload.find({
     collection,
-    where: { and: [{ _status: { equals: 'published' } }, opts.where ?? {}] },
+    // Private posts never appear in public listings (WordPress: only logged-in editors see them).
+    where: { and: [{ _status: { equals: 'published' } }, ...(collection === 'posts' ? [notPrivate] : []), opts.where ?? {}] },
     limit: opts.limit ?? 12,
     page: opts.page ?? 1,
     sort: opts.sort ?? '-publishedAt',
@@ -84,7 +87,11 @@ export async function findMany<T = any>(
 /** Resolve a public path (['documentations','getting-started']) to a page or post. */
 export async function resolvePath(segments: string[]) {
   if (segments.length === 0) {
-    const home = await findOne('pages', { slug: { equals: 'home' } })
+    // Settings → General → "Your homepage displays"
+    const ss: any = await getSettings()
+    if (ss?.homepageDisplays === 'posts') return { collection: 'blog' as const, doc: { title: ss.siteName, slug: '' } as any }
+    const chosen = ss?.homepagePage ? (typeof ss.homepagePage === 'object' ? ss.homepagePage.id : ss.homepagePage) : null
+    const home = chosen ? await findOne('pages', { id: { equals: chosen } }) : await findOne('pages', { slug: { equals: 'home' } })
     return home ? { collection: 'pages' as const, doc: home } : null
   }
   const safeDecode = (v: string) => {
@@ -114,7 +121,8 @@ export async function resolvePath(segments: string[]) {
   if (page && page.slug !== 'home') return { collection: 'pages' as const, doc: page }
   if (segments.length === 1) {
     const post = await findOne('posts', { slug: { in: slugs } })
-    if (post) return { collection: 'posts' as const, doc: post }
+    // Private posts are only reachable through the CMS preview (draft mode).
+    if (post && (post.visibility !== 'private' || draft)) return { collection: 'posts' as const, doc: post }
   }
   return null
 }
@@ -177,4 +185,26 @@ export async function log404(uri: string, referer?: string | null, ua?: string |
     if (ex.docs[0]) await payload.update({ collection: 'not-found-log', id: ex.docs[0].id, data: { hits: ((ex.docs[0] as any).hits ?? 0) + 1, lastSeen: now, referer: referer || (ex.docs[0] as any).referer } as any, depth: 0, overrideAccess: true, context: { fromMonitor: true } })
     else await payload.create({ collection: 'not-found-log', data: { uri: u, hits: 1, referer: referer || undefined, userAgent: ua?.slice(0, 200), lastSeen: now } as any, depth: 0, overrideAccess: true, context: { fromMonitor: true } })
   } catch {}
+}
+
+/** Read more under an article: "latest" (old-site behaviour) or posts sharing categories / tags. */
+export async function readMorePosts(doc: any, mode?: string) {
+  if (mode !== 'related') return (await findMany('posts', { limit: 3, depth: 1 })).docs
+  const ids = (xs: any[] = []) => xs.map((x) => (typeof x === 'object' ? x?.id : x)).filter(Boolean)
+  const cats = ids(doc.categories), tags = ids(doc.tags)
+  const or = [...(cats.length ? [{ categories: { in: cats } }] : []), ...(tags.length ? [{ tags: { in: tags } }] : [])]
+  const rel = or.length ? (await findMany('posts', { where: { and: [{ id: { not_equals: doc.id } }, { or }] }, limit: 3, depth: 1 })).docs : []
+  if (rel.length >= 3) return rel
+  const fill = (await findMany('posts', { where: { id: { not_in: [doc.id, ...rel.map((r: any) => r.id)] } }, limit: 3 - rel.length, depth: 1 })).docs
+  return [...rel, ...fill]
+}
+
+/** Previous / next post by publish date. */
+export async function adjacentPosts(doc: any) {
+  if (!doc?.publishedAt) return { prev: null, next: null }
+  const [p, n] = await Promise.all([
+    findMany('posts', { where: { publishedAt: { less_than: doc.publishedAt } }, sort: '-publishedAt', limit: 1, depth: 0 }),
+    findMany('posts', { where: { publishedAt: { greater_than: doc.publishedAt } }, sort: 'publishedAt', limit: 1, depth: 0 }),
+  ])
+  return { prev: (p.docs[0] as any) ?? null, next: (n.docs[0] as any) ?? null }
 }

@@ -1,11 +1,13 @@
 'use client'
+import { usePathname } from 'next/navigation'
 import { useMemo, useRef, useState } from 'react'
 import type { PublicComment } from '@/lib/comments'
 
-type Props = { collection: string; id: number | string; open: boolean; initial: { page: number; totalPages: number; comments: PublicComment[] }; settings: { threaded: boolean; depth: number; requireNameEmail: boolean; loggedInOnly: boolean; order: 'asc' | 'desc' } }
+type Props = { collection: string; id: number | string; open: boolean; initial: { page: number; totalPages: number; comments: PublicComment[] }; settings: { threaded: boolean; depth: number; requireNameEmail: boolean; loggedInOnly: boolean; order: 'asc' | 'desc'; privacyUrl?: string | null } }
 const fmt = (d: string) => new Date(d).toLocaleString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: '2-digit' })
 
 export function CommentsClient({ collection, id, open, initial, settings }: Props) {
+  const path = usePathname() || '/'
   const [items, setItems] = useState(initial.comments)
   const [page, setPage] = useState(initial.page)
   const [replyTo, setReplyTo] = useState<PublicComment | null>(null)
@@ -41,7 +43,7 @@ export function CommentsClient({ collection, id, open, initial, settings }: Prop
         <li key={c.id} id={`comment-${c.id}`} className="comment">
           <article className="comment-body">
             <header className="comment-meta">
-              <span className="comment-avatar" aria-hidden>{c.name.slice(0, 1).toUpperCase()}</span>
+              {c.avatar ? <img className="comment-avatar avatar" src={c.avatar} alt="" width={40} height={40} loading="lazy" referrerPolicy="no-referrer" /> : <span className="comment-avatar" aria-hidden>{c.name.slice(0, 1).toUpperCase()}</span>}
               <b className="fn">{c.url ? <a href={c.url} rel="nofollow ugc noopener" target="_blank">{c.name}</a> : c.name}</b>
               <time dateTime={c.date}>{fmt(c.date)}</time>
             </header>
@@ -59,7 +61,7 @@ export function CommentsClient({ collection, id, open, initial, settings }: Prop
         <h3 className="comments-title">{topCount === 0 ? 'Leave a Reply' : `${items.length} ${items.length === 1 ? 'Comment' : 'Comments'}`}</h3>
         {items.length > 0 && render(tree.get(null) ?? [], 0)}
         {page < initial.totalPages && <button type="button" className="comment-more" onClick={more}>Load more comments</button>}
-        {!open ? <p className="no-comments">Comments are closed.</p> : settings.loggedInOnly ? <p>You must be <a href="/admin/login">logged in</a> to post a comment.</p> : (
+        {!open ? <p className="no-comments">Comments are closed.</p> : settings.loggedInOnly ? <p>You must be <a href={`/login/?redirect_to=${encodeURIComponent(path.endsWith('/') ? path : `${path}/`)}`}>logged in</a> to post a comment.</p> : (
           <form ref={form} onSubmit={submit} className="comment-form" id="respond">
             <h4>{replyTo ? <>Reply to {replyTo.name} <button type="button" className="comment-cancel" onClick={() => setReplyTo(null)}>Cancel reply</button></> : 'Leave a Reply'}</h4>
             {state === 'ok' && <p className="comment-note ok">Thanks — your comment is published.</p>}
@@ -70,6 +72,8 @@ export function CommentsClient({ collection, id, open, initial, settings }: Prop
             <p><label>Name {settings.requireNameEmail && '*'}<input name="name" required={settings.requireNameEmail} maxLength={80} /></label></p>
             <p><label>Email {settings.requireNameEmail && '*'}<input name="email" type="email" required={settings.requireNameEmail} maxLength={120} /></label></p>
             <p><label>Website<input name="url" type="url" maxLength={200} /></label></p>
+            <p className="comment-form-subscribe"><label><input type="checkbox" name="notify" value="1" /> Notify me of replies by email</label></p>
+            {settings.privacyUrl && <p className="comment-form-privacy">By commenting you agree to our <a href={settings.privacyUrl}>privacy policy</a>.</p>}
             <p style={{ position: 'absolute', left: '-9999px' }} aria-hidden><label>Leave empty<input name="website_url" tabIndex={-1} autoComplete="off" /></label></p>
             <p><button type="submit" className="submit" disabled={state === 'sending'}>{state === 'sending' ? 'Posting…' : 'Post Comment'}</button></p>
           </form>

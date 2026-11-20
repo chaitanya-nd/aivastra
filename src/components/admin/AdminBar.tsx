@@ -1,36 +1,44 @@
 import type { ServerProps } from 'payload'
-import { ICONS } from './wp-icons'
+import { STROKE } from './nav-icons'
+import { crawlersBlocked } from '@/lib/env'
+import { ThemeToggle } from './ThemeToggle'
 
-/** WordPress-style black admin bar across the top. */
-export function AdminBar({ user, payload }: ServerProps) {
+/** Top bar: quick-create menu, site link, theme switch and account menu. */
+export async function AdminBar({ user, payload }: ServerProps) {
+  const settings: any = await payload.findGlobal({ slug: 'site-settings', depth: 0 }).catch(() => undefined)
+  const blocked = crawlersBlocked(settings)
   const name = (user as any)?.name || (user as any)?.email || 'there'
+  const role = (user as any)?.role as string | undefined
+  const initials = String(name).split(/[\s@.]+/).filter(Boolean).slice(0, 2).map((w: string) => w[0]?.toUpperCase()).join('') || 'A'
   const siteName = 'AI Vastra'
-  void payload
-  const Icon = ({ n }: { n: string }) => <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d={ICONS[n]} fill="currentColor" /></svg>
+  const Icon = ({ n }: { n: string }) => <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={STROKE[n]} /></svg>
   return (
     <div className="wpbar">
       <div className="wpbar-l">
-        <a href="/admin" className="wpbar-i" title="Dashboard"><Icon n="dashboard" /></a>
-        <a href="/" target="_blank" rel="noreferrer" className="wpbar-i"><Icon n="site" /> {siteName}</a>
         <div className="wpbar-i wpbar-new" tabIndex={0}>
-          <span>＋ New</span>
+          <span className="wpbar-cta"><Icon n="plus" /> New</span>
           <div className="wpbar-menu">
-            <a href="/admin/collections/posts/create">Post</a>
-            <a href="/admin/collections/pages/create">Page</a>
-            <a href="/admin/collections/guides/create">Guide</a>
-            <a href="/admin/collections/cases/create">Case study</a>
-            <a href="/admin/collections/updates/create">Product update</a>
-            <a href="/admin/collections/media/create">Media</a>
+            <a href="/admin/collections/posts/create"><Icon n="post" />Post</a>
+            <a href="/admin/collections/pages/create"><Icon n="page" />Page</a>
+            <a href="/admin/collections/guides/create"><Icon n="article" />Guide</a>
+            <a href="/admin/collections/cases/create"><Icon n="star" />Case study</a>
+            <a href="/admin/collections/updates/create"><Icon n="update" />Product update</a>
+            <a href="/admin/collections/media/create"><Icon n="media" />Media</a>
           </div>
         </div>
-        <a href="/admin/collections/redirects" className="wpbar-i">Redirects</a>
+        <a href="/admin/collections/redirects" className="wpbar-i"><Icon n="redirect" /> Redirects</a>
+        <a href="/admin/search-visibility" className={`wpbar-i wpbar-idx ${blocked ? 'blocked' : 'open'}`} title="Search engine indexing"><i />{blocked ? 'Indexing blocked' : 'Indexing allowed'}</a>
       </div>
       <div className="wpbar-r">
-        <div className="wpbar-i wpbar-new" tabIndex={0}>
-          <span>Howdy, <b>{name}</b></span>
+        <a href="/" target="_blank" rel="noreferrer" className="wpbar-i wpbar-site"><Icon n="site" /> {siteName} <Icon n="external" /></a>
+        <ThemeToggle />
+        <div className="wpbar-i wpbar-user" tabIndex={0}>
+          <span className="wpbar-av">{initials}</span>
+          <span className="wpbar-who"><b>{name}</b>{role ? <small>{role}</small> : null}</span>
+          <Icon n="chevron" />
           <div className="wpbar-menu right">
-            <a href={`/admin/collections/users/${(user as any)?.id ?? ''}`}>Edit Profile</a>
-            <a href="/admin/logout">Log Out</a>
+            <a href={`/admin/collections/users/${(user as any)?.id ?? ''}`}><Icon n="users" />Edit profile</a>
+            <a href="/admin/logout"><Icon n="redirect" />Log out</a>
           </div>
         </div>
       </div>

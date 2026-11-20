@@ -1,15 +1,18 @@
+import { blockedResponse } from '@/lib/crawl-guard'
 import { getClient, getSettings } from '@/lib/data'
 import { absoluteUrl, getPath, SITE_URL } from '@/lib/urls'
 
-export const revalidate = 3600
+export const dynamic = 'force-dynamic'
 
 export async function GET() {
+  const blocked = await blockedResponse()
+  if (blocked) return blocked
   const s = await getSettings()
   if (s.llmsTxt) return new Response(s.llmsTxt, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } })
   const payload = await getClient()
   const [pages, posts] = await Promise.all(
     (['pages', 'posts'] as const).map((collection) =>
-      payload.find({ collection, where: { _status: { equals: 'published' } }, limit: 200, depth: 0, sort: '-updatedAt', overrideAccess: true }),
+      payload.find({ collection, where: collection === 'posts' ? { and: [{ _status: { equals: 'published' } }, { or: [{ visibility: { exists: false } }, { visibility: { equals: 'public' } }] }] } : { _status: { equals: 'published' } }, limit: 200, depth: 0, sort: '-updatedAt', overrideAccess: true }),
     ),
   )
   const line = (c: string) => (d: any) => `- [${d.title}](${absoluteUrl(getPath(c, d))})${d.meta?.description ? `: ${d.meta.description}` : ''}`

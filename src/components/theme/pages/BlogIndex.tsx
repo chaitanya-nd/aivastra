@@ -17,7 +17,10 @@ const TABS: [string, string][] = [
 export async function BlogIndex({ gc, page = 1, term, basePath = '/blog/', faqSource }: { gc: any; page?: number; term?: any; basePath?: string; faqSource?: any }) {
   const where = term ? { categories: { in: [term.id] } } : {}
   const per = Math.max(1, Number((await getPluginSettings())?.postsPerPage) || 9)
-  const res = await findMany('posts', { where, limit: per, page, depth: 1 })
+  // Sticky posts (WordPress): shown first on the blog home, in addition to the normal page of posts.
+  const stickies = !term && page === 1 ? (await findMany('posts', { where: { sticky: { equals: true } }, limit: 10, depth: 1 })).docs : []
+  const main = await findMany('posts', { where: term ? where : { or: [{ sticky: { exists: false } }, { sticky: { equals: false } }] }, limit: per, page, depth: 1 })
+  const res = { ...main, docs: [...stickies, ...main.docs] }
   const active = term?.slug ?? 'all'
   const base = basePath.endsWith('/') ? basePath : `${basePath}/`
   return (
