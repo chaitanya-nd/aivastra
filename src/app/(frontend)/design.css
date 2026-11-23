@@ -7,10 +7,10 @@
    ===================================================================== */
 
 :root {
-  --bg: #07070b;
-  --bg-2: #0c0c13;
-  --surface: #111119;
-  --surface-2: #17171f;
+  --bg: #000000;
+  --bg-2: #050508;
+  --surface: #0a0a0f;
+  --surface-2: #101015;
   --line: rgba(255, 255, 255, 0.09);
   --line-2: rgba(255, 255, 255, 0.16);
   --fg: #f4f2ee;
@@ -29,8 +29,8 @@
   --mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
 }
 
-html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; background: var(--bg); color-scheme: dark; }
-body { background: var(--bg) !important; color: var(--fg); overflow-x: clip; }
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; background: #000000; color-scheme: dark; }
+body { background: #000000 !important; color: var(--fg); overflow-x: clip; }
 body::before { /* fixed aurora behind everything */
   content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none;
   background:
@@ -149,7 +149,7 @@ a.cmn-btn:hover::after { transform: translateX(3px); }
 .hm-brand-choose-card:hover, .inr-aiphoto-rit-btm-itm:hover, .step-card:hover, .card-itm:hover, .guide-category-card:hover, .blog-card:hover, .hm-results-col:hover, .hm-catlgue-crtion-itm:hover {
   transform: translateY(-8px); border-color: rgba(176,124,255, 0.45) !important;
 }
-.hm-brand-icon img, .step-icon img, .hm-brand-icon svg { filter: invert(1); }
+.hm-brand-icon svg { filter: invert(1); }
 .hm-brand-choose-stat { font-family: var(--display) !important; letter-spacing: -0.05em; background: var(--grad); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent !important; }
 .card-category-tag, .card-date-tag, .card-meta-line { font-family: var(--mono) !important; font-size: 10.5px !important; letter-spacing: 0.12em; text-transform: uppercase; color: var(--amber) !important; }
 .card-date-tag { color: var(--mute) !important; }
@@ -179,8 +179,8 @@ a.cmn-btn:hover::after { transform: translateX(3px); }
 .vastra-tabs { background-color: rgba(255, 255, 255, 0.92) !important; border: 1px solid var(--line-2) !important; border-radius: 999px !important; box-shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.8); }
 .vastra-tabs .tab-btn, .vastra-tabs .pricing { border-radius: 999px !important; transition: background-color 0.35s var(--ease), color 0.35s; }
 .vastra-tabs .tab-btn:not(.active), .vastra-tabs .tab-btn:not(.active) *, .vastra-tabs .pricing:not(.active), .vastra-tabs .pricing:not(.active) * { color: #3b3b45 !important; }
-.vastra-tabs .tab-btn.active, .vastra-tabs .pricing.active { background-color: #0b0b12 !important; box-shadow: 0 8px 20px -8px rgba(0, 0, 0, 0.6); }
-.vastra-tabs .tab-btn.active, .vastra-tabs .tab-btn.active *, .vastra-tabs .pricing.active, .vastra-tabs .pricing.active * { color: #fff !important; }
+.vastra-tabs .tab-btn.active, .vastra-tabs .pricing.active, .vastra-tabs .tab-btn.active:hover, .vastra-tabs .pricing.active:hover { background: #0b0b12 !important; background-color: #0b0b12 !important; background-image: none !important; color: #fff !important; -webkit-text-fill-color: #fff !important; box-shadow: 0 8px 20px -8px rgba(0, 0, 0, 0.6) !important; }
+.vastra-tabs .tab-btn.active, .vastra-tabs .tab-btn.active *, .vastra-tabs .pricing.active, .vastra-tabs .pricing.active *, .vastra-tabs .tab-btn.active:hover *, .vastra-tabs .pricing.active:hover * { color: #fff !important; -webkit-text-fill-color: #fff !important; }
 .tab-btn:not(.vastra-tabs *) { border-radius: 999px !important; }
 
 /* tables */
@@ -267,7 +267,6 @@ section.pricing, .pricing { background-image: none !important; background-color:
 .card :where(h2, h3, h4, strong, b) { color: #fff !important; }
 .card :where(p, li, span, small) { color: var(--fg-2) !important; }
 .card [class*='price'], .card [class*='amount'] { color: #fff !important; }
-.card img[src*='icon'], .card [class*='icon'] img { filter: invert(1); }
 .card .pricing-table-btn a, .card a.cmn-btn { color: #190b10 !important; }
 .card .pricing-table-btn, .card [class*='btn'] a { color: #190b10 !important; }
 .accordion-profile h3, .accordion-profile > :first-child { background: transparent !important; color: #fff !important; }
@@ -306,9 +305,65 @@ main section:not(.av-page section):not(.about-generate-creation-sec):not(.hm-pho
 .about-mission-page { background: transparent !important; }
 .about-mission-box { background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02)), var(--surface) !important; border: 1px solid var(--line) !important; border-radius: var(--r) !important; box-shadow: var(--glow) !important; }
 
-/* step icons: lavender tile with a dark, clearly visible icon */
-.step-icon, .step-card:hover .step-icon, .step-card.active .step-icon { background: #c8b6ff !important; }
-.step-icon img { filter: brightness(0) !important; opacity: .9; }
+/* ── Site-wide icon styling: matching uploaded dark slate-violet container (#2e2d3c) ── */
+.step-icon,
+.step-card .step-icon,
+.step-card:hover .step-icon,
+.step-card.active .step-icon,
+.shopify-page .step-top .step-icon,
+.shopify-page .inner-step-sec .step-top .step-icon,
+.pricing-table .card .icon,
+.pricing-table .card-itm .icon,
+.pricing-table-lst .pricing-table .card .icon,
+.card-itm .icon,
+.card .icon,
+.hm-brand-icon,
+.hm-brand-choose-card .hm-brand-icon,
+.incategory .hm-brand-icon,
+.shopify-stat-bar-cards .hm-brand-icon,
+.inr-shoppers-sec .Shoppers-card .hm-brand-icon,
+.inr-shoppers-sec .Shoppers-card [class*="icon"],
+.inr-why-item .icon,
+.inr-why-item [class*="icon"],
+.inr-int-item .icon,
+.inr-int-item [class*="icon"],
+.document-page .guide-icon,
+.guide-category-card .guide-icon {
+  background: #2e2d3c !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 12px !important;
+}
+
+.pricing-table .card .icon,
+.pricing-table .card-itm .icon,
+.pricing-table-lst .pricing-table .card .icon,
+.card-itm .icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 52px !important;
+  height: 52px !important;
+  min-width: 52px !important;
+  padding: 8px !important;
+  box-sizing: border-box !important;
+}
+
+.pricing-table .card .icon img,
+.pricing-table .card-itm .icon img,
+.pricing-table-lst .pricing-table .card .icon img,
+.card-itm .icon img,
+.step-icon img,
+.step-card .step-icon img,
+.shopify-page .step-top .step-icon img,
+.hm-brand-icon img,
+.hm-brand-icon svg,
+.inr-shoppers-sec .Shoppers-card img {
+  width: 32px !important;
+  height: 32px !important;
+  object-fit: contain !important;
+  filter: none !important;
+  opacity: 1 !important;
+}
 
 /* shopify page text cards: black with white text */
 .page-template-shopify-page .Shopify-why-teams-itm-title.inner-why-sec .inr-why-item,
@@ -320,7 +375,6 @@ main section:not(.av-page section):not(.about-generate-creation-sec):not(.hm-pho
 .page-template-shopify-page #page-column .inr-why-item *,
 .inr-shoppers-sec .Shoppers-card h6, .inr-shoppers-sec .Shoppers-card p, .inr-shoppers-sec .Shoppers-card * { color: #fff !important; }
 .inr-shoppers-sec .Shoppers-card p, .page-template-shopify-page #page-column .inr-why-item p { color: rgba(255,255,255,.78) !important; }
-.inr-shoppers-sec .Shoppers-card .hm-brand-icon, .inr-shoppers-sec .Shoppers-card [class*="icon"] { background: rgba(255,255,255,.1) !important; }
 
 /* shopify "built for your catalogue" captions: always white */
 main.page-content.shopify-page .guide-category-card.inshop-item .why-teams-itm-title,
@@ -378,3 +432,65 @@ main.page-content.shopify-page .guide-category-card.inshop-item .why-teams-itm-t
 
 /* pricing "best value": logo gradient (blue → violet → coral) */
 .pricing-table .card .badge, .pricing-table .highlight { background: linear-gradient(100deg, #4e54f8, #ba2fe2 55%, #f8624d) !important; color: #fff !important; }
+
+/* ─── Currency toggle ─────────────────────────────────────────────────────── */
+.av-currency-toggle-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-bottom: 36px;
+}
+.av-currency-label {
+  font-family: var(--body, 'Poppins', sans-serif);
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+}
+.av-currency-toggle {
+  display: inline-flex;
+  background: #f1f1f4;
+  border-radius: 999px;
+  padding: 4px;
+  gap: 4px;
+}
+.av-currency-btn {
+  font-family: var(--body, 'Poppins', sans-serif);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  background: transparent;
+  color: #555;
+  transition: background 0.25s, color 0.25s, box-shadow 0.25s;
+  white-space: nowrap;
+}
+.av-currency-btn.active {
+  background: var(--av-btn-grad, linear-gradient(100deg, #4e54f8, #ba2fe2 55%, #f8624d)) !important;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  box-shadow: 0 8px 24px -6px rgba(186, 47, 226, 0.65) !important;
+}
+
+/* ─── Price visibility: driven by data-currency on #pricing-currency-root ─── */
+#pricing-currency-root[data-currency="inr"] .price-inr { display: inline !important; }
+#pricing-currency-root[data-currency="inr"] .price-usd { display: none !important; }
+#pricing-currency-root[data-currency="usd"] .price-inr { display: none !important; }
+#pricing-currency-root[data-currency="usd"] .price-usd { display: inline !important; }
+
+/* Default fallback before JS runs */
+.price-usd { display: none; }
+
+/* ─── Purple heading accents across the site ──────────────────────────────── */
+.av-purple,
+:is(h1, h2, h3, .inr-bnr-title, .text-heading, .cmn-title, .hm-form-title, .av-mega, .av-display) :is(.av-purple, em, .av-acc, span.av-purple) {
+  font-style: normal !important;
+  background: linear-gradient(90deg, #8b6cff, #c8b6ff) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+  display: inline !important;
+}

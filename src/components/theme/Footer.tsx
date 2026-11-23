@@ -46,7 +46,7 @@ export async function Footer() {
           <div className="ftr-block-list">
             <div className="ftr-logo-blk">
               <div className="ftr-logo">
-                <a href="/" rel="home"><img src={`${THEME}/images/newlogohorizontal.svg`} alt={settings.siteName} width={910} height={189} /></a>
+                <a href="/" rel="home"><img src="/brand/AV-new-logo-horizontal-iconcolor.png" alt={settings.siteName} width={910} height={189} /></a>
               </div>
               <div className="ftr-loca-blk">
                 <div className="ftr-loca-itm">

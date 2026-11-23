@@ -20,7 +20,7 @@ const toItems = (arr: any[]): NavItem[] =>
 
 export async function AvHeader() {
   const [nav, g] = await Promise.all([getNavigation(), getGlobalContent() as Promise<any>])
-  return <HeaderBar logo={"/brand/av-logo-horizontal.png"} items={toItems((nav.header ?? []) as any[])} signText={g.sign_text} signHref={g.sign_link} catalogueText={g.catalogue_content} />
+  return <HeaderBar logo={"/brand/AV-new-logo-horizontal-iconcolor.png"} items={toItems((nav.header ?? []) as any[])} signText={g.sign_text} signHref={g.sign_link} catalogueText={g.catalogue_content} />
 }
 
 export async function AvFooter() {
@@ -35,7 +35,7 @@ export async function AvFooter() {
         <div className="av-wrap">
           <div className="av-ftr-grid">
             <div className="av-ftr-brand">
-              <a href="/" rel="home"><img src={"/brand/av-logo-horizontal.png"} alt={settings.siteName} width={344} height={78} /></a>
+              <a href="/" rel="home"><img src={"/brand/AV-new-logo-horizontal-iconcolor.png"} alt={settings.siteName} width={344} height={78} /></a>
               <div className="av-ftr-loc">
                 <div>
                   <h4 className="av-eyebrow">{g.corporate_title}</h4>

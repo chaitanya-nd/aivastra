@@ -2,6 +2,7 @@ import { FooterFormBand } from '../Footer'
 import { html, strip } from '../util'
 import { WhyTeams } from '@/ui/WhyTeams'
 import { WhySlot } from '@/ui/client/WhySlot'
+import { CurrencyToggle } from '../CurrencyToggle'
 
 /** pricing-page.php */
 export function PricingPage({ doc, gc }: { doc: any; gc: any }) {
@@ -18,8 +19,9 @@ export function PricingPage({ doc, gc }: { doc: any; gc: any }) {
           <p>{a.pricing_banner_content}</p>
         </div>
       </section>
-      <main className="page-content pricing-page">
+      <main className="page-content pricing-page" id="pricing-currency-root" data-currency="inr">
         <div className="container">
+          <CurrencyToggle />
           <section id="page-column" className="full-width" dangerouslySetInnerHTML={html(block)} />
         </div>
       </main>

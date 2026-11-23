@@ -17,7 +17,7 @@ export async function Header() {
             <div className="container">
               <div className="top_logo">
                 <a href="/" rel="home">
-                  <img src={`${THEME}/images/newlogohorizontal-white.svg`} alt={settings.siteName} width={344} height={78} />
+                  <img src="/brand/AV-new-logo-horizontal-iconcolor.png" alt={settings.siteName} width={344} height={78} />
                 </a>
               </div>
               <WpMenu items={items} id="primary-menu-mobile" />
@@ -32,7 +32,7 @@ export async function Header() {
             <div className="site-list">
               <div className="site-branding">
                 <a href="/" rel="home">
-                  <img src={`${THEME}/images/newlogohorizontal.svg`} alt={settings.siteName} width={155} height={44} />
+                  <img src="/brand/AV-new-logo-horizontal-iconcolor.png" alt={settings.siteName} width={155} height={44} />
                 </a>
               </div>
               <div className="site-header-menu">

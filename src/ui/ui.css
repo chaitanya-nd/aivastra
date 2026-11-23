@@ -323,7 +323,7 @@ body::before { display: none !important; }
 .av-ftr-soc a.av-ftr-g { width: auto; padding: 0 14px; border-radius: 99px; } .av-ftr-g img { width: auto; height: 22px; }
 .av-ftr-col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
 .av-ftr-col a { color: rgba(255,255,255,.75); font-size: 15px; transition: color .2s, padding .3s; } .av-ftr-col a:hover { color: var(--av-lime); padding-left: 6px; }
-.av-ftr-mark { font: 800 clamp(90px, 21vw, 340px)/.8 var(--av-sans); letter-spacing: -.06em; margin: 70px 0 20px -.04em; background: linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,0)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; user-select: none; text-align: center; }
+.av-ftr-mark { font: 700 clamp(90px, 21vw, 340px)/.8 'Poppins', sans-serif; letter-spacing: -.02em; margin: 70px 0 20px -.04em; background: linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,0)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; user-select: none; text-align: center; }
 .av-ftr-bottom { display: flex; flex-wrap: wrap; gap: 14px 30px; justify-content: space-between; align-items: center; padding-top: 22px; border-top: 1px solid rgba(255,255,255,.18); }
 .av-ftr-bottom p { margin: 0; display: flex; gap: 14px; align-items: center; font-size: 13.5px; }
 .av-ftr-bottom img { height: 20px; width: auto; filter: brightness(0) invert(1); }

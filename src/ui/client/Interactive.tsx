@@ -503,7 +503,7 @@ export function FooterMark() {
   const L = ({ c, children }: { c?: string; children: ReactNode }) => <span className={`av-ftr-l ${c ?? ''}`}>{children}</span>
   return (
     <div className="av-ftr-mark" aria-hidden="true" ref={root}>
-      <L>A</L><L c="av-ftr-i">&#305;<i className="av-ftr-dot" /></L><span className="av-ftr-sp" /><L>V</L><L>a</L><L>s</L><L>t</L><L>r</L><L>a</L>
+      <L>a</L><L>i</L><span className="av-ftr-sp" /><L>v</L><L>a</L><L>s</L><L>t</L><L>r</L><L>a</L>
     </div>
   )
 }

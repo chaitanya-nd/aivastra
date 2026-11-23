@@ -236,7 +236,7 @@ export async function Home({ doc, gc }: { doc: any; gc: any }) {
       {/* CHOOSE PERFECT */}
       <section className="av-split">
         <div className="av-wrap av-split-in">
-          <figure className="av-split-img" data-reveal><img src={cp.img} alt="" loading="lazy" /><span className="av-sticker s2">AI</span></figure>
+          <figure className="av-split-img" data-reveal><img src={cp.img} alt="" loading="lazy" /></figure>
           <div className="av-split-t">
             <Words as="h2" text={cp.title} className="av-display sm" accent={3} />
             <Rich html={cp.copy} className="av-lead" />
@@ -250,7 +250,7 @@ export async function Home({ doc, gc }: { doc: any; gc: any }) {
         <CardStack
           intro={
             <div className="av-cc-intro">
-              <Words as="h2" text={tx(q(ccH, 'h2'))} className="av-display sm" accent={2} />
+              <Words as="h2" text={tx(q(ccH, 'h2'))} className="av-display sm" accent={3} />
               <p className="av-serif">{tx(q(ccH, 'i'))}</p>
               <Rich html={inline(ccH)} className="av-lead light" />
             </div>
@@ -294,7 +294,7 @@ export async function Home({ doc, gc }: { doc: any; gc: any }) {
             <Rich html={cu.copy} className="av-lead" />
             {cu.btn && <Btn b={cu.btn} />}
           </div>
-          <figure className="av-split-img" data-reveal><img src={cu.img} alt="" loading="lazy" /><span className="av-sticker s3">AI</span></figure>
+          <figure className="av-split-img" data-reveal><img src={cu.img} alt="" loading="lazy" /></figure>
         </div>
       </section>
 
@@ -333,7 +333,7 @@ export async function Home({ doc, gc }: { doc: any; gc: any }) {
               )
             })}
           </div>
-          <div className="av-center"><a href="/blog/" className="av-btn ghost" data-magnetic><span>View More Blogs</span><i>→</i></a></div>
+          <div className="av-center"><a href="/blog/" className="av-btn" data-magnetic><span>View More Blogs</span><i>→</i></a></div>
         </div>
       </section>
 

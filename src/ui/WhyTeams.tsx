@@ -6,7 +6,7 @@ const COPY = {
   catalogue: {
     stats: [['1,000', 'Images in the largest pack'], ['5', 'Categories: men, women, boys, girls, jewellery'], ['3', 'Easy steps to a finished catalogue'], ['1', 'Flat-lay photo is all it takes']],
     tag: 'FOR FASHION BRANDS AND SELLERS',
-    title: 'Skip the studio shoot.',
+    title: <>Skip the <span className="av-purple">studio shoot</span>.</>,
     body: 'Upload one flat-lay and get on-model catalogue photos in every pose and background, ready for your store and marketplaces.',
     srcLabel: 'YOUR PHOTO',
     outLabel: 'YOUR CATALOGUE',
@@ -14,7 +14,7 @@ const COPY = {
   tryon: {
     stats: [['2,000', 'Try-ons in the largest pack'], ['0', 'Credits deducted for a failed try-on'], ['2', 'Ways to integrate: website and Shopify'], ['0', 'Monthly subscription, credits never expire']],
     tag: 'FOR STORES AND ONLINE SHOPPERS',
-    title: 'Let shoppers try it on before they buy.',
+    title: <>Let shoppers try it on <span className="av-purple">before they buy</span>.</>,
     body: 'Add virtual try-on to your website or Shopify store, white-labelled as your own. Shoppers see the garment on themselves, and you only pay for try-ons that succeed.',
     srcLabel: 'THE GARMENT',
     outLabel: 'SHOPPER TRY-ON',

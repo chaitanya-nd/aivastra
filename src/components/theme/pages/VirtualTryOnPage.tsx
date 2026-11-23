@@ -6,6 +6,22 @@ const Btn = ({ href, children, cls = 'cmn-btn' }: { href?: string; children?: st
   <a href={href || '#'} id="popupbtn" className={cls}>{strip(children)}</a>
 )
 
+const renderAccent = (title?: string) => {
+  if (!title) return null
+  const clean = strip(title)
+  if (/Virtual Try-On/i.test(clean)) {
+    const parts = clean.split(/(Virtual Try-On\??)/i)
+    return <>{parts[0]}<span className="av-purple">{parts[1]}</span>{parts[2] ?? ''}</>
+  }
+  if (/Fashion Business/i.test(clean)) {
+    const parts = clean.split(/(Fashion Business)/i)
+    return <>{parts[0]}<span className="av-purple">{parts[1]}</span>{parts[2] ?? ''}</>
+  }
+  const words = clean.split(' ')
+  if (words.length <= 2) return <>{clean}</>
+  return <>{words.slice(0, -2).join(' ')} <span className="av-purple">{words.slice(-2).join(' ')}</span></>
+}
+
 /** virtual-try-on.php — ACF names contain "-" ("virtual_try-on_title"); we sanitize them to "_". */
 export function VirtualTryOnPage({ doc, gc }: { doc: any; gc: any }) {
   const a = doc.acf ?? {}
@@ -31,7 +47,7 @@ export function VirtualTryOnPage({ doc, gc }: { doc: any; gc: any }) {
               <div className="about-catalogue-page-lst">
                 <div className="about-catalogue-page-lft">{g('free_trial_image') && <img src={g('free_trial_image')} alt={strip(g('free_trial_title'))} />}</div>
                 <div className="about-catalogue-page-rgt">
-                  <h2>{strip(g('free_trial_title'))}</h2>
+                  <h2>{renderAccent(g('free_trial_title'))}</h2>
                   <p dangerouslySetInnerHTML={html(g('free_trial_content'))} />
                   <div className="innr-about-btn"><Btn href={g('free_trial_button_link')}>{g('free_trial_button_text')}</Btn></div>
                 </div>
@@ -39,7 +55,7 @@ export function VirtualTryOnPage({ doc, gc }: { doc: any; gc: any }) {
             </div>
             <div className="virtual-page">
               <div className="steps-cnt">
-                <h2 className="text-heading">{strip(g('shoppers_title'))}</h2>
+                <h2 className="text-heading">{renderAccent(g('shoppers_title'))}</h2>
                 <div dangerouslySetInnerHTML={html(g('shoppers_content'))} />
               </div>
               <div id="catalogue-content" className="tab-panel active">
@@ -64,7 +80,7 @@ export function VirtualTryOnPage({ doc, gc }: { doc: any; gc: any }) {
             <div className="about-catalogue-page tryon page">
               <div className="about-catalogue-page-lst">
                 <div className="about-catalogue-page-rgt">
-                  <h2>{strip(g('business_title'))}</h2>
+                  <h2>{renderAccent(g('business_title'))}</h2>
                   <p>{strip(g('business_content'))}</p>
                   {business.length > 0 && <ul>{business.map((b, i) => <li key={i}>{strip(b.virtual_try_on_business_list_text)}</li>)}</ul>}
                   <div className="btnpadding"><Btn href={g('business_button_link')}>{g('business_button')}</Btn></div>
@@ -75,7 +91,7 @@ export function VirtualTryOnPage({ doc, gc }: { doc: any; gc: any }) {
             <div className="about-generate-creation-sec tryon">
               <div className="container">
                 <div className="about-generate-creation-cnt">
-                  <h2 className="text-heading">{strip(g('wardrobe_title'))}</h2>
+                  <h2 className="text-heading">{renderAccent(g('wardrobe_title'))}</h2>
                   <p dangerouslySetInnerHTML={html(g('wardrobe_content'))} />
                 </div>
                 {wardrobe.length > 0 && (
@@ -96,7 +112,7 @@ export function VirtualTryOnPage({ doc, gc }: { doc: any; gc: any }) {
                 <CardStack
                   intro={
                     <div className="av-cc-intro">
-                      <h2 className="av-display sm">{strip(g('fashion_title'))}</h2>
+                      <h2 className="av-display sm">{renderAccent(g('fashion_title'))}</h2>
                       <p className="av-lead light" dangerouslySetInnerHTML={html(g('fashion_content'))} />
                     </div>
                   }
@@ -112,7 +128,7 @@ export function VirtualTryOnPage({ doc, gc }: { doc: any; gc: any }) {
               </div>
             ) : (
               <div className="hm-catalogue-creation-cnt tryon">
-                <h2 className="text-heading">{strip(g('fashion_title'))}</h2>
+                <h2 className="text-heading">{renderAccent(g('fashion_title'))}</h2>
                 <p dangerouslySetInnerHTML={html(g('fashion_content'))} />
               </div>
             )}

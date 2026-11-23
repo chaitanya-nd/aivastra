@@ -33,7 +33,7 @@ export function DesignMotion() {
     const root = document.documentElement
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-    // scroll progress + header state
+    // scroll progress + header state + TOC spy
     let raf = 0
     const onScroll = () => {
       cancelAnimationFrame(raf)
@@ -41,13 +41,35 @@ export function DesignMotion() {
         const h = root.scrollHeight - window.innerHeight
         root.style.setProperty('--ds-p', h > 0 ? String(Math.min(1, window.scrollY / h)) : '0')
         document.body.classList.toggle('ds-scrolled', window.scrollY > 8)
+
+        // Active Table of Contents heading spy
+        const headings = document.querySelectorAll<HTMLElement>('.av-prose h2, .av-prose h3, .av-prose h4')
+        if (headings.length > 0) {
+          const links = document.querySelectorAll<HTMLAnchorElement>('.lwptoc_item a')
+          let activeId = ''
+          const offset = window.scrollY + 130
+          for (let i = 0; i < headings.length; i++) {
+            const el = headings[i]
+            if (el.offsetTop <= offset) {
+              activeId = el.id
+            } else {
+              break
+            }
+          }
+          links.forEach((a) => {
+            const href = a.getAttribute('href')?.replace('#', '')
+            const isMatch = Boolean(href && href === activeId)
+            a.classList.toggle('active', isMatch)
+            a.closest('.lwptoc_item')?.classList.toggle('active', isMatch)
+          })
+        }
       })
     }
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
 
     // spotlight: card glow follows the cursor
-    const CARDS = '.hm-brand-choose-card,.inr-aiphoto-rit-btm-itm,.step-card,.card-itm,.guide-category-card,.hm-results-col,.blog-card,.hm-catlgue-crtion-itm,.Shoppers-card,.inr-int-item,.av-why-card'
+    const CARDS = '.hm-brand-choose-card,.inr-aiphoto-rit-btm-itm,.step-card,.card-itm,.guide-category-card,.hm-results-col,.blog-card,.hm-catlgue-crtion-itm,.Shoppers-card,.inr-int-item,.av-why-card,.av-cc-card,.av-post,.av-stat,.av-cta-form,.pricing-table .card,.accordion-profile,.hmblg-item,.hm-form,.frm-blk,.table-wrapper,.av-look-main'
     const onMove = (e: PointerEvent) => {
       const c = (e.target as HTMLElement | null)?.closest?.(CARDS) as HTMLElement | null
       if (!c) return

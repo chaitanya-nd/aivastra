@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 import { JsonLd } from '@/components/JsonLd'
 import { DesignMotion } from '@/components/theme/DesignMotion'
+import { HeadingAccents } from '@/components/theme/HeadingAccents'
 import { Motion } from '@/ui/client/Motion'
 import { AvFooter, AvHeader } from '@/ui/shell'
 import { ThemeScripts } from '@/components/theme/ThemeScripts'
@@ -41,6 +42,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
       </head>
       <body suppressHydrationWarning>
         <DesignMotion />
+        <HeadingAccents />
         <Motion />
         <AvHeader />
         <main id="main">{children}</main>
