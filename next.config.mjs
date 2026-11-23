@@ -3,7 +3,7 @@ import { withPayload } from '@payloadcms/next/withPayload'
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Allow opening the dev server from another PC on the LAN.
-  allowedDevOrigins: ['192.168.0.198', '192.168.0.*'],
+  allowedDevOrigins: ['192.168.0.198', '192.168.0.*', 'carport-slingshot-unfiled.ngrok-free.dev', '*.ngrok-free.dev'],
   images: {
     // Media served by Payload locally (/api/media/file/...) and later from R2.
     localPatterns: [{ pathname: '/api/media/file/**' }, { pathname: '/**' }],

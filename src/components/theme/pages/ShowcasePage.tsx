@@ -30,12 +30,20 @@ const FALLBACK: Record<string, [string, string][]> = {
     ['/results/boys/kurta.webp', 'Boys kurta on AI model'],
   ],
   accessories: [
-    [`${THEME_URL}/images/jewelleryimg.webp`, 'Jewellery set on AI model'],
-    [`${UP}/2026/08/Rectangle-49-2.webp`, 'Earrings on AI model'],
-    [`${UP}/2026/08/photoshoots-item4.webp`, 'Necklace on AI model'],
-    ['/hero/jewel/model-main.png', 'Jewellery set styled on AI model'],
-    ['/hero/jewel/model-pose-3.png', 'Earrings close-up on AI model'],
+    ['/results/jewellery/necklace-saree.webp', 'Necklace with saree on AI model'],
+    ['/results/jewellery/earrings-model.webp', 'Earrings on AI model'],
+    ['/results/jewellery/bracelet-model.webp', 'Bracelet on AI model'],
+    ['/results/jewellery/necklace-model.webp', 'Necklace set on AI model'],
+    ['/results/jewellery/necklace-bust.webp', 'Necklace on bust display'],
+    ['/results/jewellery/earrings-stand.webp', 'Earrings on display stand'],
+    ['/results/jewellery/earrings-box.webp', 'Earrings in gift box'],
+    ['/results/jewellery/bracelet-box.webp', 'Bracelet in gift box'],
+    ['/results/jewellery/product-1.webp', 'Jewellery product shot'],
+    ['/results/jewellery/product-2.webp', 'Jewellery product shot'],
+    ['/results/jewellery/product-3.webp', 'Jewellery product shot'],
+    ['/results/jewellery/product-4.webp', 'Jewellery product shot'],
   ],
+
 }
 
 /** ai-showcase-page.php (catalogue-showcase) */
