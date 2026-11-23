@@ -7,6 +7,8 @@ const UP = 'https://aivastra.com/wp-content/uploads'
 /** Starter images for tabs the CMS has left empty (matched by tab slug). */
 const FALLBACK: Record<string, [string, string][]> = {
   'men-ethnic-wear': [
+    ['/results/men/kurta.webp', 'Kurta on AI model'],
+    ['/results/men/kurti-pyjama.webp', 'Sherwani and pyjama on AI model'],
     [`${UP}/2026/10/Nehru-jacket-Img.webp`, 'Nehru jacket with kurta pyjama on AI model'],
     [`${UP}/2026/10/Nehru-jacket.webp`, 'Embroidered Nehru jacket set on AI model'],
     [`${UP}/2026/10/jacket-set-img.webp`, 'Jacket set with kurta on AI model'],
@@ -14,11 +16,18 @@ const FALLBACK: Record<string, [string, string][]> = {
     [`${UP}/2026/08/Rectangle-49-1.webp`, 'Sherwani with shawl on AI model'],
   ],
   'kids-wear': [
-    [`${UP}/2026/10/boys-vest-img.webp`, 'Boys vest on AI model'],
-    [`${UP}/2026/10/Boys-vest.webp`, 'Boys vest and track pants on AI model'],
-    [`${UP}/2026/10/kidswear.webp`, 'Boys jacket and cargo pants on AI model'],
-    [`${UP}/2026/04/Rectangle-45-2.webp`, 'Boys denim jacket and jeans on AI model'],
-    [`${UP}/2026/08/Rectangle-44-2.webp`, 'Girls denim jacket on AI model'],
+    ['/results/boys/blazer.webp', 'Boys blazer on AI model'],
+    ['/results/girls/blazer.webp', 'Girls blazer on AI model'],
+    ['/results/boys/cargo.webp', 'Boys cargo on AI model'],
+    ['/results/girls/full-sleeve-shirt.webp', 'Girls full sleeve shirt on AI model'],
+    ['/results/boys/full-sleeve-shirt.webp', 'Boys full sleeve shirt on AI model'],
+    ['/results/girls/full-sleeve-tshirt.webp', 'Girls full sleeve tshirt on AI model'],
+    ['/results/girls/hoodie.webp', 'Girls hoodie on AI model'],
+    ['/results/boys/hoodie.webp', 'Boys hoodie on AI model'],
+    ['/results/girls/long-frock.webp', 'Girls long frock on AI model'],
+    ['/results/boys/jacket.webp', 'Boys jacket on AI model'],
+    ['/results/girls/minifrock.webp', 'Girls minifrock on AI model'],
+    ['/results/boys/kurta.webp', 'Boys kurta on AI model'],
   ],
   accessories: [
     [`${THEME_URL}/images/jewelleryimg.webp`, 'Jewellery set on AI model'],

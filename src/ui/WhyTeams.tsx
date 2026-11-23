@@ -1,4 +1,3 @@
-import { THEME_URL } from '@/components/theme/util'
 import { WhyShow } from './client/Interactive'
 
 /** "Why teams choose Ai Vastra" — stats strip + switchable source → catalogue visual */
@@ -40,9 +39,31 @@ export function WhyTeams({ variant = 'catalogue' }: { variant?: 'catalogue' | 't
               <p>{c.body}</p>
             </div>
             <WhyShow srcLabel={c.srcLabel} outLabel={c.outLabel} sets={[
-              { tab: 'Women', label: 'Dress', src: '/hero/flat/flatlay-dress.png', out: ['/hero/after-red.png', '/hero/after-cream.png', '/hero/flat/model-main.png'] },
-              { tab: 'Men', label: 'Sherwani set', src: '/garments/men/sherwani-and-pyjama.webp', out: ['https://aivastra.com/wp-content/uploads/2026/10/Nehru-jacket.webp', 'https://aivastra.com/wp-content/uploads/2026/08/Rectangle-49-1.webp', 'https://aivastra.com/wp-content/uploads/2026/10/Nehru-jacket-Img.webp'] },
-              { tab: 'Jewellery', label: 'Necklace set', src: '/hero/jewel/jewellery-set.png', out: ['/hero/jewel/model-pose-3.png', `${THEME_URL}/images/jewelleryimg.webp`, '/hero/jewel/model-main.png'] },
+              { tab: 'Women', items: [
+                { label: 'Saree', src: '/garments/women/saree-flat-lay.webp', out: '/results/women/saree.webp' },
+                { label: 'Long frock', src: '/garments/women/long-frock.webp', out: '/results/women/longfrock.webp' },
+                { label: 'Cocktail dress', src: '/garments/women/cocktail.webp', out: '/results/women/cocktail.webp' },
+              ] },
+              { tab: 'Men', items: [
+                { label: 'Blazer', src: '/garments/men/blazer.webp', out: '/results/men/blazer.webp' },
+                { label: 'Suit', src: '/garments/men/one-piece-suit.webp', out: '/results/men/onepiecesuit.webp' },
+                { label: 'Kurta', src: '/garments/men/kurta.webp', out: '/results/men/kurta.webp' },
+              ] },
+              { tab: 'Boys', items: [
+                { label: 'Blazer', src: '/garments/boys/blazer.webp', out: '/results/boys/blazer.webp' },
+                { label: 'Suit', src: '/garments/boys/suit.webp', out: '/results/boys/suit.webp' },
+                { label: 'Kurta', src: '/garments/boys/kurta.webp', out: '/results/boys/kurta.webp' },
+              ] },
+              { tab: 'Girls', items: [
+                { label: 'Blazer', src: '/garments/girls/blazer.webp', out: '/results/girls/blazer.webp' },
+                { label: 'Mini frock', src: '/garments/girls/mini-frock.webp', out: '/results/girls/minifrock.webp' },
+                { label: 'Long frock', src: '/garments/girls/long-frock.webp', out: '/results/girls/long-frock.webp' },
+              ] },
+              { tab: 'Jewellery', items: [
+                { label: 'Earrings', src: '/results/jewellery/product-4.webp', out: '/results/jewellery/earrings-model.webp' },
+                { label: 'Bracelet', src: '/results/jewellery/product-2.webp', out: '/results/jewellery/bracelet-model.webp' },
+                { label: 'Necklace', src: '/results/jewellery/product-1.webp', out: '/results/jewellery/necklace-saree.webp' },
+              ] },
             ]} />
           </div>
         </div>

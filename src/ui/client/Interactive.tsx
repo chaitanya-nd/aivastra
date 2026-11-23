@@ -137,7 +137,7 @@ export function TryOnStage({ garments, afters, before, labels }: { garments: str
         <img src={before} alt="" />
         <figcaption>{labels.before}</figcaption>
       </figure>
-      <svg className="av-tryon-arrow" viewBox="0 0 110 60" aria-hidden="true"><path d="M2 48 C 40 56, 70 40, 100 24" fill="none" stroke="url(#ag)" strokeWidth="3" strokeLinecap="round" /><path d="M86 18 L102 23 L93 37" fill="none" stroke="#7c5cff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" /><defs><linearGradient id="ag" x1="0" x2="1"><stop stopColor="#b07cff" /><stop offset="1" stopColor="#7c5cff" /></linearGradient></defs></svg>
+      <svg className="av-tryon-arrow" viewBox="0 0 110 60" aria-hidden="true"><path d="M2 48 C 40 56, 70 40, 100 24" fill="none" stroke="url(#ag)" strokeWidth="3" strokeLinecap="round" /><path d="M86 18 L102 23 L93 37" fill="none" stroke="#38bdf8" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" /><defs><linearGradient id="ag" x1="0" x2="1"><stop stopColor="#3b82f6" /><stop offset="1" stopColor="#38bdf8" /></linearGradient></defs></svg>
       <div className="av-tryon-picker" role="tablist">
         {garments.map((g, n) => (
           <button key={n} role="tab" aria-selected={n === i} className={n === i ? 'is-on' : ''} onClick={() => { setI(n); setPicked(true) }} aria-label={`Garment ${n + 1}`}>
@@ -235,12 +235,28 @@ export function CategoryShowcase({ tabs, aside, footer }: { tabs: CatTab[]; asid
   const strip = useRef<HTMLDivElement>(null)
   const hold = useRef(false) // true while hovering / dragging / touching → auto-scroll pauses
   const drag = useRef<{ x: number; l: number } | null>(null)
+  const quiet = useRef(0)
+  const moved = useRef(0) // how far the pointer travelled during the last press (distinguishes a drag from a click)
+  const anim = useRef(false) // true while a clicked garment is gliding to the centre (the auto-scroll loop stands aside)
+  const pick = (k: number) => { // click a garment: glide it to the centre, which applies it; auto-scroll then carries on from there
+    const el = strip.current; if (!el || moved.current > 6 || anim.current) return
+    const w = (el.firstElementChild!.firstElementChild as HTMLElement).offsetWidth
+    const from = el.scrollLeft, to = k * (w + 14) + w / 2 - el.clientWidth / 2, t0 = performance.now()
+    anim.current = true; hold.current = false; setWorn(k)
+    const run = (now: number) => {
+      const p = Math.min(1, (now - t0) / 600), e = 1 - Math.pow(1 - p, 3)
+      el.scrollLeft = from + (to - from) * e
+      if (p < 1) requestAnimationFrame(run); else anim.current = false
+    }
+    requestAnimationFrame(run)
+  }
   const step = () => { const f = strip.current?.firstElementChild?.firstElementChild as HTMLElement | null; return f ? f.offsetWidth + 14 : 1 }
   useEffect(() => {
     const el = strip.current
     if (!el) return
     el.scrollLeft = 0
     setDot(0); setWorn(0)
+    quiet.current = performance.now() + 1200 // no flying garment while the new tab settles
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     let visible = true
     const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting }, { threshold: 0.15 })
@@ -250,6 +266,7 @@ export function CategoryShowcase({ tabs, aside, footer }: { tabs: CatTab[]; asid
     const tick = (now: number) => {
       const dt = Math.min(64, now - (last || now)); last = now
       if (Math.abs(el.scrollLeft - set) > 1.5) pos = el.scrollLeft // user dragged / swiped → follow them
+      if (anim.current) { pos = el.scrollLeft; set = el.scrollLeft; raf = requestAnimationFrame(tick); return }
       if (visible && !hold.current && !reduce) pos += (SPEED * dt) / 1000
       else pos = el.scrollLeft
       const half = el.scrollWidth / 2
@@ -270,8 +287,9 @@ export function CategoryShowcase({ tabs, aside, footer }: { tabs: CatTab[]; asid
     const prev = seen.current
     seen.current = { t, w: worn }
     const N = cur.images.length
-    if (prev.t !== t || prev.w % N === worn % N) return // only animate a garment change within the same tab
+    if (prev.t !== t || prev.w % N === worn % N || performance.now() < quiet.current) return // only animate a garment change within the same tab
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    document.querySelectorAll('img[data-av-fly]').forEach((n) => n.remove()) // only one garment ever flies at a time
     const tile = strip.current?.querySelector('.av-showcase-img.is-worn img') as HTMLImageElement | null
     const dest = card.current
     if (!tile || !dest) return
@@ -313,6 +331,7 @@ export function CategoryShowcase({ tabs, aside, footer }: { tabs: CatTab[]; asid
       fly.src = cv.toDataURL('image/png')
     } catch { /* keep the original image if the canvas is blocked */ }
     Object.assign(fly.style, { position: 'fixed', left: a.left + 'px', top: a.top + 'px', width: a.width + 'px', height: a.height + 'px', objectFit: 'contain', zIndex: '60', pointerEvents: 'none', filter: 'drop-shadow(0 0 14px rgba(77,163,255,.7))' })
+    fly.setAttribute('data-av-fly', '1')
     document.body.appendChild(fly)
     const dx = b.left + b.width / 2 - (a.left + a.width / 2), dy = b.top + b.height / 2 - (a.top + a.height / 2)
     const k = Math.min(1, (b.width * 0.7) / a.width)
@@ -331,7 +350,7 @@ export function CategoryShowcase({ tabs, aside, footer }: { tabs: CatTab[]; asid
     if (k !== dot) setDot(k)
     // garment crossing the strip's centre gets "applied" to the person
     const c = Math.floor((el.scrollLeft + el.clientWidth / 2) / step())
-    if (c !== worn) setWorn(c)
+    if (c !== worn && !anim.current) setWorn(c)
   }
   return (
     <div className="av-showcase">
@@ -339,7 +358,7 @@ export function CategoryShowcase({ tabs, aside, footer }: { tabs: CatTab[]; asid
       <div className="av-showcase-main">
         <div className="av-showcase-tabs" role="tablist">
           {tabs.map((x, k) => (
-            <button key={x.label} role="tab" aria-selected={k === t} className={k === t ? 'is-on' : ''} onClick={() => setT(k)}><TabIcon k={x.icon} />{x.label}</button>
+            <button key={x.label} role="tab" aria-selected={k === t} className={k === t ? 'is-on' : ''} onClick={() => { if (k !== t) { document.querySelectorAll('img[data-av-fly]').forEach((n) => n.remove()); setWorn(0); setDot(0); setT(k) } }}><TabIcon k={x.icon} />{x.label}</button>
           ))}
         </div>
         <div className="av-showcase-stage" key={t}>
@@ -356,13 +375,13 @@ export function CategoryShowcase({ tabs, aside, footer }: { tabs: CatTab[]; asid
             onMouseLeave={() => { hold.current = false; drag.current = null }}
             onTouchStart={() => { hold.current = true }}
             onTouchEnd={() => { hold.current = false }}
-            onPointerDown={(e) => { if (e.pointerType === 'mouse') { hold.current = true; drag.current = { x: e.clientX, l: strip.current!.scrollLeft } } }}
-            onPointerMove={(e) => { if (drag.current) strip.current!.scrollLeft = drag.current.l - (e.clientX - drag.current.x) }}
+            onPointerDown={(e) => { if (e.pointerType === 'mouse') { hold.current = true; moved.current = 0; drag.current = { x: e.clientX, l: strip.current!.scrollLeft } } }}
+            onPointerMove={(e) => { if (drag.current) moved.current = Math.max(moved.current, Math.abs(e.clientX - drag.current.x)); if (drag.current) strip.current!.scrollLeft = drag.current.l - (e.clientX - drag.current.x) }}
             onPointerUp={() => { drag.current = null; hold.current = false }}
           >
             <div className="av-showcase-track">
               {loop.map((im, k) => (
-                <div className={'av-showcase-img' + (k === worn ? ' is-worn' : '')} key={k} aria-hidden={k >= cur.images.length}><img src={im.src} alt="" loading="lazy" style={{ objectPosition: im.pos || 'center top' }} /></div>
+                <div className={'av-showcase-img' + (k === worn ? ' is-worn' : '')} key={k} aria-hidden={k >= cur.images.length} onClick={() => pick(k)} style={{ cursor: 'pointer' }}><img src={im.src} alt="" loading="lazy" style={{ objectPosition: im.pos || 'center top' }} /></div>
               ))}
             </div>
           </div>
@@ -432,13 +451,14 @@ export function CardStack({ intro, cards }: { intro: ReactNode; cards: ReactNode
     const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v))
     const draw = () => {
       raf = 0
-      if (!mq.matches) { items.forEach((c) => { c.style.transform = ''; c.style.opacity = ''; c.style.filter = '' }); return }
+      if (!mq.matches) { items.forEach((c) => { c.style.transform = ''; c.style.opacity = ''; c.style.filter = ''; c.classList.remove('is-front') }); return }
       const r = w.getBoundingClientRect()
       const p = clamp(-r.top / Math.max(1, r.height - window.innerHeight))
       const a = p * (n - 1 + 0.7) - 0.7 // active float: card i is front when a === i
       w.style.setProperty('--hp', String(p))
       items.forEach((c, i) => {
         const t = a - i
+        c.classList.toggle('is-front', Math.abs(t) < 0.5)
         if (t < 0) {
           const u = clamp(-t) // 1 = off-stage right, 0 = arrived
           c.style.transform = `translate3d(${u * 105}%,0,${-u * 80}px) rotateY(${-u * 32}deg)`
@@ -509,16 +529,24 @@ export function FooterMark() {
 }
 
 /* "Why teams choose" visual: pick a category, the flat-lay and catalogue fan change together */
-export function WhyShow({ sets, srcLabel = 'YOUR PHOTO', outLabel = 'YOUR CATALOGUE' }: { srcLabel?: string; outLabel?: string; sets: { tab: string; label: string; src: string; out: [string, string, string] }[] }) {
+export function WhyShow({ sets, srcLabel = 'YOUR PHOTO', outLabel = 'YOUR CATALOGUE' }: { srcLabel?: string; outLabel?: string; sets: { tab: string; items: { label: string; src: string; out: string }[] }[] }) {
   const [i, setI] = useState(0)
   const [paused, setPaused] = useState(false)
   const [picked, setPicked] = useState(false) // a manual pick stops the auto-rotation
   useEffect(() => {
     if (paused || picked || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    const t = setInterval(() => setI((n) => (n + 1) % sets.length), 3500)
+    const t = setInterval(() => { setI((n) => (n + 1) % sets.length) }, 8000)
     return () => clearInterval(t)
   }, [paused, picked, sets.length])
-  const s = sets[i]
+  const [r, setR] = useState(0) // catalogue fan: photos slide round one by one
+  useEffect(() => { setR(0) }, [i])
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const t = setInterval(() => setR((n) => n + 1), 2400)
+    return () => clearInterval(t)
+  }, [])
+  const t0 = sets[i]
+  const s = t0.items[(((2 - r) % 3) + 3) % 3] // the garment that made the photo now in front
   return (
     <div className="av-why-visual-wrap" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
       <div className="av-why-tabs" role="tablist">
@@ -527,13 +555,11 @@ export function WhyShow({ sets, srcLabel = 'YOUR PHOTO', outLabel = 'YOUR CATALO
         ))}
       </div>
       <div className="av-why-visual" key={i}>
-        <div className="av-why-col"><small>{srcLabel}</small><img className="av-why-src" src={s.src} alt={s.label} loading="lazy" /><b>{s.label}</b></div>
+        <div className="av-why-col"><small>{srcLabel}</small><button type="button" className="av-why-srcbtn" onClick={() => setR((n) => n + 1)} aria-label={`Show next ${t0.tab} garment`}><img className="av-why-src" src={s.src} alt={s.label} loading="lazy" /></button><b>{s.label}</b>{t0.items.length > 1 && <em className="av-why-hint">Click to change</em>}</div>
         <span className="av-why-arrow" aria-hidden="true" />
         <div className="av-why-col wide"><small>{outLabel}</small>
           <div className="av-why-fan">
-            <img src={s.out[0]} alt="" loading="lazy" />
-            <img src={s.out[1]} alt="" loading="lazy" />
-            <img src={s.out[2]} alt={`${s.tab} catalogue photo`} loading="lazy" />
+            {t0.items.map((it, n) => <img key={`${i}-${n}`} src={it.out} alt={`${it.label} catalogue photo`} data-pos={(n + r) % 3} loading="lazy" />)}
           </div>
         </div>
       </div>

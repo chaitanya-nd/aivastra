@@ -25,6 +25,7 @@ const SELECTORS = [
 
 // High-priority brand/action phrases to highlight if present in the heading
 const KEY_PHRASES = [
+  'Future of Fashion Commerce',
   'Faster with AI',
   'Faster with Ai',
   'Virtual Try-On',

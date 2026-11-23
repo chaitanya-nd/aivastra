@@ -16,7 +16,7 @@ export function CommentPost({ cellData, rowData }: any) {
   if (!rel || !id) return <>—</>
   return (
     <div className="wpc-author">
-      <Link href={`/admin/collections/${rel}/${id}`}><b style={{ color: '#a99fff' }}>{doc?.title ?? `#${id}`}</b></Link>
+      <Link href={`/admin/collections/${rel}/${id}`}><b style={{ color: '#7dd3fc' }}>{doc?.title ?? `#${id}`}</b></Link>
       {doc?.slug && <a href={`${SITE_URL}${getPath(rel, doc)}/#comment-${rowData?.id}`} target="_blank" rel="noreferrer">View comment on site ↗</a>}
     </div>
   )

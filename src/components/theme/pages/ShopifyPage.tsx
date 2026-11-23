@@ -1,6 +1,7 @@
 import { findMany } from '@/lib/data'
 import { FormRenderer } from '@/components/FormRenderer'
 import { Accordion, html, strip } from '../util'
+import { ScrollRow } from '../ScrollRow'
 
 const UP = 'https://aivastra.com/wp-content/uploads'
 const STEP_CARDS = [
@@ -160,7 +161,7 @@ export async function ShopifyPage({ doc, gc }: { doc: any; gc: any }) {
                 <h2 className="text-heading cmn-title">{strip(a.shopify_built_for_your_catalogue_title)}</h2>
                 <Raw v={a.shopify_built_for_your_catalogue_content} />
                 {built.length > 0 && (
-                  <div className="guide-category-grid stpflex inr-stp-sec owl-carousel">
+                  <ScrollRow gridClassName="guide-category-grid av-loop-grid">
                     {built.map((c, i) => (
                       <div className="guide-category-card inshop-item" key={i}>
                         <a href={c.shopify_built_for_your_catalogue_card_link || '#'}>
@@ -171,7 +172,7 @@ export async function ShopifyPage({ doc, gc }: { doc: any; gc: any }) {
                         </a>
                       </div>
                     ))}
-                  </div>
+                  </ScrollRow>
                 )}
                 <div className="cntr" dangerouslySetInnerHTML={html(a.shopify_built_for_your_catalogue_btm_cont)} />
               </div>

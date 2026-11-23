@@ -1,6 +1,7 @@
 import { findMany, getPluginSettings } from '@/lib/data'
 import { FooterFormBand } from '../Footer'
 import { BlogCard } from '../BlogCards'
+import { LoadMore } from '../LoadMore'
 import { Accordion, FormBlock } from '../util'
 
 const TABS: [string, string][] = [
@@ -46,7 +47,7 @@ export async function BlogIndex({ gc, page = 1, term, basePath = '/blog/', faqSo
           {(res.totalPages ?? 1) > 1 && (
             <div className="ui-view-more-row" style={{ gap: 12 }}>
               {page > 1 && <a className="ui-view-more-btn" href={page === 2 ? base : `${base}page/${page - 1}/`} rel="prev">Newer</a>}
-              {page < res.totalPages && <a className="ui-view-more-btn" href={`${base}page/${page + 1}/`} rel="next">View More</a>}
+              {page < res.totalPages && <LoadMore next={page + 1} total={res.totalPages} />}
             </div>
           )}
         </div>

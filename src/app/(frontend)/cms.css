@@ -1,5 +1,5 @@
 /* Generic CMS blocks/templates (scoped so they never clash with theme.css) */
-.cms{--bg:#fff;--fg:#14141c;--muted:#5d6070;--line:#e6e6ee;--brand:#5b3df5;--brand-2:#8a6bff;--soft:#f6f5ff;--radius:14px;--max:1180px}
+.cms{--bg:#fff;--fg:#14141c;--muted:#5d6070;--line:#e6e6ee;--brand:#5b3df5;--brand-2:#3b82f6;--soft:#f1f7ff;--radius:14px;--max:1180px}
 .cms *{box-sizing:border-box}
 .cms{scroll-behavior:smooth}
 .cms{margin:0;font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--fg);background:var(--bg)}
@@ -123,11 +123,11 @@
 .av-comments .comment { margin: 0 0 18px; } .av-comments .comment::marker { content: ''; }
 .av-comments .comment-body { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12); border-radius: 14px; padding: 16px 18px; }
 .av-comments .comment-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 13px; color: rgba(255,255,255,.6); } .av-comments .comment-meta b { color: #fff; font-size: 15px; -webkit-text-fill-color: #fff; background: none; } .av-comments .comment-meta a { color: inherit; -webkit-text-fill-color: currentColor; }
-.av-comments .comment-avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #ff5f6d, #ffb347); color: #fff; display: grid; place-items: center; font-weight: 600; }
+.av-comments .comment-avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #3b82f6, #38bdf8); color: #fff; display: grid; place-items: center; font-weight: 600; }
 .av-comments .comment-content p { margin: 10px 0 0; line-height: 1.7; color: rgba(255,255,255,.88); }
-.av-comments .comment-reply-link, .av-comments .comment-cancel, .av-comments .comment-more { background: none; border: 0; color: #ffb347; font: 600 13px Poppins, sans-serif; cursor: pointer; padding: 8px 0 0; } .av-comments .comment-more { padding: 10px 0 20px; }
+.av-comments .comment-reply-link, .av-comments .comment-cancel, .av-comments .comment-more { background: none; border: 0; color: #38bdf8; font: 600 13px Poppins, sans-serif; cursor: pointer; padding: 8px 0 0; } .av-comments .comment-more { padding: 10px 0 20px; }
 .av-comments .comment-form { margin-top: 32px; max-width: 720px; } .av-comments .comment-form h4 { font: 600 20px Poppins, sans-serif; margin: 0 0 12px; color: #fff; }
 .av-comments .comment-form label { display: block; font-weight: 500; font-size: 14px; color: rgba(255,255,255,.85); } .av-comments .comment-form input, .av-comments .comment-form textarea { display: block; width: 100%; margin-top: 6px; padding: 11px 14px; border: 1px solid rgba(255,255,255,.18); border-radius: 10px; background: rgba(255,255,255,.06); color: #fff; font: 15px Poppins, sans-serif; }
-.av-comments .comment-form .submit { background: linear-gradient(90deg, #ff5f6d, #ffb347); color: #141414; border: 0; border-radius: 999px; padding: 12px 28px; font: 600 14px Poppins, sans-serif; cursor: pointer; }
-.av-comments .comment-note { padding: 10px 14px; border-radius: 8px; background: rgba(255,255,255,.08); } .av-comments .comment-note.ok { background: rgba(60,200,120,.16); } .av-comments .comment-note.err { background: rgba(255,90,90,.16); color: #ffb3b3; } .av-comments .comment-notes { font-size: 13px; color: rgba(255,255,255,.6); }
+.av-comments .comment-form .submit { background: linear-gradient(90deg, #3b82f6, #38bdf8); color: #141414; border: 0; border-radius: 999px; padding: 12px 28px; font: 600 14px Poppins, sans-serif; cursor: pointer; }
+.av-comments .comment-note { padding: 10px 14px; border-radius: 8px; background: rgba(255,255,255,.08); } .av-comments .comment-note.ok { background: rgba(60,200,120,.16); } .av-comments .comment-note.err { background: rgba(255,90,90,.16); color: #b3e7ff; } .av-comments .comment-notes { font-size: 13px; color: rgba(255,255,255,.6); }
 .av-comments img.comment-avatar { object-fit: cover; background: none; }
