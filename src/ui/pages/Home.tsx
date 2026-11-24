@@ -137,7 +137,7 @@ export async function Home({ doc, gc }: { doc: any; gc: any }) {
                 before="/hero/model-before.png"
                 labels={{ before: 'Before', after: 'After – Virtual Try-On' }}
               />,
-              <LookStage key="s1" kind="flat" inputLabel="Flat Lay Input" inputIcon="/hero/flat/icon-upload.png" inputImg="/hero/flat/input-1.webp" main={{ src: '/hero/flat/output-1.webp', pos: 'center 25%' }} thumbs={[{ src: '/hero/flat/output-2.webp', pos: 'center 25%' }, { src: '/hero/flat/output-3.webp', pos: 'center 25%' }, { src: '/hero/flat/output-1.webp', pos: 'center 25%' }]} pill="On-Model Catalogue" arrow="/hero/flat/arrow-2.png" />,
+              <LookStage key="s1" kind="flat" inputLabel="Flat Lay Input" inputIcon="/hero/flat/icon-upload.png" inputImg="/hero/flat/input-1.webp" main={{ src: '/hero/flat/output-1.webp', pos: 'center 25%' }} thumbs={[{ src: '/hero/flat/output-1.webp', pos: 'center 25%' }, { src: '/hero/flat/output-2.webp', pos: 'center 25%' }, { src: '/hero/flat/output-3.webp', pos: 'center 25%' }]} pill="On-Model Catalogue" arrow="/hero/flat/arrow-2.png" />,
               <LookStage key="s2" kind="jewel" inputLabel="Jewellery Input" inputIcon="/hero/jewel/icon-jewellery-input.png" inputImg="/results/jewellery/product-1.webp" main={{ src: '/results/jewellery/necklace-saree.webp' }} thumbs={[{ src: '/results/jewellery/necklace-saree.webp', pos: 'center 20%' }, { src: '/results/jewellery/necklace-model.webp', pos: 'center 25%' }, { src: '/results/jewellery/necklace-bust.webp', pos: 'center 40%' }]} pill="AI Generated Catalogue" arrow="/hero/flat/arrow-1.png" />,
             ]}
           />

@@ -62,7 +62,7 @@ html, body { background: #000000 !important; }
 .av-dots { justify-content: center; } .av-dots button { background: rgba(255,255,255,.2); } .av-dots button.is-on { background: #fff; }
 .av-hero .av-mega .av-line:last-child > span { background: var(--av-grad); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent !important; color: transparent !important; }
 .av-hero-shot { width: min(980px, 100%); aspect-ratio: 16 / 8.2; border-radius: 28px; border: 1px solid rgba(255,255,255,.14); background: linear-gradient(160deg, rgba(255,255,255,.08), rgba(255,255,255,.02)); box-shadow: 0 60px 140px -40px rgba(59,130,246,.55), inset 0 1px 0 rgba(255,255,255,.12); backdrop-filter: blur(10px); }
-.av-hero-shot::before { content: ''; position: absolute; inset: -1px; border-radius: inherit; padding: 1px; background: conic-gradient(from var(--a, 0deg), transparent 0 70%, #3b82f6, #3b82f6, transparent); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; animation: av-orbit 7s linear infinite; pointer-events: none; }
+.av-hero-shot::before { content: ''; position: absolute; inset: -1px; border-radius: inherit; padding: 1px; background: conic-gradient(from var(--a, 0deg), transparent 0 80%, #3b82f6, #3b82f6, transparent); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; animation: av-orbit 7s linear infinite; pointer-events: none; }
 @property --a { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
 @keyframes av-orbit { to { --a: 360deg; } }
 .av-hero-img { inset: 4% 4%; width: 92%; height: 92%; }
@@ -888,7 +888,7 @@ footer img[src*="av-logo-horizontal"] { filter: none !important; height: 52px; w
 
 /* ── steps: extra motion ── */
 /* a) rotating gradient ring around the active card */
-.av-step::before { content: ''; position: absolute; inset: -1px; border-radius: inherit; padding: 1.5px; pointer-events: none; opacity: 0; background: conic-gradient(from var(--a, 0deg), transparent 0 62%, #1d4ed8, #2563eb, #38bdf8, transparent); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); animation: avRing 9s linear var(--st) infinite; }
+.av-step::before { content: ''; position: absolute; inset: -1px; border-radius: inherit; padding: 1.5px; pointer-events: none; opacity: 0; background: conic-gradient(from var(--a, 0deg), transparent 0 80%, #1d4ed8, #2563eb, #38bdf8, transparent); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); animation: avRing 9s linear var(--st) infinite; }
 @keyframes avRing { 0%, 2% { opacity: 0; --a: 0deg; } 8% { opacity: 1; } 28% { opacity: 1; } 36%, 100% { opacity: 0; --a: 360deg; } }
 
 /* b) heading + subtitle rise in on scroll */
@@ -926,7 +926,7 @@ footer img[src*="av-logo-horizontal"] { filter: none !important; height: 52px; w
 .av-why-card { position: relative; isolation: isolate; }
 .av-why-card > * { position: relative; z-index: 1; }
 /* rotating gradient edge */
-.av-why-card::before { content: ''; position: absolute; inset: -1px; border-radius: inherit; padding: 1.5px; pointer-events: none; z-index: 0; background: conic-gradient(from var(--a, 0deg), transparent 0 55%, rgba(78,84,248,.9), rgba(56,189,248,.95), rgba(77,194,248,.9), transparent); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); animation: av-orbit 7s linear infinite; }
+.av-why-card::before { content: ''; position: absolute; inset: -1px; border-radius: inherit; padding: 1.5px; pointer-events: none; z-index: 0; background: conic-gradient(from var(--a, 0deg), transparent 0 80%, rgba(78,84,248,.9), rgba(56,189,248,.95), rgba(77,194,248,.9), transparent); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); animation: av-orbit 7s linear infinite; }
 /* cursor spotlight + breathing inner glow */
 .av-why-card::after { content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: 0; background: radial-gradient(460px circle at var(--mx, 50%) var(--my, 50%), rgba(56,189,248,.2), transparent 45%), radial-gradient(70% 55% at 50% 0%, rgba(56,189,248,.14), transparent 70%); opacity: .55; transition: opacity .4s; animation: avWhyBreathe 5s ease-in-out infinite; }
 .av-why-card:hover::after { opacity: 1; animation: none; }
@@ -1306,7 +1306,7 @@ html body .av-look-jewel .av-look-input-img img { mix-blend-mode: multiply; obje
 html body .blog-card, html body .pricing-table .card, html body .av-cc-card:not(.av-stk-card .av-cc-card), html body .av-art-author, html body .av-art-card { position: relative; }
 html body .blog-card::before, html body .pricing-table .card::before, html body .av-cc-card:not(.av-stk-card .av-cc-card)::before, html body .av-art-author::before {
   content: ''; position: absolute; inset: -1px; border-radius: inherit; padding: 1.5px; pointer-events: none; z-index: 2; display: block; width: auto; height: auto; top: -1px; right: -1px; left: -1px; bottom: -1px; transform: none; background-image: none;
-  background: conic-gradient(from var(--a, 0deg), transparent 0 62%, #1d4ed8, #2563eb, #38bdf8, transparent);
+  background: conic-gradient(from var(--a, 0deg), transparent 0 80%, #1d4ed8, #2563eb, #38bdf8, transparent);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
   animation: av-orbit 7s linear infinite; filter: drop-shadow(0 0 6px rgba(56,189,248,.7));
@@ -1331,13 +1331,13 @@ html body .about-catalogue-page-lft:not(.shopfy) { position: relative; border-ra
 html body .about-catalogue-page-lft:not(.shopfy) > img { display: block; width: 100%; border-radius: 22px; }
 html body .about-catalogue-page-lft:not(.shopfy)::before {
   content: ''; position: absolute; inset: -1px; border-radius: 22px; padding: 2px; pointer-events: none; z-index: 2;
-  background: conic-gradient(from var(--a, 0deg), transparent 0 55%, #1d4ed8, #2563eb, #38bdf8, transparent);
+  background: conic-gradient(from var(--a, 0deg), transparent 0 80%, #1d4ed8, #2563eb, #38bdf8, transparent);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
   animation: av-orbit 6s linear infinite; filter: drop-shadow(0 0 8px rgba(56,189,248,.8));
 }
 html body .about-catalogue-page-lft:not(.shopfy)::after { content: ''; position: absolute; inset: 0; border-radius: 22px; pointer-events: none; box-shadow: 0 0 60px -12px rgba(59,130,246,.55); animation: av-glow-in 4s ease-in-out infinite; }
-html body .about-catalogue-page-lft:not(.shopfy)::before { padding: 3px; inset: -2px; background: conic-gradient(from var(--a, 0deg), transparent 0 40%, #1d4ed8, #3b82f6, #7dd3fc, #fff, transparent); filter: drop-shadow(0 0 10px #38bdf8) drop-shadow(0 0 22px rgba(59,130,246,.9)); }
+html body .about-catalogue-page-lft:not(.shopfy)::before { padding: 3px; inset: -2px; background: conic-gradient(from var(--a, 0deg), transparent 0 80%, #1d4ed8, #3b82f6, #7dd3fc, #fff, transparent); filter: drop-shadow(0 0 10px #38bdf8) drop-shadow(0 0 22px rgba(59,130,246,.9)); }
 html body .about-catalogue-page-lft:not(.shopfy)::after { box-shadow: 0 0 40px 2px rgba(59,130,246,.55), 0 0 110px 10px rgba(56,189,248,.35); animation: av-glow-in2 3.5s ease-in-out infinite; }
 @keyframes av-glow-in2 { 0%,100% { opacity: .55; } 50% { opacity: 1; } }
 
@@ -1346,7 +1346,7 @@ html body .tryon-page .steps-list .step-card { position: relative; }
 html body .tryon-page .steps-list .step-card::before {
   content: '' !important; display: block !important; position: absolute !important; inset: -1px !important; width: auto !important; height: auto !important; top: -1px !important; right: -1px !important; bottom: -1px !important; left: -1px !important; transform: none !important;
   border: 0 !important; border-radius: 24px; padding: 2px; pointer-events: none; z-index: 3;
-  background: conic-gradient(from var(--a, 0deg), transparent 0 50%, #1d4ed8, #3b82f6, #7dd3fc, transparent) !important;
+  background: conic-gradient(from var(--a, 0deg), transparent 0 80%, #1d4ed8, #3b82f6, #7dd3fc, transparent) !important;
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
   animation: av-orbit 6s linear infinite; filter: drop-shadow(0 0 8px rgba(56,189,248,.8));
@@ -1359,7 +1359,7 @@ html body .about-generate-itm-img { position: relative; border-radius: 22px; }
 html body .about-generate-itm-img img { border-radius: 22px; display: block; }
 html body .about-generate-itm-img::before {
   content: ''; position: absolute; inset: -1px; border-radius: 22px; padding: 2px; pointer-events: none; z-index: 3;
-  background: conic-gradient(from var(--a, 0deg), transparent 0 50%, #1d4ed8, #3b82f6, #7dd3fc, transparent);
+  background: conic-gradient(from var(--a, 0deg), transparent 0 80%, #1d4ed8, #3b82f6, #7dd3fc, transparent);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
   animation: av-orbit 6s linear infinite; filter: drop-shadow(0 0 8px rgba(56,189,248,.8));
@@ -1374,7 +1374,7 @@ html body main.shopify-page .inner-step-sec .step-card::before,
 html body main.shopify-page .inner-step-sec .step-card:nth-child(n)::before {
   content: '' !important; display: block !important; position: absolute !important; inset: -1px !important; width: auto !important; height: auto !important; top: -1px !important; right: -1px !important; bottom: -1px !important; left: -1px !important; transform: none !important; background-size: auto !important;
   border: 0 !important; border-radius: 24px; padding: 2px; pointer-events: none; z-index: 3;
-  background: conic-gradient(from var(--a, 0deg), transparent 0 50%, #1d4ed8, #3b82f6, #7dd3fc, transparent) !important;
+  background: conic-gradient(from var(--a, 0deg), transparent 0 80%, #1d4ed8, #3b82f6, #7dd3fc, transparent) !important;
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
   animation: av-orbit 6s linear infinite; filter: drop-shadow(0 0 8px rgba(56,189,248,.8));
@@ -1391,7 +1391,7 @@ html body .hm-brand-choose-card, html body .hm-brand-choose-card p, html body .h
 html body .guide-category-card.inshop-item, html body .in-guide-category-card { position: relative; }
 html body .guide-category-card.inshop-item::before, html body .in-guide-category-card::before {
   content: ''; position: absolute; inset: 0; border-radius: 22px; padding: 2px; pointer-events: none; z-index: 5;
-  background: conic-gradient(from var(--a, 0deg), transparent 0 50%, #1d4ed8, #3b82f6, #7dd3fc, transparent);
+  background: conic-gradient(from var(--a, 0deg), transparent 0 80%, #1d4ed8, #3b82f6, #7dd3fc, transparent);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
   animation: av-orbit 6s linear infinite; filter: drop-shadow(0 0 8px rgba(56,189,248,.8));
@@ -1415,7 +1415,7 @@ html body a.av-link:hover { background-size: 100% 2.5px; }
 html body .av-stk-card .av-cc-card, html body .av-tryon-stack .av-stk-card .av-cc-card { position: relative; }
 html body .av-stk-card .av-cc-card::before, html body .av-tryon-stack .av-stk-card .av-cc-card::before {
   content: '' !important; display: block !important; position: absolute !important; inset: -1px !important; border-radius: 24px !important; padding: 2px !important; pointer-events: none; z-index: 6;
-  background: conic-gradient(from var(--a, 0deg), transparent 0 45%, #1d4ed8, #3b82f6, #7dd3fc, #fff, transparent) !important;
+  background: conic-gradient(from var(--a, 0deg), transparent 0 80%, #1d4ed8, #3b82f6, #7dd3fc, #fff, transparent) !important;
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
   animation: av-orbit 6s linear infinite; filter: drop-shadow(0 0 8px rgba(56,189,248,.85));
@@ -1425,7 +1425,7 @@ html body .av-stk-card .av-cc-card::before, html body .av-tryon-stack .av-stk-ca
 html body .av-split-img { position: relative; }
 html body .av-split-img::before {
   content: ''; position: absolute; inset: -1px; border-radius: 28px; padding: 3px; pointer-events: none; z-index: 3;
-  background: conic-gradient(from var(--a, 0deg), transparent 0 40%, #1d4ed8, #3b82f6, #7dd3fc, #fff, transparent);
+  background: conic-gradient(from var(--a, 0deg), transparent 0 80%, #1d4ed8, #3b82f6, #7dd3fc, #fff, transparent);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
   animation: av-orbit 6s linear infinite; filter: drop-shadow(0 0 10px #38bdf8) drop-shadow(0 0 20px rgba(59,130,246,.8));
@@ -1484,3 +1484,20 @@ html body .av-look-arrow img { width: 17px; }
 /* both hero arrows: dark circle with the sky-blue arrow (jewellery style) */
 html body .av-look-arrow { background: rgba(30,24,26,.92); border: 1px solid rgba(255,255,255,.2); box-shadow: 0 10px 34px -6px rgba(0,0,0,.8); }
 html body .av-look-arrow img { filter: brightness(0) saturate(100%) invert(63%) sepia(63%) saturate(1900%) hue-rotate(175deg) brightness(104%) contrast(97%); }
+/* glowing orbiting border on the banner pill (Shopify badge etc.) and the active showcase tab pill */
+html body .banner-sub-headding, html body .av-showcase-tabs button.is-on { position: relative; }
+html body .banner-sub-headding::after, html body .av-showcase-tabs button.is-on::after {
+  content: ''; position: absolute; inset: -1px; border-radius: inherit; padding: 1.5px; pointer-events: none; z-index: 2;
+  background: conic-gradient(from var(--a, 0deg), transparent 0 80%, #1d4ed8, #3b82f6, #7dd3fc, transparent);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  animation: av-orbit 5s linear infinite; filter: drop-shadow(0 0 6px rgba(56,189,248,.8));
+}
+/* banner pill: same look as the active tab pill (blue border, tinted fill, glow) */
+html body .hm-banner-sec-cnt .banner-sub-headding, html body .banner-sub-headding { border: 1px solid #3b82f6 !important; background: linear-gradient(135deg, rgba(56,189,248,.14), rgba(59,130,246,.2)), #0b0b12 !important; box-shadow: 0 0 28px -8px rgba(59,130,246,.8); }
+/* step cards clip overflow, so the orbit line was half cut off along some edges: draw it fully inside */
+html body main.shopify-page .inner-step-sec .step-card::before, html body main.shopify-page .inner-step-sec .step-card:nth-child(n)::before,
+html body .tryon-page .steps-list .step-card::before { inset: 0 !important; top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important; padding: 2px !important; z-index: 6 !important; }
+/* look stage: old image fades out first, then the next fades in (no two photos ghosting over each other) */
+html body .av-look-main > img { transition: opacity .22s ease, transform .8s cubic-bezier(.2,.8,.2,1); }
+html body .av-look-main > img.is-on { transition: opacity .5s ease .18s, transform .8s cubic-bezier(.2,.8,.2,1); }

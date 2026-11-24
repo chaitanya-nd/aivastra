@@ -183,15 +183,15 @@ export function HeroShow({ slides, feats, stages }: { slides: ReactNode[]; feats
 type Look = { src: string; pos?: string; zoom?: number; big?: Look }
 /** Input card → big on-model frame + clickable looks rail (flat lay and jewellery banners). */
 export function LookStage({ kind, inputLabel, inputIcon, inputImg, main, thumbs, pill, arrow }: { kind: 'flat' | 'jewel'; inputLabel: string; inputIcon: string; inputImg: string; main: Look; thumbs: Look[]; pill: string; arrow: string }) {
-  const [sel, setSel] = useState(-1) // -1 = hero shot, 0.. = rail look
+  const [sel, setSel] = useState(0) // rail look currently shown in the big frame
   const [paused, setPaused] = useState(false)
   const [picked, setPicked] = useState(false)
   useEffect(() => {
     if (paused || picked) return
-    const t = setInterval(() => setSel((n) => (n + 1 >= thumbs.length ? -1 : n + 1)), 3200)
+    const t = setInterval(() => setSel((n) => (n + 1) % thumbs.length), 3200)
     return () => clearInterval(t)
   }, [paused, picked, thumbs.length])
-  const looks = [main, ...thumbs.map((t) => t.big ?? t)]
+  const looks = thumbs.map((t) => t.big ?? t)
   return (
     <div className={`av-look av-look-${kind}`} onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
       <div className="av-look-glow" aria-hidden="true" />
@@ -201,7 +201,7 @@ export function LookStage({ kind, inputLabel, inputIcon, inputImg, main, thumbs,
       </div>
       <div className="av-look-main">
         {looks.map((l, n) => (
-          <img key={n} src={l.src} alt="" className={n === sel + 1 ? 'is-on' : ''} style={{ objectPosition: l.pos || 'center top', transform: n === sel + 1 && l.zoom ? `scale(${l.zoom})` : undefined }} />
+          <img key={n} src={l.src} alt="" className={n === sel ? 'is-on' : ''} style={{ objectPosition: l.pos || 'center top', transform: n === sel && l.zoom ? `scale(${l.zoom})` : undefined }} />
         ))}
         <div className="av-look-pill"><i aria-hidden="true">✓</i>{pill}</div>
       </div>
