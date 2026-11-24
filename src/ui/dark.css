@@ -1473,3 +1473,14 @@ html body .tab-content.accessories .gallery-item > img { width: 100%; height: au
 html body .tab-content.accessories .gallery-item:nth-child(7n+1) > img { aspect-ratio: 16 / 9; }
 html body .tab-content.accessories .gallery-item:nth-child(7n+4) > img { aspect-ratio: 15 / 14; }
 html body .tab-content.accessories .gallery-item:nth-child(7n+6) > img { aspect-ratio: 4 / 3; }
+/* custom cursor: plain white (no difference blend, which turned blue bars orange) */
+html body .av-cursor { background: #fff; mix-blend-mode: normal; }
+html body .av-cursor.is-hot { background: rgba(255,255,255,.16); border: 1.5px solid rgba(255,255,255,.7); mix-blend-mode: normal; }
+/* hero flat-lay steps: one consistent sky-blue for every icon and arrow (t-shirt was white) */
+html body .av-feats img[src*="/hero/flat/icon-"], html body .av-feats img[src*="/hero/flat/arrow"] { filter: brightness(0) saturate(100%) invert(63%) sepia(63%) saturate(1900%) hue-rotate(175deg) brightness(104%) contrast(97%) drop-shadow(0 0 10px rgba(56,189,248,.45)) !important; }
+/* hero look stage: smaller arrow button sitting on the card edge, not over the input image */
+html body .av-look-arrow { left: calc(31% + 4px); width: 38px; height: 38px; margin: -19px 0 0 -19px; }
+html body .av-look-arrow img { width: 17px; }
+/* both hero arrows: dark circle with the sky-blue arrow (jewellery style) */
+html body .av-look-arrow { background: rgba(30,24,26,.92); border: 1px solid rgba(255,255,255,.2); box-shadow: 0 10px 34px -6px rgba(0,0,0,.8); }
+html body .av-look-arrow img { filter: brightness(0) saturate(100%) invert(63%) sepia(63%) saturate(1900%) hue-rotate(175deg) brightness(104%) contrast(97%); }
