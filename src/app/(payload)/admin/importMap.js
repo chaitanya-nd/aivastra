@@ -28,6 +28,7 @@ import { StrikethroughFeatureClient as StrikethroughFeatureClient_e70f5e05f09f93
 import { UnderlineFeatureClient as UnderlineFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { BoldFeatureClient as BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { ItalicFeatureClient as ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
+import { PageCodeEditor as PageCodeEditor_25ca9683b2201187fe0b8e235245855f } from '../../../components/admin/wp/PageCodeEditor'
 import { PageCode as PageCode_a351ccf852d2e227ca7d3dad4f5e34fa } from '../../../components/admin/wp/PageCode'
 import { Hidden as Hidden_b164d85ee18f588640b9f1d137e8da05 } from '../../../components/admin/wp/Hidden'
 import { LinksCell as LinksCell_7f39c14670c29e436ddf3e384a810e23 } from '../../../components/admin/wp/LinksCell'
@@ -69,6 +70,8 @@ import { EditorialCalendar as EditorialCalendar_a66c431753428837125119aa6ec06bed
 import { Analytics as Analytics_1f6a64c0ab3f4f1e5c9fb34fe2be6495 } from '../../../components/admin/Analytics'
 import { SearchVisibility as SearchVisibility_ebe13c4957c09330f2897192f0f98411 } from '../../../components/admin/SearchVisibility'
 import { SiteHealth as SiteHealth_0967ce80fb00ab7735b91dc6decd1be6 } from '../../../components/admin/SiteHealth'
+import { SitemapSettings as SitemapSettings_8c35350d42302378ce167de8120181b2 } from '../../../components/admin/SitemapSettings'
+import { SitemapView as SitemapView_67d2fd1e25b2abb6241192177a032b22 } from '../../../components/admin/SitemapView'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
 /** @type import('payload').ImportMap */
@@ -103,6 +106,7 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#UnderlineFeatureClient": UnderlineFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#BoldFeatureClient": BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#ItalicFeatureClient": ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "/components/admin/wp/PageCodeEditor#PageCodeEditor": PageCodeEditor_25ca9683b2201187fe0b8e235245855f,
   "/components/admin/wp/PageCode#PageCode": PageCode_a351ccf852d2e227ca7d3dad4f5e34fa,
   "/components/admin/wp/Hidden#Hidden": Hidden_b164d85ee18f588640b9f1d137e8da05,
   "/components/admin/wp/LinksCell#LinksCell": LinksCell_7f39c14670c29e436ddf3e384a810e23,
@@ -144,5 +148,7 @@ export const importMap = {
   "/components/admin/Analytics#Analytics": Analytics_1f6a64c0ab3f4f1e5c9fb34fe2be6495,
   "/components/admin/SearchVisibility#SearchVisibility": SearchVisibility_ebe13c4957c09330f2897192f0f98411,
   "/components/admin/SiteHealth#SiteHealth": SiteHealth_0967ce80fb00ab7735b91dc6decd1be6,
+  "/components/admin/SitemapSettings#SitemapSettings": SitemapSettings_8c35350d42302378ce167de8120181b2,
+  "/components/admin/SitemapView#SitemapView": SitemapView_67d2fd1e25b2abb6241192177a032b22,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }

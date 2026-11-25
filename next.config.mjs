@@ -12,11 +12,14 @@ const nextConfig = {
   // WordPress URLs end with `/`. We keep that for public pages in src/proxy.ts (not here,
   // because Next's global trailingSlash would also rewrite Payload's /api and /admin routes).
   skipTrailingSlashRedirect: true,
+  // As on the WordPress site (Rank Math): /sitemap.xml permanently redirects to the sitemap index.
+  async redirects() {
+    return [{ source: '/sitemap.xml', destination: '/sitemap_index.xml', statusCode: 301 }]
+  },
   // Rank Math sitemap URLs (served by src/app/(frontend)/api/av/sitemap/route.ts)
   async rewrites() {
     return [
       { source: '/sitemap_index.xml', destination: '/api/av/sitemap?file=index' },
-      { source: '/sitemap.xml', destination: '/api/av/sitemap?file=index' },
       { source: '/:key([a-z_]+)-sitemap:n([0-9]*).xml', destination: '/api/av/sitemap?key=:key&n=:n' },
     ]
   },

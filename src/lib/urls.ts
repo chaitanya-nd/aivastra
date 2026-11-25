@@ -39,13 +39,23 @@ const SECTION_BASE: Record<string, string> = {
   update: '/update-category',
 }
 
+/**
+ * URL of a page's last nested-docs breadcrumb. In the admin, form data can hold `breadcrumbs` as a
+ * row count or object instead of an array, so never assume `.at` exists.
+ */
+export function lastCrumbUrl(doc: { breadcrumbs?: unknown } | null | undefined): string | undefined {
+  const b = doc?.breadcrumbs
+  if (!Array.isArray(b) || b.length === 0) return undefined
+  const url = (b[b.length - 1] as { url?: unknown } | null)?.url
+  return typeof url === 'string' && url ? url : undefined
+}
+
 export function getPath(collection: string, doc: Doc | null | undefined): string {
   if (!doc?.slug) return '/'
   switch (collection) {
     case 'pages': {
       if (doc.slug === 'home') return '/'
-      const crumb = doc.breadcrumbs?.at(-1)?.url
-      return crumb || `/${doc.slug}`
+      return lastCrumbUrl(doc) || `/${doc.slug}`
     }
     case 'posts':
       return `/${doc.slug}`
