@@ -75,7 +75,7 @@ html, body { background: #000000 !important; }
 
 /* ── brands: quiet greyscale logo wall */
 .av-brands { background: transparent !important; border-block: 1px solid rgba(255,255,255,.07); padding: 54px 0 60px !important; }
-.av-marquee-g img { filter: grayscale(1) invert(1) brightness(1.6); mix-blend-mode: screen; opacity: .55; height: 54px; } .av-marquee-g img:hover { opacity: 1; filter: none; mix-blend-mode: normal; }
+.av-marquee-g img { filter: grayscale(1) invert(1) brightness(1.6); mix-blend-mode: screen; opacity: .55; height: 54px; } .av-marquee-g img:hover { opacity: 1; filter: grayscale(1) invert(1) brightness(2.2); mix-blend-mode: screen; transform: none; }
 
 /* ── bands share the same black; separate with glow + hairlines */
 .av-ink { background: #000000 !important; border-radius: 0 !important; }
@@ -176,7 +176,7 @@ html, body { background: #000000 !important; }
 .av-cta h2, .av-cta p { --c: #fff; }
 .av-cta p { --c: rgba(255,255,255,.72); }
 .av-cta-form { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.14); box-shadow: 0 50px 120px -40px rgba(59,130,246,.55); backdrop-filter: blur(16px); }
-.av-cta-form .av-eyebrow { --c: rgba(255,255,255,.8); }
+.av-cta-form .av-eyebrow { --c: #fff; border-color: rgba(56,189,248,.55); background: linear-gradient(110deg, rgba(59,130,246,.28), rgba(56,189,248,.16)); box-shadow: 0 0 28px -6px rgba(59,130,246,.65), inset 0 0 18px rgba(59,130,246,.14); }
 
 /* ── forms + modal */
 .av-cta-form :is(input,textarea,select), .av-modal :is(input,textarea,select) { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.14); color: #fff; border-radius: 14px; }
@@ -704,6 +704,7 @@ button.tab-btn.active:not(.vastra-tabs *) { background: #0b0b12 !important; colo
 .av-ftr-dot { display: none; }
 .av-ftr-sp { display: inline-block; width: .28em; }
 .av-ftr-mark { font-size: clamp(54px, 14.2vw, 220px) !important; white-space: nowrap; overflow: visible; }
+@media (max-width: 640px) { .av-ftr-mark { white-space: normal !important; overflow: hidden !important; font-size: clamp(48px, 17vw, 120px) !important; } }
 
 /* showcase: person on the left, garment types scrolling on the right */
 .av-showcase-in > div { aspect-ratio: 3 / 4; background: #2a2a2e; }

@@ -1,12 +1,14 @@
     // Function to open the floating menu
 const floatingMenu = () => {
-    document.getElementById('floatingMenu').classList.add('openMenu');
+    var fm = document.getElementById('floatingMenu');
+    if (fm) fm.classList.add('openMenu');
 };
 document.addEventListener('DOMContentLoaded', function () {
     const closeButtons = document.querySelectorAll('#cloaseFloatingMenu, #cloaseFloatingMenu2');
     closeButtons.forEach(button => {
         button.addEventListener('click', () => {
-            document.getElementById('floatingMenu').classList.remove('openMenu');
+            var fm = document.getElementById('floatingMenu');
+            if (fm) fm.classList.remove('openMenu');
         });
     });
     const menuTriggers = document.querySelectorAll('.stickyshowhide, .showhide');
@@ -72,7 +74,7 @@ function shouldApplySticky() {
     return window.innerWidth > 991;
 }
 window.addEventListener("scroll", () => {
-    if (!shouldApplySticky()) return;
+    if (!shouldApplySticky() || !header) return;
 
     const currentScroll = window.pageYOffset;
 
@@ -93,6 +95,7 @@ window.addEventListener("scroll", () => {
     lastScroll = currentScroll;
 });
 window.addEventListener("resize", () => {
+    if (!header) return;
     if (!shouldApplySticky()) {
         header.classList.remove(toggleClass, fadingOutClass);
     }
@@ -123,6 +126,7 @@ document.addEventListener("DOMContentLoaded", function() {
   widgets.forEach(widget => {
     const name = widget.querySelector(".widget-names");
     const description = widget.querySelector(".widget-description");
+    if (!name || !description) return;
 
     name.addEventListener("click", function() {
       name.classList.toggle("nameactive");
@@ -210,7 +214,7 @@ jQuery(document).ready(function ($) {
     });
     const headers = document.querySelectorAll('.accordion-profile');
     const contents = document.querySelectorAll('.accordion-profile-content');
-    if (headers.length) {
+    if (headers.length && contents.length) {
         headers[0].classList.add('active');
         contents[0].style.maxHeight = contents[0].scrollHeight + 'px';
         headers.forEach(header => {

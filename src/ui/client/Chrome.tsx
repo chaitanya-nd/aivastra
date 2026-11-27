@@ -58,6 +58,7 @@ export function HeaderBar({ logo, items, signText, signHref, catalogueText }: { 
             </div>
           ))}
         </nav>
+        {catalogueText && <a data-demo className="av-mnav-demo" onClick={() => setOpen(false)}>{catalogueText}</a>}
         {signText && <a href={signHref || '#'} target="_blank" rel="noopener" className="av-btn">{signText}</a>}
       </div>
     </>

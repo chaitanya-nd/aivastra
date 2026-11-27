@@ -31,7 +31,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   const s = await getSettings()
   const ps: any = await getPluginSettings()
   return (
-    <html lang={(s as any).siteLanguage || 'en'}>
+    <html lang={(s as any).siteLanguage || 'en'} suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

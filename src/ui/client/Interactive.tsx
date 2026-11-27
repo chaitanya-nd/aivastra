@@ -242,13 +242,26 @@ export function CategoryShowcase({ tabs, aside, footer }: { tabs: CatTab[]; asid
     const el = strip.current; if (!el || moved.current > 6 || anim.current) return
     const w = (el.firstElementChild!.firstElementChild as HTMLElement).offsetWidth
     const from = el.scrollLeft, to = k * (w + 14) + w / 2 - el.clientWidth / 2, t0 = performance.now()
-    anim.current = true; hold.current = false; setWorn(k)
+    anim.current = true; hold.current = false; setWorn(k); setDot(((k % cur.images.length) + cur.images.length) % cur.images.length)
     const run = (now: number) => {
       const p = Math.min(1, (now - t0) / 600), e = 1 - Math.pow(1 - p, 3)
       el.scrollLeft = from + (to - from) * e
       if (p < 1) requestAnimationFrame(run); else anim.current = false
     }
     requestAnimationFrame(run)
+  }
+  const pickDot = (k: number) => { // click a bubble below: glide the nearest copy of that garment to the centre, which applies it
+    const el = strip.current; if (!el || anim.current) return
+    const N = cur.images.length
+    const s = step()
+    const centreIdx = (el.scrollLeft + el.clientWidth / 2) / s
+    let best = k, bestDist = Infinity
+    for (const c of [k, k + N]) {
+      const d = Math.abs(c + 0.5 - centreIdx)
+      if (d < bestDist) { bestDist = d; best = c }
+    }
+    moved.current = 0
+    pick(best)
   }
   const step = () => { const f = strip.current?.firstElementChild?.firstElementChild as HTMLElement | null; return f ? f.offsetWidth + 14 : 1 }
   useEffect(() => {
@@ -346,11 +359,13 @@ export function CategoryShowcase({ tabs, aside, footer }: { tabs: CatTab[]; asid
   const onScroll = () => {
     const el = strip.current
     if (!el) return
-    const k = Math.round((el.scrollLeft % (el.scrollWidth / 2)) / step()) % cur.images.length
-    if (k !== dot) setDot(k)
-    // garment crossing the strip's centre gets "applied" to the person
+    // garment crossing the strip's centre gets "applied" to the person — the bubble below tracks it
     const c = Math.floor((el.scrollLeft + el.clientWidth / 2) / step())
-    if (c !== worn && !anim.current) setWorn(c)
+    if (c !== worn && !anim.current) {
+      setWorn(c)
+      const d = ((c % cur.images.length) + cur.images.length) % cur.images.length
+      if (d !== dot) setDot(d)
+    }
   }
   return (
     <div className="av-showcase">
@@ -387,7 +402,7 @@ export function CategoryShowcase({ tabs, aside, footer }: { tabs: CatTab[]; asid
           </div>
         </div>
         <div className="av-showcase-dots">
-          {cur.images.map((_, k) => <button key={k} className={k === dot ? 'is-on' : ''} aria-label={`Image ${k + 1}`} onClick={() => strip.current?.scrollTo({ left: k * step(), behavior: 'smooth' })} />)}
+          {cur.images.map((_, k) => <button key={k} className={k === dot ? 'is-on' : ''} aria-label={`Image ${k + 1}`} onClick={() => pickDot(k)} />)}
         </div>
       </div>
       {footer && <div className="av-showcase-foot">{footer}</div>}
@@ -442,6 +457,8 @@ export function ScrollTicker({ cols }: { cols: string[][] }) {
 export function CardStack({ intro, cards }: { intro: ReactNode; cards: ReactNode[] }) {
   const wrap = useRef<HTMLDivElement>(null)
   const n = cards.length
+  const [prog, setProg] = useState(0)
+  const progRef = useRef(0)
   useEffect(() => {
     const w = wrap.current
     if (!w) return
@@ -454,7 +471,8 @@ export function CardStack({ intro, cards }: { intro: ReactNode; cards: ReactNode
       if (!mq.matches) { items.forEach((c) => { c.style.transform = ''; c.style.opacity = ''; c.style.filter = ''; c.classList.remove('is-front') }); return }
       const r = w.getBoundingClientRect()
       const p = clamp(-r.top / Math.max(1, r.height - window.innerHeight))
-      const a = p * (n - 1 + 0.7) - 0.7 // active float: card i is front when a === i
+      if (Math.abs(p - progRef.current) > 0.002) { progRef.current = p; setProg(p) }
+      const a = p * (n - 1) // active float: card i is front when a === i (first card fully visible on entry)
       w.style.setProperty('--hp', String(p))
       items.forEach((c, i) => {
         const t = a - i
@@ -482,7 +500,17 @@ export function CardStack({ intro, cards }: { intro: ReactNode; cards: ReactNode
   return (
     <div className="av-stk" ref={wrap} style={{ ['--n' as string]: n }}>
       <div className="av-stk-stick">
-        <div className="av-stk-intro">{intro}</div>
+        <div className="av-stk-intro">
+          {intro}
+          <div className={`av-stk-cue${prog > 0.06 ? ' is-hide' : ''}`} aria-hidden="true">
+            <span className="av-stk-cue-txt">Scroll to explore</span>
+            <span className="av-stk-cue-arr"><i /></span>
+          </div>
+          <div className="av-stk-count" aria-hidden="true">
+            <span className="av-stk-count-bar"><i style={{ transform: `scaleX(${prog})` }} /></span>
+            <span className="av-stk-count-n">{String(Math.min(n, Math.floor(prog * n) + 1)).padStart(2, '0')} / {String(n).padStart(2, '0')}</span>
+          </div>
+        </div>
         <div className="av-stk-stage">
           {cards.map((c, i) => <div className="av-stk-card" key={i}>{c}</div>)}
         </div>

@@ -58,7 +58,11 @@ export async function AvFooter() {
                     </a>
                   ) : null,
                 )}
-                {g.google_link && g.google_image && <a href={g.google_link} target="_blank" rel="noopener noreferrer" className="av-ftr-g"><img src={g.google_image} alt="Google" /></a>}
+                {g.google_link && g.google_image && (
+                  <a href={g.google_link} target="_blank" rel="noopener noreferrer" className="av-ftr-g" aria-label="Google Play" data-magnetic>
+                    <img src={g.google_image} alt="Get it on Google Play" />
+                  </a>
+                )}
               </div>
             </div>
             {cols.map((c: any) => (
