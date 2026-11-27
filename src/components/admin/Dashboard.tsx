@@ -2,6 +2,8 @@ import type { ServerProps } from 'payload'
 import Link from 'next/link'
 import { crawlersBlocked } from '@/lib/env'
 import { QuickDraft } from './QuickDraft'
+import { entries as sitemapEntries, SOURCES as SITEMAP_SOURCES } from '@/lib/sitemap'
+import { SITE_URL } from '@/lib/urls'
 
 const IC: Record<string, string> = {
   posts: 'M4 5h16M4 10h16M4 15h10M4 20h7',
@@ -19,6 +21,7 @@ const IC: Record<string, string> = {
   arrow: 'M7 17 17 7M8 7h9v9',
   globe: 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3z',
   edit: 'M4 20h4L19 9l-4-4L4 16zM13 7l4 4',
+  sitemap: 'M9 3h6v5H9zM3 16h6v5H3zM15 16h6v5h-6zM12 8v4M6 16v-2h12v2',
 }
 const Ico = ({ n }: { n: string }) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={IC[n]} /></svg>
 const fmt = (d?: string) => (d ? new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '')
@@ -44,6 +47,19 @@ export async function Dashboard({ payload, user }: ServerProps) {
     payload.find({ collection: 'posts', where: { _status: { equals: 'draft' } }, sort: '-updatedAt', limit: 5, depth: 0, select: { title: true, updatedAt: true } }),
     payload.findGlobal({ slug: 'site-settings', depth: 0 }),
   ])
+  // ── sitemap (same sources / rules as the public /sitemap_index.xml)
+  const ps: any = await payload.findGlobal({ slug: 'plugin-settings' as any, depth: 0 })
+  const smOn = ps?.sitemapEnabled !== false
+  const smMax = Math.max(1, Number(ps?.sitemapMaxLinks) || 200)
+  const smRows = smOn
+    ? await Promise.all(SITEMAP_SOURCES.map(async (src) => {
+        const e = await sitemapEntries(src, settings, ps)
+        const files = Math.ceil(e.length / smMax)
+        const last = e.map((x) => x.lastmod).filter(Boolean).sort().at(-1)
+        return { key: src.key, coll: src.coll, urls: e.length, files, last }
+      }))
+    : []
+  const smTotal = smRows.reduce((a, r) => a + r.urls, 0)
   const env = process.env.SITE_ENV || 'local'
   const role = (user as any)?.role
   const glance: [number, string, string][] = [
@@ -110,6 +126,34 @@ export async function Dashboard({ payload, user }: ServerProps) {
               ))}
               {drafts.docs.length === 0 && <li className="dx-empty">No drafts — you’re all caught up.</li>}
             </ul>
+          </section>
+          <section className="dx-card dx-sitemap">
+            <header><h2>Sitemap</h2><a href="/sitemap_index.xml" target="_blank" rel="noopener">Open sitemap ↗</a></header>
+            <div className="dx-sm-status">
+              <span className={`dx-dot ${smOn && visible ? 'ok' : 'warn'}`} />
+              {!smOn ? 'Sitemap is turned off.' : !visible ? 'Sitemap is open in the browser; search engines are blocked for now.' : 'Sitemap is live.'}
+              <span className="dx-sm-meta">{smTotal} URLs · {smRows.reduce((a, r) => a + r.files, 0)} files · max {smMax} links per file</span>
+            </div>
+            {smOn && (
+              <table className="dx-sm-t">
+                <thead><tr><th>Sitemap</th><th>URLs</th><th>Last modified</th></tr></thead>
+                <tbody>
+                  {smRows.filter((r) => r.urls > 0).flatMap((r) => Array.from({ length: r.files }, (_, i) => {
+                    const file = `${r.key}-sitemap${i > 0 ? i + 1 : ''}.xml`
+                    const n = Math.min(smMax, r.urls - i * smMax)
+                    return (
+                      <tr key={file}>
+                        <td><a href={`/${file}`} target="_blank" rel="noopener">{file}</a></td>
+                        <td>{n}</td>
+                        <td>{i === 0 ? fmt(r.last) : ''}</td>
+                      </tr>
+                    )
+                  }))}
+                  {smRows.every((r) => r.urls === 0) && <tr><td colSpan={3} className="dx-empty">No URLs in the sitemap yet.</td></tr>}
+                </tbody>
+              </table>
+            )}
+            <footer><span className="dx-sm-url">{SITE_URL}/sitemap_index.xml</span><Link href="/admin/sitemap-settings">Sitemap settings →</Link></footer>
           </section>
         </div>
 

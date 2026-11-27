@@ -351,6 +351,8 @@ export const PluginSettings: GlobalConfig = {
           { name: 'sitemapImages', type: 'checkbox', label: 'Include images', defaultValue: true },
           { name: 'sitemapExcludePosts', type: 'text', label: 'Exclude posts / pages (slugs, comma separated)' },
           { name: 'sitemapExcludeTerms', type: 'text', label: 'Exclude terms (slugs, comma separated)' },
+          { name: 'sitemapAuthors', type: 'checkbox', label: 'Include author sitemap (author-sitemap.xml)', defaultValue: false, admin: { description: 'Rank Math “Author Sitemap”. Off on the WordPress site.' } },
+          { name: 'sitemapSectionTerms', type: 'checkbox', label: 'Include guide / case / update categories (section_category-sitemap.xml)', defaultValue: false, admin: { description: 'Off on the WordPress site.' } },
         ] },
         { label: 'Breadcrumbs (NavXT)', fields: [
           { name: 'bcSeparator', type: 'select', label: 'Breadcrumb separator', defaultValue: 'arrow', options: [{ label: 'Theme arrow (default)', value: 'arrow' }, { label: '/', value: '/' }, { label: '>', value: '>' }, { label: '»', value: '»' }, { label: '|', value: '|' }, { label: '·', value: '·' }] },

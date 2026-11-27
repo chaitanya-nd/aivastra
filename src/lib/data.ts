@@ -1,3 +1,4 @@
+import { lastCrumbUrl } from './urls'
 import config from '@payload-config'
 import { unstable_cache } from 'next/cache'
 import { draftMode } from 'next/headers'
@@ -115,7 +116,7 @@ export async function resolvePath(segments: string[]) {
   } as any)
   // The page's OWN url is its last breadcrumb (earlier crumbs are ancestors).
   const page = (candidates.docs as any[]).find((p) => {
-    const own: string = p.breadcrumbs?.at(-1)?.url || `/${p.slug}`
+    const own: string = lastCrumbUrl(p) || `/${p.slug}`
     return safeDecode(own) === full
   })
   if (page && page.slug !== 'home') return { collection: 'pages' as const, doc: page }

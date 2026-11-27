@@ -97,6 +97,8 @@ export default buildConfig({
         analytics: { Component: '/components/admin/Analytics#Analytics', path: '/analytics' },
         searchVisibility: { Component: '/components/admin/SearchVisibility#SearchVisibility', path: '/search-visibility' },
         siteHealth: { Component: '/components/admin/SiteHealth#SiteHealth', path: '/site-health' },
+        sitemapSettings: { Component: '/components/admin/SitemapSettings#SitemapSettings', path: '/sitemap-settings' },
+        sitemapView: { Component: '/components/admin/SitemapView#SitemapView', path: '/sitemap-view' },
       },
       Nav: '/components/admin/WpNav#WpNav',
       graphics: { Logo: '/components/admin/Brand#Logo', Icon: '/components/admin/Brand#Icon' },

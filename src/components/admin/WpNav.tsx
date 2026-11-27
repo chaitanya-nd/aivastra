@@ -15,42 +15,42 @@ export async function WpNav({ user, payload }: ServerProps) {
   const has = (c: Parameters<typeof caps.has>[0]) => caps.has(c)
   const pendingReview = await payload.count({ collection: 'posts', where: { and: [{ reviewStatus: { equals: 'pending' } }, { _status: { equals: 'draft' } }] }, overrideAccess: true }).then((r) => r.totalDocs).catch(() => 0)
   const items: MenuItem[] = [
-    { label: 'Dashboard', icon: 'dashboard', href: '/admin', exact: true },
+    { label: 'Overview', icon: 'dashboard', href: '/admin', exact: true },
     { type: 'sep', label: 'Content' },
-    { label: 'Posts', icon: 'post', href: C('posts'), badge: has('publish_posts') ? pendingReview : 0, sub: [
-      { label: 'All Posts', href: C('posts'), exact: true }, { label: 'Add New', href: `${C('posts')}/create` },
-      ...(pendingReview && has('publish_posts') ? [{ label: `Pending review (${pendingReview})`, href: `${C('posts')}?where[reviewStatus][equals]=pending&where[_status][equals]=draft`, noActive: true }] : []),
+    { label: 'Blog', icon: 'post', href: C('posts'), badge: has('publish_posts') ? pendingReview : 0, sub: [
+      { label: 'All articles', href: C('posts'), exact: true }, { label: 'Write new article', href: `${C('posts')}/create` },
+      ...(pendingReview && has('publish_posts') ? [{ label: `Waiting for review (${pendingReview})`, href: `${C('posts')}?where[reviewStatus][equals]=pending&where[_status][equals]=draft`, noActive: true }] : []),
       ...(has('manage_categories') ? [{ label: 'Categories', href: C('categories') }, { label: 'Tags', href: C('tags') }] : []),
-      { label: 'Calendar', href: '/admin/calendar' }, { label: 'Patterns', href: C('patterns') } ] },
-    ...(has('upload_files') ? [{ label: 'Media', icon: 'media', href: C('media'), sub: [{ label: 'Library', href: C('media'), exact: true }, { label: 'Add New', href: `${C('media')}/create` }, { label: 'Unused media', href: '/admin/media-usage' }] } as MenuItem] : []),
-    { label: 'Pages', icon: 'page', href: C('pages'), sub: [{ label: 'All Pages', href: C('pages'), exact: true }, { label: 'Add New', href: `${C('pages')}/create` }] },
-    { label: 'Guides', icon: 'article', href: C('guides'), sub: [{ label: 'All Guides', href: C('guides'), exact: true }, { label: 'Add New', href: `${C('guides')}/create` }, { label: 'Section categories', href: C('section-categories') }] },
-    { label: 'Case Studies', icon: 'star', href: C('cases'), sub: [{ label: 'All Case Studies', href: C('cases'), exact: true }, { label: 'Add New', href: `${C('cases')}/create` }] },
-    { label: 'Product Updates', icon: 'update', href: C('updates'), sub: [{ label: 'All Updates', href: C('updates'), exact: true }, { label: 'Add New', href: `${C('updates')}/create` }] },
-    { label: 'Reviews', icon: 'star', href: C('reviews'), sub: [{ label: 'All Reviews', href: C('reviews'), exact: true }, { label: 'Add New', href: `${C('reviews')}/create` }] },
-    ...(has('moderate_comments') ? [{ label: 'Comments', icon: 'comment', href: C('comments'), badge: pending, sub: [{ label: 'All Comments', href: C('comments'), exact: true }, { label: `Pending${pending ? ` (${pending})` : ''}`, href: `${C('comments')}?where[status][equals]=pending`, noActive: true }] } as MenuItem] : []),
-    ...(has('manage_forms') ? [{ label: 'Contact', icon: 'form', href: C('forms'), sub: [{ label: 'Contact Forms', href: C('forms'), exact: true }, { label: 'Add New', href: `${C('forms')}/create` }, { label: 'Messages (submissions)', href: C('form-submissions') }] } as MenuItem] : []),
-    { type: 'sep', label: 'Growth & tools' },
-    ...(canSEO ? [{ label: 'Rank Math SEO', icon: 'seo', href: '/admin/seo-audit', sub: [
-      { label: 'Dashboard (SEO audit)', href: '/admin/seo-audit' },
-      { label: 'Analytics & rank tracker', href: '/admin/analytics' },
+      { label: 'Content calendar', href: '/admin/calendar' }, { label: 'Reusable blocks', href: C('patterns') } ] },
+    ...(has('upload_files') ? [{ label: 'Media library', icon: 'media', href: C('media'), sub: [{ label: 'All files', href: C('media'), exact: true }, { label: 'Upload files', href: `${C('media')}/create` }, { label: 'Unused files', href: '/admin/media-usage' }] } as MenuItem] : []),
+    { label: 'Website pages', icon: 'page', href: C('pages'), sub: [{ label: 'All pages', href: C('pages'), exact: true }, { label: 'Create page', href: `${C('pages')}/create` }] },
+    // Guides, case studies, product updates and reviews: the /documentations/, /case-studies/ and /review/ sections of the site, grouped in one menu.
+    { label: 'Resources', icon: 'article', href: C('guides'), sub: [
+      { label: 'Help guides', href: C('guides') }, { label: 'Case studies', href: C('cases') }, { label: 'Product updates', href: C('updates') },
+      { label: 'Customer reviews', href: C('reviews') }, { label: 'Resource categories', href: C('section-categories') } ] },
+    ...(has('moderate_comments') ? [{ label: 'Comments', icon: 'comment', href: C('comments'), badge: pending, sub: [{ label: 'All comments', href: C('comments'), exact: true }, { label: `Awaiting approval${pending ? ` (${pending})` : ''}`, href: `${C('comments')}?where[status][equals]=pending`, noActive: true }] } as MenuItem] : []),
+    ...(has('manage_forms') ? [{ label: 'Forms & leads', icon: 'form', href: C('forms'), sub: [{ label: 'All forms', href: C('forms'), exact: true }, { label: 'Create form', href: `${C('forms')}/create` }, { label: 'Leads (form entries)', href: C('form-submissions') }] } as MenuItem] : []),
+    { type: 'sep', label: 'Grow' },
+    ...(canSEO ? [{ label: 'SEO', icon: 'seo', href: '/admin/seo-audit', sub: [
+      { label: 'SEO audit', href: '/admin/seo-audit' },
+      { label: 'Traffic & rankings', href: '/admin/analytics' },
       { label: 'Bulk SEO editor', href: '/admin/seo-bulk' },
-      { label: 'Link reports (orphans, broken)', href: '/admin/link-report' },
-      { label: 'Auto links', href: C('auto-links') },
+      { label: 'Link health', href: '/admin/link-report' },
+      { label: 'Automatic internal links', href: C('auto-links') },
       { label: 'Search visibility', href: '/admin/search-visibility' },
-      { label: 'Titles & Meta', href: G('site-settings'), noActive: true },
-      { label: 'Redirections', href: C('redirects') },
-      { label: '404 Monitor', href: C('not-found-log') },
-      { label: 'Sitemap settings', href: `${G('plugin-settings')}`, noActive: true },
-      { label: 'Sitemap', href: '/sitemap_index.xml', external: true },
+      { label: 'Titles & meta tags', href: G('site-settings'), noActive: true },
+      { label: 'Redirects', href: C('redirects') },
+      { label: 'Broken URLs (404)', href: C('not-found-log') },
+      { label: 'Sitemap', href: '/admin/sitemap-settings' },
+      { label: 'Open sitemap.xml', href: '/sitemap_index.xml', external: true },
       { label: 'robots.txt', href: '/robots.txt', external: true },
       { label: 'llms.txt', href: '/llms.txt', external: true } ] } as MenuItem] : []),
-    ...(isAdmin ? [{ label: 'Tools', icon: 'tools', href: '/admin/backups', sub: [{ label: 'Backups (UpdraftPlus)', href: '/admin/backups' }, { label: 'Export & Import', href: '/admin/export-import' }, { label: 'Site Health', href: '/admin/site-health' }, { label: 'Activity log', href: C('activity-log') }, { label: 'Privacy (export / erase data)', href: '/admin/privacy' }, { label: 'Cache (LiteSpeed)', href: '/admin/cache' }, { label: 'File manager (Media)', href: C('media') }] } as MenuItem] : []),
-    { type: 'sep', label: 'Workspace' },
-    ...(has('edit_theme_options') ? [{ label: 'Appearance', icon: 'brush', href: G('navigation'), sub: [{ label: 'Menus', href: G('navigation') }, { label: 'Widgets', href: '/admin/widgets' }, { label: 'Theme options (Global content)', href: G('global-content') }] } as MenuItem] : []),
-    { label: 'Users', icon: 'users', href: C('users'), sub: [{ label: 'All Users', href: C('users'), exact: true }, ...(isAdmin ? [{ label: 'Add New', href: `${C('users')}/create` }, { label: 'Role Manager', href: '/admin/roles' }] : []), { label: 'Two-factor login', href: '/admin/two-factor' }, { label: 'Your Profile', href: user ? `${C('users')}/${(user as any).id}` : C('users') }] },
+    ...(isAdmin ? [{ label: 'Maintenance', icon: 'tools', href: '/admin/backups', sub: [{ label: 'Backups', href: '/admin/backups' }, { label: 'Import / export', href: '/admin/export-import' }, { label: 'System status', href: '/admin/site-health' }, { label: 'Activity log', href: C('activity-log') }, { label: 'Personal data requests', href: '/admin/privacy' }, { label: 'Cache', href: '/admin/cache' }, { label: 'File browser', href: C('media') }] } as MenuItem] : []),
+    { type: 'sep', label: 'Manage' },
+    ...(has('edit_theme_options') ? [{ label: 'Site design', icon: 'brush', href: G('navigation'), sub: [{ label: 'Navigation menus', href: G('navigation') }, { label: 'Sidebar & footer blocks', href: '/admin/widgets' }, { label: 'Site-wide content', href: G('global-content') }] } as MenuItem] : []),
+    { label: 'Team', icon: 'users', href: C('users'), sub: [{ label: 'All members', href: C('users'), exact: true }, ...(isAdmin ? [{ label: 'Invite member', href: `${C('users')}/create` }, { label: 'Roles & permissions', href: '/admin/roles' }] : []), { label: 'Two-factor login', href: '/admin/two-factor' }, { label: 'My profile', href: user ? `${C('users')}/${(user as any).id}` : C('users') }] },
     ...(has('manage_options') ? [{ label: 'Settings', icon: 'settings', href: G('site-settings'), sub: [
-      { label: 'General & SEO', href: G('site-settings') }, { label: 'Plugin settings', href: G('plugin-settings') }, { label: 'Discussion', href: G('plugin-settings'), noActive: true }, { label: 'Reading', href: G('plugin-settings'), noActive: true }, { label: 'Permalinks', href: '/admin/permalinks' }, { label: 'Menus', href: G('navigation') }, { label: 'Global content', href: G('global-content') } ] } as MenuItem] : []),
+      { label: 'General', href: G('site-settings') }, { label: 'Features', href: G('plugin-settings') }, { label: 'Comments', href: G('plugin-settings'), noActive: true }, { label: 'Publishing', href: G('plugin-settings'), noActive: true }, { label: 'URL structure', href: '/admin/permalinks' }, { label: 'Navigation menus', href: G('navigation') }, { label: 'Site-wide content', href: G('global-content') } ] } as MenuItem] : []),
   ]
   return <WpNavClient items={items} />
 }

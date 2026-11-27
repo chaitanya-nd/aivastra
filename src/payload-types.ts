@@ -6000,6 +6000,14 @@ export interface PluginSetting {
   sitemapImages?: boolean | null;
   sitemapExcludePosts?: string | null;
   sitemapExcludeTerms?: string | null;
+  /**
+   * Rank Math “Author Sitemap”. Off on the WordPress site.
+   */
+  sitemapAuthors?: boolean | null;
+  /**
+   * Off on the WordPress site.
+   */
+  sitemapSectionTerms?: boolean | null;
   bcSeparator?: ('arrow' | '/' | '>' | '»' | '|' | '·') | null;
   bcHomeLabel?: string | null;
   bcShowHome?: boolean | null;
@@ -6414,6 +6422,8 @@ export interface PluginSettingsSelect<T extends boolean = true> {
   sitemapImages?: T;
   sitemapExcludePosts?: T;
   sitemapExcludeTerms?: T;
+  sitemapAuthors?: T;
+  sitemapSectionTerms?: T;
   bcSeparator?: T;
   bcHomeLabel?: T;
   bcShowHome?: T;

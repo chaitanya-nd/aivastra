@@ -30,7 +30,10 @@ export function SeoPanel() {
   const secondary = String(v('meta.secondaryKeywords') || '').split(',').map((s) => s.trim()).filter(Boolean)
   const seoTitle = String(v('meta.title') || '') || (title ? `${title} - AI Vastra` : '')
   const description = String(v('meta.description') || '') || stripHtml(String(v('excerpt') || '')).slice(0, 160)
-  const path = collectionSlug ? getPath(collectionSlug, { slug, breadcrumbs: v('breadcrumbs') || undefined } as any) : `/${slug}`
+  // Form state stores an array field as a row count; the rows live under `breadcrumbs.<n>.url`.
+  const crumbRows = Number(v('breadcrumbs')) || 0
+  const crumbUrl = crumbRows > 0 ? String(v(`breadcrumbs.${crumbRows - 1}.url`) || '') : ''
+  const path = collectionSlug ? getPath(collectionSlug, { slug, breadcrumbs: crumbUrl ? [{ url: crumbUrl }] : undefined } as any) : `/${slug}`
   const url = `${SITE_URL}${path.endsWith('/') ? path : `${path}/`}`
   const showToc = v('showToc') !== false
   const ogTitle = String(v('meta.ogTitle') || '') || seoTitle

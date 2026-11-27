@@ -38,6 +38,7 @@ export const Pages = contentCollection({
         },
       ],
     },
+    { type: 'ui', name: 'pageContentCode', admin: { components: { Field: '/components/admin/wp/PageCodeEditor#PageCodeEditor' } } },
     { type: 'ui', name: 'pageCode', admin: { components: { Field: '/components/admin/wp/PageCode#PageCode' } } },
     {
       name: 'template',
